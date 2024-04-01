@@ -64,9 +64,9 @@ function App() {
         <LeftGrow trigger={renderOrder > 2}>
           <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center' }} style={{ gap: 15, marginTop: 15 }}>
             <h3 style={{ whiteSpace: 'nowrap' }}>biology</h3>
-            <a href={'/old-pages/synbio.html'}>
+            <Link href={'biology/'}>
               <img src={msa} style={{ maxHeight: '25vh', objectFit: 'contain' }}></img>
-            </a>
+            </Link>
           </Box>
         </LeftGrow>
       </Box>

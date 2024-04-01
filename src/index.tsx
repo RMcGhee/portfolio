@@ -5,6 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import Photography from './photography';
+import Biology from './biology';
 
 const router = createBrowserRouter([
   {
@@ -14,6 +15,10 @@ const router = createBrowserRouter([
   {
     path: '/photography',
     element: <Photography/>
+  },
+  {
+    path: '/biology',
+    element: <Biology/>
   }
 ]);
 const root = ReactDOM.createRoot(

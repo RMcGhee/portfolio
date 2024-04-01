@@ -10,9 +10,6 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
-import jhc from './img/joule-home-sc.png'
-import bad from './img/badlands1.jpg'
-import msa from './img/msa.png'
 import { AnnotatedImage, LeftGrow } from './common/Basic';
 import BottomNav from './BottomNav';
 import photos from './img/photos';
