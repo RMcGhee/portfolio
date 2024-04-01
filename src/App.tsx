@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Container, ThemeProvider } from '@mui/material';
+import { Button, Container, Link, ThemeProvider } from '@mui/material';
 import { CssBaseline } from '@mui/material';
 import { Box } from '@mui/system';
 import theme from './base-theme';
@@ -11,12 +11,13 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import jhc from './img/joule-home-sc.png'
-import bad from './img/badlands1.jpg'
+import bad from './img/badlands.jpg'
 import msa from './img/msa.png'
 import { LeftGrow } from './common/Basic';
 import BottomNav from './BottomNav';
 
-const user_home_url = 'https://rmcghee.github.io/'
+// const user_home_url = 'https://rmcghee.github.io/';
+const user_home_url = 'localhost:3000/old-pages/';
 
 function App() {
   const [renderOrder, setRenderOrder] = useState(0);
@@ -47,7 +48,7 @@ function App() {
         <LeftGrow trigger={renderOrder > 0}>
           <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center' }} style={{ gap: 15, marginTop: 15 }}>
             <h3 style={{ whiteSpace: 'nowrap' }}>joule-home</h3>
-            <a href={user_home_url + 'joule-home/'}>
+            <a href={'/joule-home/'}>
               <img src={jhc} style={{ maxHeight: '25vh', objectFit: 'contain' }}></img>
             </a>
           </Box>
@@ -55,15 +56,15 @@ function App() {
         <LeftGrow trigger={renderOrder > 1}>
           <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center' }} style={{ gap: 15, marginTop: 15 }}>
             <h3 style={{ whiteSpace: 'nowrap' }}>photography</h3>
-            <a href={user_home_url + 'photography.html'}>
+            <Link href={'photography/'}>
               <img src={bad} style={{ maxHeight: '25vh', objectFit: 'contain' }}></img>
-            </a>
+            </Link>
           </Box>
         </LeftGrow>
         <LeftGrow trigger={renderOrder > 2}>
           <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center' }} style={{ gap: 15, marginTop: 15 }}>
             <h3 style={{ whiteSpace: 'nowrap' }}>biology</h3>
-            <a href={user_home_url + 'synbio.html'}>
+            <a href={'/old-pages/synbio.html'}>
               <img src={msa} style={{ maxHeight: '25vh', objectFit: 'contain' }}></img>
             </a>
           </Box>
