@@ -1,9 +1,16 @@
 {
   "files": {
     "main.css": "/static/css/main.5de8d9e6.css",
-    "main.js": "/static/js/main.794576aa.js",
+    "main.js": "/static/js/main.155b8418.js",
     "static/js/453.ace21015.chunk.js": "/static/js/453.ace21015.chunk.js",
+    "static/media/Badlands2.jpg": "/static/media/Badlands2.514d9ac104ef1257bb4d.jpg",
+    "static/media/DevilsTower.jpg": "/static/media/DevilsTower.1eb85b5ddc76d90778ad.jpg",
+    "static/media/CrazyHorse.jpg": "/static/media/CrazyHorse.224fd4cad5b6c8c497aa.jpg",
+    "static/media/GCRoBT.jpg": "/static/media/GCRoBT.5650cea7863064d833f7.jpg",
+    "static/media/Badlands1.jpg": "/static/media/Badlands1.3a853c074fafb6ca9792.jpg",
+    "static/media/badlands.jpg": "/static/media/badlands.3a853c074fafb6ca9792.jpg",
     "static/media/badlands1.jpg": "/static/media/badlands1.3a853c074fafb6ca9792.jpg",
+    "static/media/OuterDiskatBigTree.jpg": "/static/media/OuterDiskatBigTree.b3d068379d599fbd6dad.jpg",
     "static/media/msa.png": "/static/media/msa.44cf014d483c6df1df65.png",
     "static/media/joule-home-sc.png": "/static/media/joule-home-sc.330e36a7ad2e4b30a87d.png",
     "static/media/roboto-latin-500-normal.woff2": "/static/media/roboto-latin-500-normal.f25d774ecfe0996f8eb5.woff2",
@@ -64,11 +71,11 @@
     "static/media/roboto-greek-ext-700-normal.woff": "/static/media/roboto-greek-ext-700-normal.249853776d22a271b2b5.woff",
     "index.html": "/index.html",
     "main.5de8d9e6.css.map": "/static/css/main.5de8d9e6.css.map",
-    "main.794576aa.js.map": "/static/js/main.794576aa.js.map",
+    "main.155b8418.js.map": "/static/js/main.155b8418.js.map",
     "453.ace21015.chunk.js.map": "/static/js/453.ace21015.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.5de8d9e6.css",
-    "static/js/main.794576aa.js"
+    "static/js/main.155b8418.js"
   ]
 }
