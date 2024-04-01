@@ -10,8 +10,13 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
+import jhc from './img/joule-home-sc.png'
+import bad from './img/badlands1.jpg'
+import msa from './img/msa.png'
 import { LeftGrow } from './common/Basic';
 import BottomNav from './BottomNav';
+
+const user_home_url = 'https://rmcghee.github.io/'
 
 function App() {
   const [renderOrder, setRenderOrder] = useState(0);
@@ -38,21 +43,31 @@ function App() {
         <h1>portfolio</h1>
       </Box></LeftGrow>
       
-      <Box sx={{
-        flexGrow: 1,
-        display: 'flex',
-        flexDirection: 'column',
-        maxWidth: '500px',
-      }}>
-        <LeftGrow trigger={renderOrder > 0}><Box sx={{ flexGrow: 0}} style={{ marginTop: 15 }}>
-          <h3>joule-home</h3>
-        </Box></LeftGrow>
-        <LeftGrow trigger={renderOrder > 1}><Box sx={{ flexGrow: 0}} style={{ marginTop: 15 }}>
-          <h3>photography</h3>
-        </Box></LeftGrow>
-        <LeftGrow trigger={renderOrder > 2}><Box sx={{ flexGrow: 0}} style={{ marginTop: 15 }}>
-          <h3>synthetic biology</h3>
-        </Box></LeftGrow>
+      <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', maxWidth: '500px' }}>
+        <LeftGrow trigger={renderOrder > 0}>
+          <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center' }} style={{ gap: 15, marginTop: 15 }}>
+            <h3 style={{ whiteSpace: 'nowrap' }}>joule-home</h3>
+            <a href={user_home_url + 'joule-home/'}>
+              <img src={jhc} style={{ maxHeight: '25vh', objectFit: 'contain' }}></img>
+            </a>
+          </Box>
+        </LeftGrow>
+        <LeftGrow trigger={renderOrder > 1}>
+          <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center' }} style={{ gap: 15, marginTop: 15 }}>
+            <h3 style={{ whiteSpace: 'nowrap' }}>photography</h3>
+            <a href={user_home_url + 'photography.html'}>
+              <img src={bad} style={{ maxHeight: '25vh', objectFit: 'contain' }}></img>
+            </a>
+          </Box>
+        </LeftGrow>
+        <LeftGrow trigger={renderOrder > 2}>
+          <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center' }} style={{ gap: 15, marginTop: 15 }}>
+            <h3 style={{ whiteSpace: 'nowrap' }}>biology</h3>
+            <a href={user_home_url + 'synbio.html'}>
+              <img src={msa} style={{ maxHeight: '25vh', objectFit: 'contain' }}></img>
+            </a>
+          </Box>
+        </LeftGrow>
       </Box>
       <BottomNav/>
     </Container>

@@ -24,7 +24,7 @@ const BottomNav: React.FC = () => {
         <Divider orientation='vertical'/>
         <Link href="/joule-home">joule-home</Link><br />
         <Link href={user_home_url + "photography.html"}>photography</Link><br />
-        <Link href={user_home_url + "synbio.html"}>synthetic biology</Link><br />
+        <Link href={user_home_url + "synbio.html"}>biology</Link><br />
       </Stack>
     </LeftGrow>
   );
