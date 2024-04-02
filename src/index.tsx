@@ -2,23 +2,19 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { RouterProvider, createHashRouter } from 'react-router-dom';
 import Photography from './Photography';
 import Biology from './Biology';
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: '/',
-    element: <App/>
+    element: <App/>,
+    children: [
+      { path: 'photography', element: <Photography/> },
+      { path: 'biology', element: <Biology/> },
+    ]
   },
-  {
-    path: '/photography',
-    element: <Photography/>
-  },
-  {
-    path: '/biology',
-    element: <Biology/>
-  }
 ]);
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement

@@ -35,9 +35,7 @@ function Photography() {
   }, [renderOrder, renderTimer]);
 
   return (
-    <ThemeProvider theme={theme}>
-    <CssBaseline>
-    <Container sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+    <div>
       <LeftGrow><Box sx={{ flexGrow: 0}} style={{ marginTop: 15 }}>
         <h1>photography</h1>
       </Box></LeftGrow>
@@ -66,10 +64,8 @@ function Photography() {
         <p>Devil's Tower, WY</p>
       </AnnotatedImage>
       </Box>
-      <BottomNav/>
-    </Container>
-    </CssBaseline>
-    </ThemeProvider>
+      {/* <BottomNav/> */}
+      </div>
   );
 }
 

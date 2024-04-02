@@ -36,9 +36,9 @@ const BottomNav: React.FC = () => {
           <h2>r.mcghee</h2>
         </Tooltip>
         <Divider orientation='vertical'/>
-        <Link href="/joule-home">joule-home</Link><br />
-        <Link href={"/photography"}>photography</Link><br />
-        <Link href={"/biology"}>biology</Link><br />
+        <Link href={user_home_url + "joule-home"}>joule-home</Link><br />
+        <Link href={"/portfolio/photography"}>photography</Link><br />
+        <Link href={"/portfolio/biology"}>biology</Link><br />
       </Stack>
     </LeftGrow>
   );

@@ -14,14 +14,15 @@ import BottomNav from './BottomNav';
 
 function Biology() {
   return (
-    <ThemeProvider theme={theme}>
-    <CssBaseline>
-    <Container sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+    // <ThemeProvider theme={theme}>
+    // <CssBaseline>
+    // <Container sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+    <div>
       <LeftGrow><Box sx={{ flexGrow: 0}} style={{ marginTop: 15 }}>
         <h1>biology</h1>
       </Box></LeftGrow>
       <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', maxWidth: '500px' }}>
-        <p>
+        <div>
           <h2> What is synthetic biology? </h2>
           Synthetic biology is the interdisciplinary field that combines biochemistry, systems biology, computer science, and genetic engineering to solve real world problems with biological machines. These machines can do a number of different things, from producing insulin for diabetics, to sensing toxins in a water sample, to isolating and destroying DNA from pathogenic viruses. In the coming years, synthetic biology will make progress towards better treatments for cancer, proactively treating pathogenic diseases, and mass production of complex molecules.
           <h2> New HIV test </h2>
@@ -44,12 +45,13 @@ function Biology() {
           - Polyvalent anti-venins are produced, but some snakes have a unique cocktail of toxins, requiring a hospital with multiple snake species to carry anti-venins for each snake they need to treat for.
           <h3> Solution </h3>
           The team found genes that the snake uses to counteract the venom it produces. These genes allow the snake to produce copious quantities of venom without being killed itself. Using recombinantly produced venom, we are testing the efficacy of these proteins to determine the concentrations needed to counteract the venom. After getting the results of the enzyme activity assay, we are looking to move forward to in vitro toxicity assays to determine if the enzyme is non-toxic to mammals.
-        </p>
+        </div>
       </Box>
-      <BottomNav/>
-    </Container>
-    </CssBaseline>
-    </ThemeProvider>
+      {/* <BottomNav/> */}
+      </div>
+    // </Container>
+    // </CssBaseline>
+    // </ThemeProvider>
   );
 }
 
