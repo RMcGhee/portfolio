@@ -29,7 +29,7 @@ export const AnnotatedImage: React.FC<AnnotatedImageProps> = ({ children, img, m
 return (
   <LeftGrow trigger={trigger}>
       <div>
-          <img src={img} style={{ maxHeight: maxHeight, objectFit: 'contain' }}></img>
+          <img src={img} style={{ maxWidth: '95vw', maxHeight: maxHeight, objectFit: 'contain' }}></img>
           {children}
           <br/>
       </div>
