@@ -1,6 +1,7 @@
 import React from 'react';
-import { Link, Divider, Stack, Typography, Tooltip, } from '@mui/material';
+import { Divider, Stack, Typography, Tooltip, } from '@mui/material';
 import { LeftGrow } from './common/Basic';
+import { Link } from 'react-router-dom';
 
 import './App.css';
 
@@ -15,10 +16,10 @@ const BottomNav: React.FC = () => {
   const tooltipContent = (
     <React.Fragment>
       <Typography color="inherit">Want to connect?</Typography>
-      <Link href="https://www.linkedin.com/in/rich-mcghee-18a41757" target="_blank" rel="noopener noreferrer">
+      <Link to="https://www.linkedin.com/in/rich-mcghee-18a41757" target="_blank" rel="noopener noreferrer">
         LinkedIn
       </Link><br/>
-      <Link href={user_home_url} target="_self" rel="noopener noreferrer">
+      <Link to='/' target="_self" rel="noopener noreferrer">
         Home
       </Link>
     </React.Fragment>
@@ -36,9 +37,9 @@ const BottomNav: React.FC = () => {
           <h2>r.mcghee</h2>
         </Tooltip>
         <Divider orientation='vertical'/>
-        <Link href={user_home_url + "joule-home"}>joule-home</Link><br />
-        <Link href={"/portfolio/photography"}>photography</Link><br />
-        <Link href={"/portfolio/biology"}>biology</Link><br />
+        <Link to={user_home_url + "joule-home"}>joule-home</Link><br />
+        <Link to={"/photography"}>photography</Link><br />
+        <Link to={"/biology"}>biology</Link><br />
       </Stack>
     </LeftGrow>
   );

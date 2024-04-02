@@ -23,9 +23,6 @@ function App() {
   const [renderTimer, setRenderTimer] = useState<NodeJS.Timer|null>(null);
 
   const location = useLocation();
-  console.log(location);
-
-
   const isRootRoute = location.pathname === '/';
 
   useEffect(() => {
