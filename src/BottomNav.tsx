@@ -1,5 +1,5 @@
 import React from 'react';
-import { Divider, Stack, Typography, Tooltip, } from '@mui/material';
+import { Divider, Stack, Typography, Tooltip, Link as LinkOut } from '@mui/material';
 import { LeftGrow } from './common/Basic';
 import { Link } from 'react-router-dom';
 
@@ -19,7 +19,7 @@ const BottomNav: React.FC = () => {
       <Link to="https://www.linkedin.com/in/rich-mcghee-18a41757" target="_blank" rel="noopener noreferrer">
         LinkedIn
       </Link><br/>
-      <Link to='/' target="_self" rel="noopener noreferrer">
+      <Link to='.' target="_self" rel="noopener noreferrer">
         Home
       </Link>
     </React.Fragment>
@@ -37,9 +37,9 @@ const BottomNav: React.FC = () => {
           <h2>r.mcghee</h2>
         </Tooltip>
         <Divider orientation='vertical'/>
-        <Link to={user_home_url + "joule-home"}>joule-home</Link><br />
-        <Link to={"/photography"}>photography</Link><br />
-        <Link to={"/biology"}>biology</Link><br />
+        <LinkOut href={user_home_url + "joule-home"}>joule-home</LinkOut>
+        <Link to={"/photography"}>photography</Link>
+        <Link to={"/biology"}>biology</Link>
       </Stack>
     </LeftGrow>
   );
