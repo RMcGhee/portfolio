@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Container, ThemeProvider } from '@mui/material';
+import { Container, ThemeProvider } from '@mui/material';
 import { CssBaseline } from '@mui/material';
 import { Box } from '@mui/system';
 import theme from './base-theme';
@@ -10,12 +9,8 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
-import { AnnotatedImage, LeftGrow } from './common/Basic';
+import { LeftGrow } from './common/Basic';
 import BottomNav from './BottomNav';
-import photos from './img/photos';
-
-// const user_home_url = 'https://rmcghee.github.io/';
-const user_home_url = 'localhost:3000/old-pages/';
 
 function Biology() {
   return (
