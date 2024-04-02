@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Container, ThemeProvider, CssBaseline } from '@mui/material';
 import { Box } from '@mui/system';
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 import theme from './base-theme';
 
 import './App.css';
@@ -22,7 +22,11 @@ function App() {
   const [renderOrder, setRenderOrder] = useState(0);
   const [renderTimer, setRenderTimer] = useState<NodeJS.Timer|null>(null);
 
-  const isRootRoute = window.location.pathname === '/portfolio/';
+  const location = useLocation();
+  console.log(location);
+
+
+  const isRootRoute = location.pathname === '/';
 
   useEffect(() => {
       const interval = setInterval(() => setRenderOrder(renderOrder + 1), 450);
