@@ -20,15 +20,16 @@ interface LeftGrowProps {
 interface AnnotatedImageProps {
   children: ReactElement;
   img: string;
+  maxHeight?: string;
   trigger: boolean;
   timeout?: number;
 }
 
-export const AnnotatedImage: React.FC<AnnotatedImageProps> = ({ children, img, trigger = true, timeout = 1500 }) => {
+export const AnnotatedImage: React.FC<AnnotatedImageProps> = ({ children, img, maxHeight='40vh', trigger = true, timeout = 1500 }) => {
 return (
   <LeftGrow trigger={trigger}>
       <div>
-          <img src={img} style={{ maxHeight: '40vh', objectFit: 'contain' }}></img>
+          <img src={img} style={{ maxHeight: maxHeight, objectFit: 'contain' }}></img>
           {children}
           <br/>
       </div>
