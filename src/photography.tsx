@@ -10,9 +10,6 @@ import '@fontsource/roboto/700.css';
 import { AnnotatedImage, LeftGrow } from './common/Basic';
 import photos from './img/photos';
 
-// const user_home_url = 'https://rmcghee.github.io/';
-const user_home_url = 'localhost:3000/old-pages/';
-
 function Photography() {
   const [renderOrder, setRenderOrder] = useState(0);
   const [renderTimer, setRenderTimer] = useState<NodeJS.Timer|null>(null);

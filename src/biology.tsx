@@ -1,7 +1,4 @@
-import { Container, ThemeProvider } from '@mui/material';
-import { CssBaseline } from '@mui/material';
 import { Box } from '@mui/system';
-import theme from './base-theme';
 
 import './App.css';
 
@@ -10,7 +7,6 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import { LeftGrow } from './common/Basic';
-import BottomNav from './BottomNav';
 
 function Biology() {
   return (

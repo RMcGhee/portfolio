@@ -53,7 +53,7 @@ function App() {
               <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center' }} style={{ gap: 15, marginTop: 15 }}>
                 <h3 style={{ whiteSpace: 'nowrap' }}>joule-home</h3>
                 <a href={user_home_url + 'joule-home/'}>
-                  <img src={jhc} style={{ maxHeight: '25vh', objectFit: 'contain' }}></img>
+                  <img src={jhc} alt='Graphs of energy usage' style={{ maxHeight: '25vh', objectFit: 'contain' }}></img>
                 </a>
               </Box>
             </LeftGrow>
@@ -61,7 +61,7 @@ function App() {
               <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center' }} style={{ gap: 15, marginTop: 15 }}>
                 <h3 style={{ whiteSpace: 'nowrap' }}>photography</h3>
                 <Link to='/photography'>
-                  <img src={bad} style={{ maxHeight: '25vh', objectFit: 'contain' }}></img>
+                  <img src={bad} alt='The badlands in black and white' style={{ maxHeight: '25vh', objectFit: 'contain' }}></img>
                 </Link>
               </Box>
             </LeftGrow>
@@ -69,7 +69,7 @@ function App() {
               <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center' }} style={{ gap: 15, marginTop: 15 }}>
                 <h3 style={{ whiteSpace: 'nowrap' }}>biology</h3>
                 <Link to='/biology'>
-                  <img src={msa} style={{ maxHeight: '25vh', objectFit: 'contain' }}></img>
+                  <img src={msa} alt='Python code screenshot' style={{ maxHeight: '25vh', objectFit: 'contain' }}></img>
                 </Link>
               </Box>
             </LeftGrow>

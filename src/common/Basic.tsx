@@ -1,8 +1,6 @@
 import { Grow } from '@mui/material';
 import React, { ReactElement } from 'react';
 
-const prod_env = false;
-
 interface LeftGrowProps {
     children: ReactElement;
     timeout?: number;
@@ -23,13 +21,14 @@ interface AnnotatedImageProps {
   maxHeight?: string;
   trigger: boolean;
   timeout?: number;
+  altText?: string;
 }
 
-export const AnnotatedImage: React.FC<AnnotatedImageProps> = ({ children, img, maxHeight='40vh', trigger = true, timeout = 1500 }) => {
+export const AnnotatedImage: React.FC<AnnotatedImageProps> = ({ children, img, maxHeight='40vh', trigger = true, timeout = 1500, altText }) => {
 return (
   <LeftGrow trigger={trigger}>
       <div>
-          <img src={img} style={{ maxWidth: '95vw', maxHeight: maxHeight, objectFit: 'contain' }}></img>
+          <img src={img} alt={altText} style={{ maxWidth: '95vw', maxHeight: maxHeight, objectFit: 'contain' }}></img>
           {children}
           <br/>
       </div>
