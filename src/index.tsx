@@ -5,12 +5,14 @@ import App from './App';
 import { RouterProvider, createHashRouter } from 'react-router-dom';
 import Photography from './pages/photography';
 import Biology from './pages/biology';
+import JouleHome from './pages/joule-home';
 
 const router = createHashRouter([
   {
     path: '/',
     element: <App/>,
     children: [
+      { path: 'joule-home', element: <JouleHome/> },
       { path: 'photography', element: <Photography/> },
       { path: 'biology', element: <Biology/> },
     ]
