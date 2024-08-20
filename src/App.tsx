@@ -17,8 +17,6 @@ import { LeftGrow } from './common/Basic';
 import BottomNav from './BottomNav';
 
 function App() {
-  const user_home_url = 'https://rmcghee.github.io/'
-
   const [renderOrder, setRenderOrder] = useState(0);
   const [renderTimer, setRenderTimer] = useState<NodeJS.Timer|null>(null);
 
@@ -52,7 +50,7 @@ function App() {
             <LeftGrow trigger={renderOrder > 0}>
               <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center' }} style={{ gap: 15, marginTop: 15 }}>
                 <h3 style={{ whiteSpace: 'nowrap' }}>joule-home</h3>
-                <a href={user_home_url + 'joule-home/'}>
+                <a href={'/joule-home'}>
                   <img src={jhc} alt='Graphs of energy usage' style={{ maxHeight: '25vh', objectFit: 'contain' }}></img>
                 </a>
               </Box>

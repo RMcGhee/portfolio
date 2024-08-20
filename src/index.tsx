@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import { RouterProvider, createHashRouter } from 'react-router-dom';
-import Photography from './photography';
-import Biology from './biology';
+import Photography from './pages/photography';
+import Biology from './pages/biology';
 
 const router = createHashRouter([
   {

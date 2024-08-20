@@ -1,18 +1,15 @@
 import { Box } from '@mui/system';
 
-import './App.css';
+import '../App.css';
 
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
-import { LeftGrow } from './common/Basic';
+import { LeftGrow } from '../common/Basic';
 
 function Biology() {
   return (
-    // <ThemeProvider theme={theme}>
-    // <CssBaseline>
-    // <Container sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
     <div>
       <LeftGrow><Box sx={{ flexGrow: 0}} style={{ marginTop: 15 }}>
         <h1>biology</h1>
@@ -43,11 +40,7 @@ function Biology() {
           The team found genes that the snake uses to counteract the venom it produces. These genes allow the snake to produce copious quantities of venom without being killed itself. Using recombinantly produced venom, we are testing the efficacy of these proteins to determine the concentrations needed to counteract the venom. After getting the results of the enzyme activity assay, we are looking to move forward to in vitro toxicity assays to determine if the enzyme is non-toxic to mammals.
         </div>
       </Box>
-      {/* <BottomNav/> */}
       </div>
-    // </Container>
-    // </CssBaseline>
-    // </ThemeProvider>
   );
 }
 

@@ -10,8 +10,6 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
-const user_home_url = 'https://rmcghee.github.io/'
-
 const BottomNav: React.FC = () => {
   const tooltipContent = (
     <React.Fragment>
@@ -37,7 +35,7 @@ const BottomNav: React.FC = () => {
           <h2>r.mcghee</h2>
         </Tooltip>
         <Divider orientation='vertical'/>
-        <LinkOut href={user_home_url + "joule-home"}>joule-home</LinkOut>
+        <LinkOut href={"/joule-home"}>joule-home</LinkOut>
         <Link to={"/photography"}>photography</Link>
         <Link to={"/biology"}>biology</Link>
       </Stack>
