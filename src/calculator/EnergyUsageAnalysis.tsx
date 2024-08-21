@@ -38,7 +38,7 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
   const [desiredHvacYearlyCost, setDesiredHvacYearlyCost] = useState(0);
   const [desiredTotalYearlyCost, setDesiredTotalYearlyCost] = useState(0);
   const [oldHvacYearlyCost, setOldHvacYearlyCost] = useState(0);
-  const [oldYearlyCost, setOldYearlyCost] = useState(0);
+  const [, setOldYearlyCost] = useState(0);
 
   useEffect(() => {
     setFormData((formDataDraft) => {
