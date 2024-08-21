@@ -12,6 +12,7 @@ type NewSystemCostGraphProps = {
   setDesiredHvacYearlyCost: (e: number) => void;
   setDesiredTotalYearlyCost: (e: number) => void;
   setOldHvacYearlyCost: (e: number) => void;
+  setOldYearlyCost: (e: number) => void;
 };
 
 const NewSystemCostGraph: React.FC<NewSystemCostGraphProps> = ({
@@ -19,6 +20,7 @@ const NewSystemCostGraph: React.FC<NewSystemCostGraphProps> = ({
   setDesiredHvacYearlyCost,
   setDesiredTotalYearlyCost,
   setOldHvacYearlyCost,
+  setOldYearlyCost,
 }) => {
   const theme = useTheme();
   ChartJS.register(LinearScale, CategoryScale, PointElement, LineElement, Legend, Tooltip, Title, ScatterController);
@@ -69,14 +71,23 @@ const NewSystemCostGraph: React.FC<NewSystemCostGraphProps> = ({
     return monthCost;
   });
 
+  const monthlyOldTotalCost = monthlyOldHvacCost.map((cost) => {
+    return (
+      (cost + (formData.baseElectricUsage * electricPrice)) +
+      (formData.baseGasUsage * gasPrice)
+    );
+  });
+
   const desiredHvacYearlyCost = monthlyHVACCost.reduce((acc, next) => acc + next);
   const desiredTotalYearlyCost = monthlyTotalCost.reduce((acc, next) => acc + next);
-  const oldHvacYearlyCost = monthlyOldHvacCost.reduce((acc, next) => acc + next)
+  const oldHvacYearlyCost = monthlyOldHvacCost.reduce((acc, next) => acc + next);
+  const oldYearlyCost = monthlyOldTotalCost.reduce((acc, next) => acc + next);
 
   useEffect(() => {
     setDesiredHvacYearlyCost(desiredHvacYearlyCost);
     setDesiredTotalYearlyCost(desiredTotalYearlyCost);
     setOldHvacYearlyCost(oldHvacYearlyCost);
+    setOldYearlyCost(oldYearlyCost);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [desiredHvacYearlyCost, desiredTotalYearlyCost, oldHvacYearlyCost]);
 
@@ -110,6 +121,8 @@ const NewSystemCostGraph: React.FC<NewSystemCostGraphProps> = ({
         showLine: false,
         yAxisID: 'y',
         lineTension: 0.3,
+        pointBorderWidth: 1,
+        hidden: true,
       },
       {
         label: 'HVAC Cost',
@@ -117,13 +130,19 @@ const NewSystemCostGraph: React.FC<NewSystemCostGraphProps> = ({
         borderColor: getLinearGradient(chartRefBtu),
         yAxisID: 'y1',
         lineTension: 0.3,
+        borderWidth: 2.5,
+        pointBorderWidth: 1,
       },
       {
         label: 'Old HVAC Cost',
         data: monthlyOldHvacCost,
-        borderColor: 'grey',
+        borderColor: getLinearGradient(chartRefBtu),
         yAxisID: 'y1',
         lineTension: 0.3,
+        borderWidth: 2.5,
+        borderDash: [8, 14],
+        pointBorderWidth: 1,
+        hidden: true,
       },
       {
         label: 'Total New Cost',
@@ -131,6 +150,18 @@ const NewSystemCostGraph: React.FC<NewSystemCostGraphProps> = ({
         borderColor: 'green',
         yAxisID: 'y1',
         lineTension: 0.3,
+        borderWidth: 2.5,
+        pointBorderWidth: 1,
+      },
+      {
+        label: 'Total Old Cost',
+        data: monthlyOldTotalCost,
+        borderColor: 'green',
+        yAxisID: 'y1',
+        lineTension: 0.3,
+        borderWidth: 2.5,
+        borderDash: [8, 14],
+        pointBorderWidth: 1,
       },
     ],
   };

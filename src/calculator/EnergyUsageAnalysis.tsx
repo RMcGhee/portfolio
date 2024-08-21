@@ -38,6 +38,7 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
   const [desiredHvacYearlyCost, setDesiredHvacYearlyCost] = useState(0);
   const [desiredTotalYearlyCost, setDesiredTotalYearlyCost] = useState(0);
   const [oldHvacYearlyCost, setOldHvacYearlyCost] = useState(0);
+  const [oldYearlyCost, setOldYearlyCost] = useState(0);
 
   useEffect(() => {
     setFormData((formDataDraft) => {
@@ -105,7 +106,7 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
           <YearBtuNeedsGraph formData={formData} setAveragekBTUdd={setAveragekBTUdd} setkBTUNeeds={setkBTUNeeds}/>
         </div>
         <div id='newSystemCostGraph' style={{ width: '1' }}>
-          <NewSystemCostGraph formData={formData} setDesiredHvacYearlyCost={setDesiredHvacYearlyCost} setDesiredTotalYearlyCost={setDesiredTotalYearlyCost} setOldHvacYearlyCost={setOldHvacYearlyCost}/>
+          <NewSystemCostGraph formData={formData} setDesiredHvacYearlyCost={setDesiredHvacYearlyCost} setDesiredTotalYearlyCost={setDesiredTotalYearlyCost} setOldHvacYearlyCost={setOldHvacYearlyCost} setOldYearlyCost={setOldYearlyCost}/>
         </div>
         <div id='newSystemUsageGraph' style={{ width: '1' }}>
           <NewSystemUsageGraph formData={formData} setDesiredHvacYearlyCost={setDesiredHvacYearlyCost} setDesiredTotalYearlyCost={setDesiredTotalYearlyCost} setOldHvacYearlyCost={setOldHvacYearlyCost}/>
