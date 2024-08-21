@@ -43,7 +43,8 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
     <CssBaseline>
-    <Container sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+    <Container sx={{ display: 'flex', flexDirection: 'column', height: '100vh', margin: '0px' }}>
+      <Box sx={{ flexGrow: 1, paddingBottom: '100px' }}>
       {isRootRoute && 
         <div>
           <LeftGrow><Box sx={{ flexGrow: 0}} style={{ marginTop: 15 }}>
@@ -79,7 +80,10 @@ function App() {
         </div>
       }
       <Outlet/ >
-      <BottomNav/>
+      </Box>
+      <Box marginBottom='0px'> {/* Prevents marginBottom on BottomNav from being rendered off page */}
+        <BottomNav/>
+      </Box>
     </Container>
     </CssBaseline>
     </ThemeProvider>

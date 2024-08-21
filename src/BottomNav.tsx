@@ -30,9 +30,10 @@ const BottomNav: React.FC = () => {
         spacing={3}
         alignItems={'flex-end'}
         justifyContent={'flex-start'}
+        marginBottom='0.3em'
       >
         <Tooltip title={tooltipContent} enterDelay={0}>
-          <h2>r.mcghee</h2>
+        <h2><Link to="/" className='unstyled-link'>r.mcghee</Link></h2>
         </Tooltip>
         <Divider orientation='vertical'/>
         <Link to="/joule-home">joule-home</Link>
