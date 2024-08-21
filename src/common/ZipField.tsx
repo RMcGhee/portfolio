@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ValidatedField, ValidatedFieldProps, supabaseBaseUrl } from './Basic';
+import { ValidatedField, ValidatedFieldProps } from './Basic';
 import { ZipDist } from '../entities/ZipDist';
 import { CircularProgress, InputAdornment } from '@mui/material';
 import { validateZip } from './Util';

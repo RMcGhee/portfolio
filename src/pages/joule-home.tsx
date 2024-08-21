@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Button, Container } from '@mui/material';
+import { Button } from '@mui/material';
 import { Box } from '@mui/system';
 import { useImmer } from 'use-immer';
 
@@ -33,6 +33,7 @@ function JouleHome() {
         Object.assign(draftFormData, loadedData);
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Save form data 3 seconds after it's updated.
@@ -55,6 +56,7 @@ function JouleHome() {
       // Return clearTimeout as the cleanup so that it clears if unmounted or called again.
       return () => clearTimeout(timer);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData]);
 
   const handleNextStep = (stepChange = 1) => {

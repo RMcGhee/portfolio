@@ -63,6 +63,7 @@ const YearBtuGraph: React.FC<YearBtuGraphProps> = ({
   useEffect(() => {
     setCurrentHVACCost(currentYearHVACCost);
     setCurrentTotalCost(currentYearTotalCost);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getLinearGradient = (chartRef: React.RefObject<ChartJSOrUndefined<"line", number[], unknown>>) => {

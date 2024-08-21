@@ -58,5 +58,4 @@ export const validateEnergyFormData = (formData: FormData): boolean => {
     ) &&
     isNumeric(formData.electricPrice) &&
     isNumeric(formData.gasPrice);
-  return true;
 };

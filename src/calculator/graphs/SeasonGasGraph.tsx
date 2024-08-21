@@ -65,6 +65,7 @@ const SeasonGasGraph: React.FC<SeasonGasGraphProps> = ({
     if (coolingMonthLine && heatingMonthLine) {
       setBaseGasUsage(coolingMonthsGas.map(([k, [unit, dd]]) => unit).reduce((a, b) => a + b) / coolingMonthsGas.length);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [coolingMonthLine, heatingMonthLine]);
 
   const chartData = {

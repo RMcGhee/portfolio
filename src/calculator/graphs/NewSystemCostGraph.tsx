@@ -69,16 +69,6 @@ const NewSystemCostGraph: React.FC<NewSystemCostGraphProps> = ({
     return monthCost;
   });
 
-  const monthlyOldHvackWh = months.map((month) => {
-    let cdd = Number(formData.degreeDayData.cooling[month.toLowerCase() as keyof DegreeDayMonths]);
-    let kWh = 0;
-    if (cdd > 0) {
-      kWh += (((cdd * formData.averagekBTUdd) / acCop / btuInkWh * 1000) * 1.10);
-    }
-    kWh += formData.baseElectricUsage
-    return kWh;
-  });
-
   const desiredHvacYearlyCost = monthlyHVACCost.reduce((acc, next) => acc + next);
   const desiredTotalYearlyCost = monthlyTotalCost.reduce((acc, next) => acc + next);
   const oldHvacYearlyCost = monthlyOldHvacCost.reduce((acc, next) => acc + next)
@@ -87,6 +77,7 @@ const NewSystemCostGraph: React.FC<NewSystemCostGraphProps> = ({
     setDesiredHvacYearlyCost(desiredHvacYearlyCost);
     setDesiredTotalYearlyCost(desiredTotalYearlyCost);
     setOldHvacYearlyCost(oldHvacYearlyCost);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [desiredHvacYearlyCost, desiredTotalYearlyCost, oldHvacYearlyCost]);
 
   const getLinearGradient = (chartRef: React.RefObject<ChartJSOrUndefined<"line", number[], unknown>>) => {

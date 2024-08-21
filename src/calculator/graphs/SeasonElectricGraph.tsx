@@ -65,6 +65,7 @@ const SeasonElectricGraph: React.FC<SeasonElectricGraphProps> = ({
     if (coolingMonthLine && heatingMonthLine) {
       setBaseElectricUsage((coolingMonthLine.intercept + heatingMonthLine.intercept) / 2);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [coolingMonthLine, heatingMonthLine]);
 
   const chartData = {

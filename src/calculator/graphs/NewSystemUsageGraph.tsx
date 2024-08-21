@@ -1,10 +1,10 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { FormData } from '../../entities/FormData';
 import { Chart as ChartJS, LinearScale, CategoryScale, PointElement, LineElement, Legend, Tooltip, Title, ScatterController, } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 import { useTheme } from '@mui/material';
-import { btuInCcf, btuInkWh, copInSeer, months } from '../../common/Basic';
+import { btuInkWh, copInSeer, months } from '../../common/Basic';
 import { DegreeDayMonths } from '../../entities/DegreeDayData';
 
 type NewSystemUsageGraphProps = {
@@ -16,9 +16,6 @@ type NewSystemUsageGraphProps = {
 
 const NewSystemUsageGraph: React.FC<NewSystemUsageGraphProps> = ({
   formData,
-  setDesiredHvacYearlyCost,
-  setDesiredTotalYearlyCost,
-  setOldHvacYearlyCost,
 }) => {
   const theme = useTheme();
   ChartJS.register(LinearScale, CategoryScale, PointElement, LineElement, Legend, Tooltip, Title, ScatterController);
@@ -28,8 +25,6 @@ const NewSystemUsageGraph: React.FC<NewSystemUsageGraphProps> = ({
   const hpCoolCop = Number(formData.desiredHeatPumpSeer) * copInSeer;
   const hpHeatCop = Number(formData.desiredHeatPumpHspf) * copInSeer;
   const acCop = Number(formData.currentACSeer) * copInSeer;
-  const electricPrice = Number(formData.electricPrice);
-  const gasPrice = Number(formData.gasPrice);
 
   const estimatedBtuNeeds = months.map((month) => ((Number(formData.degreeDayData.cooling[month.toLowerCase() as keyof DegreeDayMonths]) * 1.10) + (Number(formData.degreeDayData.heating[month.toLowerCase() as keyof DegreeDayMonths]) * 0.85)) * formData.averagekBTUdd);
 
@@ -54,10 +49,6 @@ const NewSystemUsageGraph: React.FC<NewSystemUsageGraphProps> = ({
     }
     return kWh;
   });
-
-  useEffect(() => {
-    
-  }, []);
 
   const getLinearGradient = (chartRef: React.RefObject<ChartJSOrUndefined<"line", number[], unknown>>) => {
     if (chartRef && chartRef.current) {

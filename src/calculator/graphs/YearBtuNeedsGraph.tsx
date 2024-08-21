@@ -48,6 +48,7 @@ const YearBtuNeedsGraph: React.FC<YearBtuNeedsGraphProps> = ({
   useEffect(() => {
     setkBTUNeeds(initMonthData(estimatedBtuNeeds));
     setAveragekBTUdd(averageBtuDd);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getLinearGradient = (chartRef: React.RefObject<ChartJSOrUndefined<"line", number[], unknown>>) => {

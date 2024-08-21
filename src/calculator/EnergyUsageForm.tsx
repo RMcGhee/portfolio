@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Button, Collapse, IconButton, InputAdornment, ToggleButton, ToggleButtonGroup, Tooltip } from '@mui/material';
-import { LeftGrow, ValidatedField, supabaseBaseUrl } from '../common/Basic';
+import { LeftGrow, ValidatedField } from '../common/Basic';
 import { FormData } from '../entities/FormData';
 import { QuestionMark } from '@mui/icons-material';
 import { HelpPopover } from '../common/HelpPopover';
@@ -65,6 +65,7 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
       };
       getDegreeDayData();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -78,6 +79,7 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
         gasUnits: energyFormData.gasUnits,
       } as FormData);
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [energyFormData]);
 
   const helpText = (

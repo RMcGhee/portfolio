@@ -34,5 +34,4 @@ export const validateCurrentSystemData = (formData: FormData): boolean => {
     ) &&
     validateZip(formData.zipCode) &&
     !isEmpty(formData.zipDistData);
-  return true;
 };
