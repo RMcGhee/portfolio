@@ -49,8 +49,6 @@ function JouleHome() {
         case 2:
           setNextDisabled(!validateEnergyFormData(formData));
           break;
-        case 3:
-          // validate energy analysis form
       }
   
       // Return clearTimeout as the cleanup so that it clears if unmounted or called again.
@@ -63,8 +61,12 @@ function JouleHome() {
     localStorage.setItem('formData', JSON.stringify(formData));
     if (currentStep === 3 && stepChange > 0) {
       setCurrentStep(0);
+      setNextDisabled(false);
     } else {
       setCurrentStep(currentStep + stepChange);
+    }
+    if (currentStep + stepChange === 0) {
+      setNextDisabled(false);
     }
     window.scrollTo(0,0);
   };
