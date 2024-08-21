@@ -24,6 +24,10 @@ function App() {
   const isRootRoute = location.pathname === '/';
 
   useEffect(() => {
+    window.scrollTo(0,0);
+  }, [location]);
+
+  useEffect(() => {
       const interval = setInterval(() => setRenderOrder(renderOrder + 1), 450);
       setRenderTimer(interval);
 

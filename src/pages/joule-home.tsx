@@ -66,6 +66,7 @@ function JouleHome() {
     } else {
       setCurrentStep(currentStep + stepChange);
     }
+    window.scrollTo(0,0);
   };
 
   const renderStep = () => {
