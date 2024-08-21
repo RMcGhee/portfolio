@@ -61,7 +61,7 @@ function JouleHome() {
 
   const handleNextStep = (stepChange = 1) => {
     localStorage.setItem('formData', JSON.stringify(formData));
-    if (currentStep === 3) {
+    if (currentStep === 3 && stepChange > 0) {
       setCurrentStep(0);
     } else {
       setCurrentStep(currentStep + stepChange);
