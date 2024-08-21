@@ -25,7 +25,7 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
   formData,
   setFormData,
 }) => {
-  const [energyFormData, setEnergyFormData] = useState<EnergyFormData>(initEnergyForm(formData));
+  const [energyFormData,] = useState<EnergyFormData>(initEnergyForm(formData));
 
   const [showHelpPopover, setShowHelpPopover] = useState(false);
 
@@ -38,8 +38,6 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
   const [desiredHvacYearlyCost, setDesiredHvacYearlyCost] = useState(0);
   const [desiredTotalYearlyCost, setDesiredTotalYearlyCost] = useState(0);
   const [oldHvacYearlyCost, setOldHvacYearlyCost] = useState(0);
-
-  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
   useEffect(() => {
     setFormData((formDataDraft) => {
@@ -54,7 +52,7 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
       formDataDraft.desiredTotalCost = desiredTotalYearlyCost;
       formDataDraft.oldHvacCost = oldHvacYearlyCost;
     });
-  }, [energyFormData, baseElectricUsage, baseGasUsage, averagekBTUdd, kBTUNeeds, currentHVACCost, currentTotalCost, desiredHvacYearlyCost, desiredTotalYearlyCost]);
+  }, [energyFormData, baseElectricUsage, baseGasUsage, averagekBTUdd, kBTUNeeds, currentHVACCost, currentTotalCost, desiredHvacYearlyCost, desiredTotalYearlyCost, oldHvacYearlyCost, setFormData]);
 
   const helpText = (
     <div>

@@ -39,7 +39,7 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
   useEffect(() => {
     if (validateZip(formData.selectedClimate) && degreeDayDataOutOfDate(formData.degreeDayData)) {
       const getDegreeDayData = async () => {
-        const edgeFunction = supabaseBaseUrl + 'get-dd'
+        const edgeFunction = 'https://get-dd-data.richmcghee.workers.dev';
         const response = await fetch(edgeFunction, {
           method: 'POST',
           body: JSON.stringify({ 'zip': formData.selectedClimate }),
