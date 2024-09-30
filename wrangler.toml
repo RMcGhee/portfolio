@@ -1,5 +1,6 @@
 name = "portfolio"
 main = "src/main.tsx"
+pages_build_output_dir = "dist"
 
 [vars]
   PNPM_VERSION = "9.8.0"
