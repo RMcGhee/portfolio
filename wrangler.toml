@@ -1,0 +1,5 @@
+name = "portfolio"
+main = "src/main.tsx"
+
+[vars]
+  PNPM_VERSION = "9.8.0"
