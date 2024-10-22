@@ -1,36 +1,35 @@
 import React, { useEffect, useState } from 'react';
-import { Box, IconButton, InputAdornment } from '@mui/material';
+import { Box, Button, IconButton, InputAdornment } from '@mui/material';
 import { LeftGrow, ValidatedField } from '../common/Basic';
 import { ZipField } from '../common/ZipField';
 import { SelectClimate } from '../common/SelectClimate';
 import { FormData } from '../entities/FormData';
 import { QuestionMark } from '@mui/icons-material';
 import { HelpPopover } from '../common/HelpPopover';
-import { initCurrentSystem } from '../entities/CurrentSystemData';
 import { Updater } from 'use-immer';
+import { Link, useOutletContext } from 'react-router-dom';
+import { ContextType } from '../pages/joule-home';
 
 type CurrentSystemFormProps = {
   formData: FormData;
   setFormData: Updater<FormData>;
 };
 
-const CurrentSystemForm: React.FC<CurrentSystemFormProps> = ({
-  formData,
-  setFormData,
-}) => {
-  const [systemData, setSystemData] = useState(initCurrentSystem(formData));
+const CurrentSystemForm: React.FC = () => {
+  const { formData, setFormData } = useOutletContext<ContextType>();
 
   const [showHelpPopover, setShowHelpPopover] = useState(false);
+  const haveZipDistData = Object.keys(formData.zipDistData).length !== 0;
 
-  const haveZipDistData = Object.keys(systemData.zipDistData).length !== 0;
 
   useEffect(() => {
     setFormData((draftFormData) => {
-      Object.assign(draftFormData, systemData);
+      Object.assign(draftFormData, formData);
+      return draftFormData;
     });
     // intentionally not dependencies; formData and setFormData
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [systemData]);
+  }, [formData]);
 
   const helpText = (
     <div>
@@ -55,41 +54,41 @@ const CurrentSystemForm: React.FC<CurrentSystemFormProps> = ({
       <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: 2 }}>
         <ValidatedField 
           label="Desired Heat Pump SEER" 
-          value={systemData.desiredHeatPumpSeer}
+          value={formData.desiredHeatPumpSeer}
           inputType='decimal'
           inputProps={{ inputMode: 'decimal' }}
-          setter={(e) => setSystemData({...systemData, desiredHeatPumpSeer: e.target.value})} 
+          setter={(e) => setFormData({...formData, desiredHeatPumpSeer: e.target.value})} 
           formOrder={0}
         />
         <ValidatedField 
           label="Desired Heat Pump HSPF"
-          value={systemData.desiredHeatPumpHspf}
+          value={formData.desiredHeatPumpHspf}
           inputType='decimal'
           inputProps={{ inputMode: 'decimal' }}
-          setter={(e) => setSystemData({...systemData, desiredHeatPumpHspf: e.target.value})} 
+          setter={(e) => setFormData({...formData, desiredHeatPumpHspf: e.target.value})} 
           formOrder={1}
         />
         <ValidatedField 
           label="Current AC SEER" 
-          value={systemData.currentACSeer}
+          value={formData.currentACSeer}
           inputType='decimal'
           inputProps={{ inputMode: 'decimal' }}
-          setter={(e) => setSystemData({...systemData, currentACSeer: e.target.value})} 
+          setter={(e) => setFormData({...formData, currentACSeer: e.target.value})} 
           formOrder={2}
         />
         <ValidatedField 
           label="Current Furnace Efficiency" 
-          value={systemData.currentFurnaceEfficiency} 
+          value={formData.currentFurnaceEfficiency} 
           inputType='decimal'
           inputProps={{ inputMode: 'decimal' }}
           InputProps={{ endAdornment: <InputAdornment position="end">%</InputAdornment> }}
-          setter={(e) => setSystemData({...systemData, currentFurnaceEfficiency: e.target.value})} 
+          setter={(e) => setFormData({...formData, currentFurnaceEfficiency: e.target.value})} 
           formOrder={3}
         />
         <div style={{ display: 'flex' }}>
           <ZipField
             label="Zip Code"
-            value={systemData.zipCode}
+            value={formData.zipCode}
             len={5}
             inputType='int'
             inputProps={{ inputMode: 'numeric' }}
@@ -104,8 +103,8 @@ const CurrentSystemForm: React.FC<CurrentSystemFormProps> = ({
                 borderBottomRightRadius: haveZipDistData ? '0' : '4px',
               }
             }}
-            setter={(e) => setSystemData({...systemData, zipCode: e.target.value})} 
-            onZipDataReceived={(d, zipCode) => setSystemData({...systemData, zipDistData: d, zipCode: zipCode})}
+            setter={(e) => setFormData({...formData, zipCode: e.target.value})} 
+            onZipDataReceived={(d, zipCode) => setFormData({...formData, zipDistData: d, zipCode: zipCode})}
             formOrder={4}
           />
         <SelectClimate
@@ -123,9 +122,9 @@ const CurrentSystemForm: React.FC<CurrentSystemFormProps> = ({
               borderBottomLeftRadius: '0',
             }
           }}
-          zipData={systemData.zipDistData}
-          selectedClimate={systemData.selectedClimate}
-          setSelectedClimate={(e) => setSystemData({...systemData, selectedClimate: e})}
+          zipData={formData.zipDistData}
+          selectedClimate={formData.selectedClimate}
+          setSelectedClimate={(e) => setFormData({...formData, selectedClimate: e})}
         />
         </div>
         <IconButton
@@ -134,6 +133,35 @@ const CurrentSystemForm: React.FC<CurrentSystemFormProps> = ({
           onClick={() => setShowHelpPopover(!showHelpPopover)}
         ><QuestionMark/></IconButton>
         <HelpPopover helpText={helpText} isOpen={showHelpPopover} onClose={() => setShowHelpPopover(false)}></HelpPopover>
+        <Box sx={{
+          position: 'relative',
+          padding: 2,
+          marginBottom: '30px',
+          flexGrow: 1,
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-evenly',
+        }}>
+          <Button
+            component={Link}
+            to='/joule-home'
+            style={{
+              transition: 'width 0.5s ease-in-out, opacity 0.5s ease-in-out',
+              left: 0,
+          }}>
+            Previous
+          </Button>
+          <Button
+            component={Link}
+            to='/joule-home/energy-usage'
+            disabled={!haveZipDistData}
+            style={{
+              transition: 'width 0.5s ease-in-out, opacity 0.5s ease-in-out',
+              left: 0,
+          }}>
+            Next
+          </Button>
+        </Box>
       </Box>
     </LeftGrow>
   );
