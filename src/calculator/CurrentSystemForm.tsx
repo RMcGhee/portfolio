@@ -147,7 +147,7 @@ const CurrentSystemForm: React.FC = () => {
           <Button
             component={Link}
             to='/joule-home/energy-usage'
-            disabled={!haveZipDistData}
+            // disabled={!haveZipDistData}
             style={{
               transition: 'width 0.5s ease-in-out, opacity 0.5s ease-in-out',
               left: 0,

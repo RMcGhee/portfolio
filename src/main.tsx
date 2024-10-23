@@ -9,6 +9,7 @@ import JouleHome from './pages/joule-home';
 import Home from './pages/home';
 import Introduction from './calculator/Introduction';
 import CurrentSystemForm from './calculator/CurrentSystemForm';
+import EnergyUsageForm from './calculator/EnergyUsageForm';
 
 const router = createHashRouter([
   {
@@ -21,7 +22,7 @@ const router = createHashRouter([
         children: [
           { path: '', element: <Introduction /> },
           { path: 'current-system', element: <CurrentSystemForm /> },
-          { path: 'energy-usage', element: <Home /> },
+          { path: 'energy-usage', element: <EnergyUsageForm /> },
           { path: 'analysis', element: <Home /> },
         ],
       },

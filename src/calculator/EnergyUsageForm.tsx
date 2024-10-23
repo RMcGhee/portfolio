@@ -7,18 +7,12 @@ import { HelpPopover } from '../common/HelpPopover';
 import { EnergyFormData, MonthlyUsage, initEnergyForm, } from '../entities/EnergyFormData';
 import { DegreeDayData, initDegreeDayMonths } from '../entities/DegreeDayData';
 import { isEmpty, validateZip } from '../common/Util';
-import { Updater } from 'use-immer';
+import { Link, useOutletContext } from 'react-router-dom';
+import { ContextType } from '../pages/joule-home';
 
-type EnergyUsageFormProps = {
-  formData: FormData;
-  setFormData: Updater<FormData>;
-};
+const EnergyUsageForm: React.FC = () => {
 
-const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
-  formData,
-  setFormData,
-}) => {
-
+  const { formData, setFormData } = useOutletContext<ContextType>();
   const [energyFormData, setEnergyFormData] = useState<EnergyFormData>(initEnergyForm(formData));
   
   const [showHelpPopover, setShowHelpPopover] = useState(false);
@@ -61,6 +55,7 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
 
         setFormData((formDataDraft) => {
           formDataDraft.degreeDayData = data;
+          return formDataDraft;
         });
       };
       getDegreeDayData();
@@ -78,6 +73,7 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
         gasPrice: energyFormData.gasPrice,
         gasUnits: energyFormData.gasUnits,
       } as FormData);
+      return formDataDraft;
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [energyFormData]);
@@ -200,6 +196,35 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
           onClick={() => setShowHelpPopover(!showHelpPopover)}
         ><QuestionMark/></IconButton>
         <HelpPopover helpText={helpText} isOpen={showHelpPopover} onClose={() => setShowHelpPopover(false)}></HelpPopover>
+        <Box sx={{
+          position: 'relative',
+          padding: 2,
+          marginBottom: '30px',
+          flexGrow: 1,
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-evenly',
+        }}>
+          <Button
+            component={Link}
+            to='/joule-home/current-system'
+            style={{
+              transition: 'width 0.5s ease-in-out, opacity 0.5s ease-in-out',
+              left: 0,
+          }}>
+            Previous
+          </Button>
+          <Button
+            component={Link}
+            to='/joule-home/analysis'
+            // disabled={!haveZipDistData}
+            style={{
+              transition: 'width 0.5s ease-in-out, opacity 0.5s ease-in-out',
+              left: 0,
+          }}>
+            Next
+          </Button>
+        </Box>
       </Box>
     </LeftGrow>
   );
