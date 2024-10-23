@@ -4,7 +4,7 @@ import { LeftGrow, ValidatedField } from '../common/Basic';
 import { FormData } from '../entities/FormData';
 import { QuestionMark } from '@mui/icons-material';
 import { HelpPopover } from '../common/HelpPopover';
-import { EnergyFormData, MonthlyUsage, initEnergyForm, } from '../entities/EnergyFormData';
+import { EnergyFormData, MonthlyUsage, initEnergyForm, validateEnergyFormData, } from '../entities/EnergyFormData';
 import { DegreeDayData, dummyData, initDegreeDayMonths } from '../entities/DegreeDayData';
 import { isEmpty, validateZip } from '../common/Util';
 import { Link, useOutletContext } from 'react-router-dom';
@@ -15,6 +15,7 @@ const EnergyUsageForm: React.FC = () => {
   const { formData, setFormData } = useOutletContext<ContextType>();
   const [energyFormData, setEnergyFormData] = useState<EnergyFormData>(initEnergyForm(formData));
   
+  const [formValid, setFormValid] = useState(false);
   const [showHelpPopover, setShowHelpPopover] = useState(false);
 
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -82,6 +83,7 @@ const EnergyUsageForm: React.FC = () => {
         gasPrice: energyFormData.gasPrice,
         gasUnits: energyFormData.gasUnits,
       } as FormData);
+      setFormValid(validateEnergyFormData(formDataDraft));
       return formDataDraft;
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -226,7 +228,7 @@ const EnergyUsageForm: React.FC = () => {
           <Button
             component={Link}
             to='/joule-home/analysis'
-            // disabled={!haveZipDistData}
+            disabled={!formValid}
             style={{
               transition: 'width 0.5s ease-in-out, opacity 0.5s ease-in-out',
               left: 0,
