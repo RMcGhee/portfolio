@@ -10,6 +10,7 @@ import Home from './pages/home';
 import Introduction from './calculator/Introduction';
 import CurrentSystemForm from './calculator/CurrentSystemForm';
 import EnergyUsageForm from './calculator/EnergyUsageForm';
+import EnergyUsageAnalysis from './calculator/EnergyUsageAnalysis';
 
 const router = createHashRouter([
   {
@@ -23,7 +24,7 @@ const router = createHashRouter([
           { path: '', element: <Introduction /> },
           { path: 'current-system', element: <CurrentSystemForm /> },
           { path: 'energy-usage', element: <EnergyUsageForm /> },
-          { path: 'analysis', element: <Home /> },
+          { path: 'analysis', element: <EnergyUsageAnalysis /> },
         ],
       },
       { path: 'photography', element: <Photography/> },
