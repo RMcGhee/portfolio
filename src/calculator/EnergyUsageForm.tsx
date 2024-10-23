@@ -60,7 +60,9 @@ const EnergyUsageForm: React.FC = () => {
           data.year_2023.heating = initDegreeDayMonths(data.year_2023.heating);
 
           setFormData((formDataDraft) => {
+            if (data !== null) {
             formDataDraft.degreeDayData = data;
+            }
             return formDataDraft;
           });
         }
