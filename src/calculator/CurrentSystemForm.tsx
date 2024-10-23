@@ -3,17 +3,10 @@ import { Box, Button, IconButton, InputAdornment } from '@mui/material';
 import { LeftGrow, ValidatedField } from '../common/Basic';
 import { ZipField } from '../common/ZipField';
 import { SelectClimate } from '../common/SelectClimate';
-import { FormData } from '../entities/FormData';
 import { QuestionMark } from '@mui/icons-material';
 import { HelpPopover } from '../common/HelpPopover';
-import { Updater } from 'use-immer';
 import { Link, useOutletContext } from 'react-router-dom';
 import { ContextType } from '../pages/joule-home';
-
-type CurrentSystemFormProps = {
-  formData: FormData;
-  setFormData: Updater<FormData>;
-};
 
 const CurrentSystemForm: React.FC = () => {
   const { formData, setFormData } = useOutletContext<ContextType>();
