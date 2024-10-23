@@ -33,7 +33,7 @@ const EnergyUsageForm: React.FC = () => {
   useEffect(() => {
     if (validateZip(formData.selectedClimate) && degreeDayDataOutOfDate(formData.degreeDayData)) {
       const getDegreeDayData = async () => {
-        let data = null;
+        let data: DegreeDayData|null = null;
         const edgeFunction = 'https://get-dd-data.richmcghee.workers.dev';
         try {
           const response = await fetch(edgeFunction, {
