@@ -1,6 +1,7 @@
 import React from 'react';
-import { Box, Divider, Grid, Paper, Typography } from '@mui/material';
+import { Box, Button, Divider, Grid, Paper, Typography } from '@mui/material';
 import { LeftGrow } from '../common/Basic';
+import { Link } from 'react-router-dom';
 
 const Introduction: React.FC = () => {
   return (
@@ -51,7 +52,27 @@ const Introduction: React.FC = () => {
         Don't worry, we won't hide your results at the end by asking for your email or phone number.
         <br/>We don't wan't those.
         <br/>Why? I like heat pumps and wanted to play around with React. Stack is React, Cloudflare Pages/Workers, and Supabase (postgres) for db.
+        <Box sx={{
+          position: 'relative',
+          padding: 2,
+          marginBottom: '30px',
+          flexGrow: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+        }}>
+          <Button
+            component={Link}
+            to='current-system'
+            style={{
+              transition: 'width 0.5s ease-in-out, opacity 0.5s ease-in-out',
+              left: 0,
+          }}>
+            Next
+          </Button>
+        </Box>
       </Box>
+      
     </LeftGrow>
   );
 };

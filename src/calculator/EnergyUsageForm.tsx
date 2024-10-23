@@ -4,23 +4,18 @@ import { LeftGrow, ValidatedField } from '../common/Basic';
 import { FormData } from '../entities/FormData';
 import { QuestionMark } from '@mui/icons-material';
 import { HelpPopover } from '../common/HelpPopover';
-import { EnergyFormData, MonthlyUsage, initEnergyForm, } from '../entities/EnergyFormData';
-import { DegreeDayData, initDegreeDayMonths } from '../entities/DegreeDayData';
+import { EnergyFormData, MonthlyUsage, initEnergyForm, validateEnergyFormData, } from '../entities/EnergyFormData';
+import { DegreeDayData, dummyData, initDegreeDayMonths } from '../entities/DegreeDayData';
 import { isEmpty, validateZip } from '../common/Util';
-import { Updater } from 'use-immer';
+import { Link, useOutletContext } from 'react-router-dom';
+import { ContextType } from '../pages/joule-home';
 
-type EnergyUsageFormProps = {
-  formData: FormData;
-  setFormData: Updater<FormData>;
-};
+const EnergyUsageForm: React.FC = () => {
 
-const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
-  formData,
-  setFormData,
-}) => {
-
+  const { formData, setFormData } = useOutletContext<ContextType>();
   const [energyFormData, setEnergyFormData] = useState<EnergyFormData>(initEnergyForm(formData));
   
+  const [formValid, setFormValid] = useState(false);
   const [showHelpPopover, setShowHelpPopover] = useState(false);
 
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -39,29 +34,39 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
   useEffect(() => {
     if (validateZip(formData.selectedClimate) && degreeDayDataOutOfDate(formData.degreeDayData)) {
       const getDegreeDayData = async () => {
+        let data: DegreeDayData|null = null;
         const edgeFunction = 'https://get-dd-data.richmcghee.workers.dev';
-        const response = await fetch(edgeFunction, {
-          method: 'POST',
-          body: JSON.stringify({ 'zip': formData.selectedClimate }),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-        if (!response.ok) throw new Error('Network response was not ok');
-        const responseData = await response.json();
-        const data = responseData.data[0] as DegreeDayData;
-        data.cooling = initDegreeDayMonths(data.cooling);
-        data.heating = initDegreeDayMonths(data.heating);
-        data.year_2021.cooling = initDegreeDayMonths(data.year_2021.cooling);
-        data.year_2021.heating = initDegreeDayMonths(data.year_2021.heating);
-        data.year_2022.cooling = initDegreeDayMonths(data.year_2022.cooling);
-        data.year_2022.heating = initDegreeDayMonths(data.year_2022.heating);
-        data.year_2023.cooling = initDegreeDayMonths(data.year_2023.cooling);
-        data.year_2023.heating = initDegreeDayMonths(data.year_2023.heating);
+        try {
+          const response = await fetch(edgeFunction, {
+            method: 'POST',
+            body: JSON.stringify({ 'zip': formData.selectedClimate }),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+          // if (!response.ok) throw new Error('Network response was not ok');
+          const responseData = await response.json();
+          data = responseData.data[0] as DegreeDayData;
+        } catch (e) {
+          data = dummyData;
+        }
+        if (data !== null) {
+          data.cooling = initDegreeDayMonths(data.cooling);
+          data.heating = initDegreeDayMonths(data.heating);
+          data.year_2021.cooling = initDegreeDayMonths(data.year_2021.cooling);
+          data.year_2021.heating = initDegreeDayMonths(data.year_2021.heating);
+          data.year_2022.cooling = initDegreeDayMonths(data.year_2022.cooling);
+          data.year_2022.heating = initDegreeDayMonths(data.year_2022.heating);
+          data.year_2023.cooling = initDegreeDayMonths(data.year_2023.cooling);
+          data.year_2023.heating = initDegreeDayMonths(data.year_2023.heating);
 
-        setFormData((formDataDraft) => {
-          formDataDraft.degreeDayData = data;
-        });
+          setFormData((formDataDraft) => {
+            if (data !== null) {
+            formDataDraft.degreeDayData = data;
+            }
+            return formDataDraft;
+          });
+        }
       };
       getDegreeDayData();
     }
@@ -78,6 +83,8 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
         gasPrice: energyFormData.gasPrice,
         gasUnits: energyFormData.gasUnits,
       } as FormData);
+      setFormValid(validateEnergyFormData(formDataDraft));
+      return formDataDraft;
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [energyFormData]);
@@ -200,6 +207,35 @@ const EnergyUsageForm: React.FC<EnergyUsageFormProps> = ({
           onClick={() => setShowHelpPopover(!showHelpPopover)}
         ><QuestionMark/></IconButton>
         <HelpPopover helpText={helpText} isOpen={showHelpPopover} onClose={() => setShowHelpPopover(false)}></HelpPopover>
+        <Box sx={{
+          position: 'relative',
+          padding: 2,
+          marginBottom: '30px',
+          flexGrow: 1,
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-evenly',
+        }}>
+          <Button
+            component={Link}
+            to='/joule-home/current-system'
+            style={{
+              transition: 'width 0.5s ease-in-out, opacity 0.5s ease-in-out',
+              left: 0,
+          }}>
+            Previous
+          </Button>
+          <Button
+            component={Link}
+            to='/joule-home/analysis'
+            disabled={!formValid}
+            style={{
+              transition: 'width 0.5s ease-in-out, opacity 0.5s ease-in-out',
+              left: 0,
+          }}>
+            Next
+          </Button>
+        </Box>
       </Box>
     </LeftGrow>
   );

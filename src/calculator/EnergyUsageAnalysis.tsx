@@ -1,30 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Grid, IconButton, Paper, } from '@mui/material';
+import { Box, Button, Grid, IconButton, Paper, } from '@mui/material';
 import { LeftGrow } from '../common/Basic';
-import { FormData } from '../entities/FormData';
 import { QuestionMark } from '@mui/icons-material';
 import { HelpPopover } from '../common/HelpPopover';
 import { EnergyFormData, initEnergyForm, } from '../entities/EnergyFormData';
 import SeasonElectricGraph from './graphs/SeasonElectricGraph';
 import SeasonGasGraph from './graphs/SeasonGasGraph';
-import { Updater } from 'use-immer';
 import YearBtuGraph from './graphs/YearBtuGraph';
 import YearBtuNeedsGraph from './graphs/YearBtuNeedsGraph';
 import { MonthData } from '../entities/CalculatedData';
 import NewSystemCostGraph from './graphs/NewSystemCostGraph';
 import NewSystemUsageGraph from './graphs/NewSystemUsageGraph';
+import { Link, useOutletContext } from 'react-router-dom';
+import { ContextType } from '../pages/joule-home';
 
 export type MonthDataEntry = [string, [number, number]];
 
-type EnergyUsageAnalysisProps = {
-  formData: FormData;
-  setFormData: Updater<FormData>;
-};
-
-const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
-  formData,
-  setFormData,
-}) => {
+const EnergyUsageAnalysis: React.FC = () => {
+  const { formData, setFormData } = useOutletContext<ContextType>();
   const [energyFormData,] = useState<EnergyFormData>(initEnergyForm(formData));
 
   const [showHelpPopover, setShowHelpPopover] = useState(false);
@@ -42,6 +35,7 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
 
   useEffect(() => {
     setFormData((formDataDraft) => {
+      formDataDraft = {...formData};
       formDataDraft.baseElectricUsage = baseElectricUsage;
       formDataDraft.baseGasUsage = baseGasUsage;
       formDataDraft.averagekBTUdd = averagekBTUdd;
@@ -52,6 +46,7 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
       formDataDraft.desiredTotalCost = desiredTotalYearlyCost;
       formDataDraft.desiredTotalCost = desiredTotalYearlyCost;
       formDataDraft.oldHvacCost = oldHvacYearlyCost;
+      return formDataDraft;
     });
   }, [energyFormData, baseElectricUsage, baseGasUsage, averagekBTUdd, kBTUNeeds, currentHVACCost, currentTotalCost, desiredHvacYearlyCost, desiredTotalYearlyCost, oldHvacYearlyCost, setFormData]);
 
@@ -124,6 +119,35 @@ const EnergyUsageAnalysis: React.FC<EnergyUsageAnalysisProps> = ({
           <HeaderItem>New HVAC Cost</HeaderItem> <DataItem asDollars={true}>{formData.desiredHvacCost}</DataItem>
           <HeaderItem>Difference</HeaderItem> <DataItem asDollars={true}>{formData.oldHvacCost - formData.desiredHvacCost}</DataItem>
         </Grid>
+        <Box sx={{
+          position: 'relative',
+          padding: 2,
+          marginBottom: '30px',
+          flexGrow: 1,
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-evenly',
+        }}>
+          <Button
+            component={Link}
+            to='/joule-home/energy-usage'
+            style={{
+              transition: 'width 0.5s ease-in-out, opacity 0.5s ease-in-out',
+              left: 0,
+          }}>
+            Previous
+          </Button>
+          <Button
+            component={Link}
+            to='/joule-home'
+            // disabled={!haveZipDistData}
+            style={{
+              transition: 'width 0.5s ease-in-out, opacity 0.5s ease-in-out',
+              left: 0,
+          }}>
+            Start Over
+          </Button>
+        </Box>
       </Box>
     </LeftGrow>
   );

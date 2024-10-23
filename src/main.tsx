@@ -6,13 +6,26 @@ import { RouterProvider, createHashRouter } from 'react-router-dom';
 import Photography from './pages/photography';
 import Biology from './pages/biology';
 import JouleHome from './pages/joule-home';
+import Introduction from './calculator/Introduction';
+import CurrentSystemForm from './calculator/CurrentSystemForm';
+import EnergyUsageForm from './calculator/EnergyUsageForm';
+import EnergyUsageAnalysis from './calculator/EnergyUsageAnalysis';
 
 const router = createHashRouter([
   {
     path: '/',
     element: <App/>,
     children: [
-      { path: 'joule-home', element: <JouleHome/> },
+      {
+        path: 'joule-home',
+        element: <JouleHome/>,
+        children: [
+          { path: '', element: <Introduction /> },
+          { path: 'current-system', element: <CurrentSystemForm /> },
+          { path: 'energy-usage', element: <EnergyUsageForm /> },
+          { path: 'analysis', element: <EnergyUsageAnalysis /> },
+        ],
+      },
       { path: 'photography', element: <Photography/> },
       { path: 'biology', element: <Biology/> },
     ]
