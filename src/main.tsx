@@ -6,7 +6,6 @@ import { RouterProvider, createHashRouter } from 'react-router-dom';
 import Photography from './pages/photography';
 import Biology from './pages/biology';
 import JouleHome from './pages/joule-home';
-import Home from './pages/home';
 import Introduction from './calculator/Introduction';
 import CurrentSystemForm from './calculator/CurrentSystemForm';
 import EnergyUsageForm from './calculator/EnergyUsageForm';
