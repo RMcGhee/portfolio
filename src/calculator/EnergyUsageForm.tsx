@@ -5,7 +5,7 @@ import { FormData } from '../entities/FormData';
 import { QuestionMark } from '@mui/icons-material';
 import { HelpPopover } from '../common/HelpPopover';
 import { EnergyFormData, MonthlyUsage, initEnergyForm, } from '../entities/EnergyFormData';
-import { DegreeDayData, initDegreeDayMonths } from '../entities/DegreeDayData';
+import { DegreeDayData, dummyData, initDegreeDayMonths } from '../entities/DegreeDayData';
 import { isEmpty, validateZip } from '../common/Util';
 import { Link, useOutletContext } from 'react-router-dom';
 import { ContextType } from '../pages/joule-home';
@@ -33,17 +33,23 @@ const EnergyUsageForm: React.FC = () => {
   useEffect(() => {
     if (validateZip(formData.selectedClimate) && degreeDayDataOutOfDate(formData.degreeDayData)) {
       const getDegreeDayData = async () => {
+        let data = null;
         const edgeFunction = 'https://get-dd-data.richmcghee.workers.dev';
-        const response = await fetch(edgeFunction, {
-          method: 'POST',
-          body: JSON.stringify({ 'zip': formData.selectedClimate }),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-        if (!response.ok) throw new Error('Network response was not ok');
-        const responseData = await response.json();
-        const data = responseData.data[0] as DegreeDayData;
+        try {
+          const response = await fetch(edgeFunction, {
+            method: 'POST',
+            body: JSON.stringify({ 'zip': formData.selectedClimate }),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+          // if (!response.ok) throw new Error('Network response was not ok');
+          const responseData = await response.json();
+          data = responseData.data[0] as DegreeDayData;
+        } catch (e) {
+          data = dummyData;
+        }
+        
         data.cooling = initDegreeDayMonths(data.cooling);
         data.heating = initDegreeDayMonths(data.heating);
         data.year_2021.cooling = initDegreeDayMonths(data.year_2021.cooling);

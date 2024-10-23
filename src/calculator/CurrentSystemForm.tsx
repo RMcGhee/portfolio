@@ -97,7 +97,7 @@ const CurrentSystemForm: React.FC = () => {
               }
             }}
             setter={(e) => setFormData({...formData, zipCode: e.target.value})} 
-            onZipDataReceived={(d, zipCode) => setFormData({...formData, zipDistData: d, zipCode: zipCode})}
+            onZipDataReceived={(d, zipCode) => setFormData({...formData, zipDistData: d, zipCode: zipCode, selectedClimate: d.near_zip_1 ?? '' })}
             formOrder={4}
           />
         <SelectClimate

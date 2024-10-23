@@ -145,7 +145,7 @@ const EnergyUsageAnalysis: React.FC = () => {
               transition: 'width 0.5s ease-in-out, opacity 0.5s ease-in-out',
               left: 0,
           }}>
-            Next
+            Start Over
           </Button>
         </Box>
       </Box>
