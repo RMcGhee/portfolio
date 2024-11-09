@@ -1,5 +1,5 @@
 import React, { createContext, useContext } from 'react';
-import { FormData } from './FormData';
+import { type FormData } from './FormData';
 
 // Create the context for form data
 interface JouleHomeContextType {

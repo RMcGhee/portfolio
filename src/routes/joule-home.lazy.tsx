@@ -3,7 +3,7 @@ import { Box } from '@mui/system'
 import { useImmer } from 'use-immer'
 
 import { LeftGrow } from '../common/Basic'
-import { FormData, defaultFormData } from '../entities/FormData'
+import { type FormData, defaultFormData } from '../entities/FormData'
 import { isEmpty } from '../common/Util'
 import { createLazyFileRoute, Outlet } from '@tanstack/react-router'
 import { JouleHomeContext } from '../entities/joule-home-context'

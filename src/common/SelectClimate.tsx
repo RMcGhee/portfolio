@@ -1,6 +1,6 @@
-import { TextField, TextFieldProps, MenuItem } from '@mui/material';
+import { MenuItem, TextField, type TextFieldProps } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { ZipDist } from '../entities/ZipDist';
+import type { ZipDist } from '../entities/ZipDist';
 import { isEmpty } from './Util';
 
 type SelectClimateProps = TextFieldProps & {

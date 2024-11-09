@@ -1,11 +1,11 @@
-import React, { useRef } from 'react';
-import { FormData } from '../../entities/FormData';
-import { Chart as ChartJS, LinearScale, CategoryScale, PointElement, LineElement, Legend, Tooltip, Title, ScatterController, } from 'chart.js';
-import { Line } from 'react-chartjs-2';
-import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 import { useTheme } from '@mui/material';
+import { CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, ScatterController, Title, Tooltip, } from 'chart.js';
+import React, { useRef } from 'react';
+import { Line } from 'react-chartjs-2';
+import type { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 import { btuInkWh, copInSeer, months } from '../../common/Basic';
-import { DegreeDayMonths } from '../../entities/DegreeDayData';
+import type { DegreeDayMonths } from '../../entities/DegreeDayData';
+import type { FormData } from '../../entities/FormData';
 
 type NewSystemUsageGraphProps = {
   formData: FormData;

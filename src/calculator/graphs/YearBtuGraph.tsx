@@ -1,11 +1,11 @@
-import React, { useEffect, useRef } from 'react';
-import { FormData } from '../../entities/FormData';
-import { MonthlyUsage, } from '../../entities/EnergyFormData';
-import { Chart as ChartJS, LinearScale, CategoryScale, PointElement, LineElement, Legend, Tooltip, Title, } from 'chart.js';
-import { Line } from 'react-chartjs-2';
-import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 import { useTheme } from '@mui/material';
+import { CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title, Tooltip, } from 'chart.js';
+import React, { useEffect, useRef } from 'react';
+import { Line } from 'react-chartjs-2';
+import type { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 import { btuInCcf, btuInkWh, copInSeer, months } from '../../common/Basic';
+import type { MonthlyUsage, } from '../../entities/EnergyFormData';
+import type { FormData } from '../../entities/FormData';
 
 type YearBtuGraphProps = {
   formData: FormData;

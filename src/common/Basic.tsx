@@ -1,5 +1,5 @@
-import React, { useState, ReactElement } from 'react';
-import { Grow, TextField, TextFieldProps, Tooltip } from '@mui/material';
+import { Grow, TextField, Tooltip, type TextFieldProps } from '@mui/material';
+import React, { useState, type ReactElement } from 'react';
 
 const prod_env = true;
 export const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];

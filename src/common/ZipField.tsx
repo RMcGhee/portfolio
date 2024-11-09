@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { ValidatedField, ValidatedFieldProps } from './Basic';
-import { ZipDist } from '../entities/ZipDist';
 import { CircularProgress, InputAdornment } from '@mui/material';
+import React, { useState } from 'react';
+import type { ZipDist } from '../entities/ZipDist';
+import { ValidatedField, type ValidatedFieldProps } from './Basic';
 import { validateZip } from './Util';
 
 type ZipFieldProps = ValidatedFieldProps & {

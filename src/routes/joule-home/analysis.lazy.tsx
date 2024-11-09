@@ -10,8 +10,8 @@ import YearBtuGraph from '../../calculator/graphs/YearBtuGraph';
 import YearBtuNeedsGraph from '../../calculator/graphs/YearBtuNeedsGraph';
 import { LeftGrow } from '../../common/Basic';
 import { HelpPopover } from '../../common/HelpPopover';
-import { MonthData } from '../../entities/CalculatedData';
-import { EnergyFormData, initEnergyForm } from '../../entities/EnergyFormData';
+import { type MonthData } from '../../entities/CalculatedData';
+import { type EnergyFormData, initEnergyForm } from '../../entities/EnergyFormData';
 import { useJouleHomeContext } from '../../entities/joule-home-context';
 
 export const Route = createLazyFileRoute('/joule-home/analysis')({

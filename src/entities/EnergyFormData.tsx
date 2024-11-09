@@ -1,5 +1,5 @@
 import { isNumeric } from "../common/Util";
-import { FormData } from "./FormData";
+import { type FormData } from "./FormData";
 
 export type EnergyFormData = {
   dataYear: 2021 | 2022 | 2023;

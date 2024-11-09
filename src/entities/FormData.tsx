@@ -1,8 +1,8 @@
-import { CalculatedData, MonthData } from "./CalculatedData";
-import { CurrentSystemData } from "./CurrentSystemData";
-import { DegreeDayData, DegreeDayMonths } from "./DegreeDayData";
-import { EnergyFormData, defaultMonthlyUsage, } from "./EnergyFormData";
-import { ZipDist } from "./ZipDist";
+import type { CalculatedData, MonthData } from "./CalculatedData";
+import { type CurrentSystemData } from "./CurrentSystemData";
+import type { DegreeDayData, DegreeDayMonths } from "./DegreeDayData";
+import { type EnergyFormData, defaultMonthlyUsage, } from "./EnergyFormData";
+import { type ZipDist } from "./ZipDist";
 
 export type FormData = CurrentSystemData & EnergyFormData & CalculatedData & {};
 

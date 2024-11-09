@@ -14,18 +14,9 @@ import React, { useEffect, useState } from 'react'
 import { LeftGrow, ValidatedField } from '../../common/Basic'
 import { HelpPopover } from '../../common/HelpPopover'
 import { isEmpty, validateZip } from '../../common/Util'
-import {
-  DegreeDayData,
-  dummyData,
-  initDegreeDayMonths,
-} from '../../entities/DegreeDayData'
-import {
-  EnergyFormData,
-  initEnergyForm,
-  MonthlyUsage,
-  validateEnergyFormData,
-} from '../../entities/EnergyFormData'
-import { FormData } from '../../entities/FormData'
+import { type DegreeDayData, dummyData, initDegreeDayMonths } from '../../entities/DegreeDayData'
+import { type EnergyFormData, initEnergyForm, type MonthlyUsage, validateEnergyFormData } from '../../entities/EnergyFormData'
+import type { FormData } from '../../entities/FormData'
 import { useJouleHomeContext } from '../../entities/joule-home-context'
 
 export const Route = createLazyFileRoute('/joule-home/energy-usage-form')({
