@@ -15,7 +15,7 @@ export const ZipField: React.FC<ZipFieldProps> = ({
   const [zipDataLoading, setZipDataLoading] = useState(false);
   
   const fetchZipData = async (zipCode: string) => {
-    const edgeFunction = 'https://get-zip-dist.richmcghee.workers.dev/';
+    const edgeFunction = 'https://joule-home.richmcghee.workers.dev/get-zip-dist';
     // Need to validate here too, since the setter is always called after validation, even
     // if validation fails.
     if (validateZip(zipCode)) {

@@ -98,7 +98,7 @@ function EnergyUsageForm() {
     ) {
       const getDegreeDayData = async () => {
         let data: DegreeDayData | null = null
-        const edgeFunction = 'https://get-dd-data.richmcghee.workers.dev'
+        const edgeFunction = 'https://joule-home.richmcghee.workers.dev/get-dd-data'
         try {
           const response = await fetch(edgeFunction, {
             method: 'POST',
