@@ -42,7 +42,6 @@ function JouleHome() {
       // Return clearTimeout as the cleanup so that it clears if unmounted or called again.
       return () => clearTimeout(timer)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData])
 
   return (
