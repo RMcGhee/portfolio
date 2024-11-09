@@ -14,7 +14,7 @@ import { MonthData } from '../../entities/CalculatedData';
 import { EnergyFormData, initEnergyForm } from '../../entities/EnergyFormData';
 import { useJouleHomeContext } from '../../entities/joule-home-context';
 
-export const Route = createLazyFileRoute('/joule-home/energy-usage-analysis')({
+export const Route = createLazyFileRoute('/joule-home/analysis')({
   component: EnergyUsageAnalysis,
 })
 
@@ -134,7 +134,7 @@ function EnergyUsageAnalysis() {
         }}>
           <Button
             component={Link}
-            to='/joule-home/energy-usage'
+            to='/joule-home/energy-usage-form'
             style={{
               transition: 'width 0.5s ease-in-out, opacity 0.5s ease-in-out',
               left: 0,

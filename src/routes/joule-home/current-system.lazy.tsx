@@ -141,7 +141,7 @@ function CurrentSystemForm() {
         }}>
           <Button
             component={Link}
-            to='/joule-home/introduction'
+            to='/joule-home'
             style={{
               transition: 'width 0.5s ease-in-out, opacity 0.5s ease-in-out',
               left: 0,
@@ -150,7 +150,7 @@ function CurrentSystemForm() {
           </Button>
           <Button
             component={Link}
-            to='/joule-home/energy-usage'
+            to='/joule-home/energy-usage-form'
             disabled={!haveZipDistData}
             style={{
               transition: 'width 0.5s ease-in-out, opacity 0.5s ease-in-out',

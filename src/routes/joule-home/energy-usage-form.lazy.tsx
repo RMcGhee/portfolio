@@ -155,7 +155,7 @@ function EnergyUsageForm() {
         gasPrice: energyFormData.gasPrice,
         gasUnits: energyFormData.gasUnits,
       } as FormData)
-      setFormValid(validateEnergyFormData(formDataDraft))
+      setFormValid(validateEnergyFormData(formDataDraft)) // TODO: might be causing render setState issue
       return formDataDraft
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps

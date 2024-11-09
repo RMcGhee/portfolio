@@ -24,12 +24,10 @@ const JouleHomeIndexLazyImport = createFileRoute('/joule-home/')()
 const JouleHomeEnergyUsageFormLazyImport = createFileRoute(
   '/joule-home/energy-usage-form',
 )()
-const JouleHomeEnergyUsageAnalysisLazyImport = createFileRoute(
-  '/joule-home/energy-usage-analysis',
-)()
 const JouleHomeCurrentSystemLazyImport = createFileRoute(
   '/joule-home/current-system',
 )()
+const JouleHomeAnalysisLazyImport = createFileRoute('/joule-home/analysis')()
 
 // Create/Update Routes
 
@@ -74,17 +72,6 @@ const JouleHomeEnergyUsageFormLazyRoute =
     import('./routes/joule-home/energy-usage-form.lazy').then((d) => d.Route),
   )
 
-const JouleHomeEnergyUsageAnalysisLazyRoute =
-  JouleHomeEnergyUsageAnalysisLazyImport.update({
-    id: '/energy-usage-analysis',
-    path: '/energy-usage-analysis',
-    getParentRoute: () => JouleHomeLazyRoute,
-  } as any).lazy(() =>
-    import('./routes/joule-home/energy-usage-analysis.lazy').then(
-      (d) => d.Route,
-    ),
-  )
-
 const JouleHomeCurrentSystemLazyRoute = JouleHomeCurrentSystemLazyImport.update(
   {
     id: '/current-system',
@@ -93,6 +80,14 @@ const JouleHomeCurrentSystemLazyRoute = JouleHomeCurrentSystemLazyImport.update(
   } as any,
 ).lazy(() =>
   import('./routes/joule-home/current-system.lazy').then((d) => d.Route),
+)
+
+const JouleHomeAnalysisLazyRoute = JouleHomeAnalysisLazyImport.update({
+  id: '/analysis',
+  path: '/analysis',
+  getParentRoute: () => JouleHomeLazyRoute,
+} as any).lazy(() =>
+  import('./routes/joule-home/analysis.lazy').then((d) => d.Route),
 )
 
 // Populate the FileRoutesByPath interface
@@ -127,18 +122,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PhotographyLazyImport
       parentRoute: typeof rootRoute
     }
+    '/joule-home/analysis': {
+      id: '/joule-home/analysis'
+      path: '/analysis'
+      fullPath: '/joule-home/analysis'
+      preLoaderRoute: typeof JouleHomeAnalysisLazyImport
+      parentRoute: typeof JouleHomeLazyImport
+    }
     '/joule-home/current-system': {
       id: '/joule-home/current-system'
       path: '/current-system'
       fullPath: '/joule-home/current-system'
       preLoaderRoute: typeof JouleHomeCurrentSystemLazyImport
-      parentRoute: typeof JouleHomeLazyImport
-    }
-    '/joule-home/energy-usage-analysis': {
-      id: '/joule-home/energy-usage-analysis'
-      path: '/energy-usage-analysis'
-      fullPath: '/joule-home/energy-usage-analysis'
-      preLoaderRoute: typeof JouleHomeEnergyUsageAnalysisLazyImport
       parentRoute: typeof JouleHomeLazyImport
     }
     '/joule-home/energy-usage-form': {
@@ -161,15 +156,15 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 interface JouleHomeLazyRouteChildren {
+  JouleHomeAnalysisLazyRoute: typeof JouleHomeAnalysisLazyRoute
   JouleHomeCurrentSystemLazyRoute: typeof JouleHomeCurrentSystemLazyRoute
-  JouleHomeEnergyUsageAnalysisLazyRoute: typeof JouleHomeEnergyUsageAnalysisLazyRoute
   JouleHomeEnergyUsageFormLazyRoute: typeof JouleHomeEnergyUsageFormLazyRoute
   JouleHomeIndexLazyRoute: typeof JouleHomeIndexLazyRoute
 }
 
 const JouleHomeLazyRouteChildren: JouleHomeLazyRouteChildren = {
+  JouleHomeAnalysisLazyRoute: JouleHomeAnalysisLazyRoute,
   JouleHomeCurrentSystemLazyRoute: JouleHomeCurrentSystemLazyRoute,
-  JouleHomeEnergyUsageAnalysisLazyRoute: JouleHomeEnergyUsageAnalysisLazyRoute,
   JouleHomeEnergyUsageFormLazyRoute: JouleHomeEnergyUsageFormLazyRoute,
   JouleHomeIndexLazyRoute: JouleHomeIndexLazyRoute,
 }
@@ -183,8 +178,8 @@ export interface FileRoutesByFullPath {
   '/biology': typeof BiologyLazyRoute
   '/joule-home': typeof JouleHomeLazyRouteWithChildren
   '/photography': typeof PhotographyLazyRoute
+  '/joule-home/analysis': typeof JouleHomeAnalysisLazyRoute
   '/joule-home/current-system': typeof JouleHomeCurrentSystemLazyRoute
-  '/joule-home/energy-usage-analysis': typeof JouleHomeEnergyUsageAnalysisLazyRoute
   '/joule-home/energy-usage-form': typeof JouleHomeEnergyUsageFormLazyRoute
   '/joule-home/': typeof JouleHomeIndexLazyRoute
 }
@@ -193,8 +188,8 @@ export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
   '/biology': typeof BiologyLazyRoute
   '/photography': typeof PhotographyLazyRoute
+  '/joule-home/analysis': typeof JouleHomeAnalysisLazyRoute
   '/joule-home/current-system': typeof JouleHomeCurrentSystemLazyRoute
-  '/joule-home/energy-usage-analysis': typeof JouleHomeEnergyUsageAnalysisLazyRoute
   '/joule-home/energy-usage-form': typeof JouleHomeEnergyUsageFormLazyRoute
   '/joule-home': typeof JouleHomeIndexLazyRoute
 }
@@ -205,8 +200,8 @@ export interface FileRoutesById {
   '/biology': typeof BiologyLazyRoute
   '/joule-home': typeof JouleHomeLazyRouteWithChildren
   '/photography': typeof PhotographyLazyRoute
+  '/joule-home/analysis': typeof JouleHomeAnalysisLazyRoute
   '/joule-home/current-system': typeof JouleHomeCurrentSystemLazyRoute
-  '/joule-home/energy-usage-analysis': typeof JouleHomeEnergyUsageAnalysisLazyRoute
   '/joule-home/energy-usage-form': typeof JouleHomeEnergyUsageFormLazyRoute
   '/joule-home/': typeof JouleHomeIndexLazyRoute
 }
@@ -218,8 +213,8 @@ export interface FileRouteTypes {
     | '/biology'
     | '/joule-home'
     | '/photography'
+    | '/joule-home/analysis'
     | '/joule-home/current-system'
-    | '/joule-home/energy-usage-analysis'
     | '/joule-home/energy-usage-form'
     | '/joule-home/'
   fileRoutesByTo: FileRoutesByTo
@@ -227,8 +222,8 @@ export interface FileRouteTypes {
     | '/'
     | '/biology'
     | '/photography'
+    | '/joule-home/analysis'
     | '/joule-home/current-system'
-    | '/joule-home/energy-usage-analysis'
     | '/joule-home/energy-usage-form'
     | '/joule-home'
   id:
@@ -237,8 +232,8 @@ export interface FileRouteTypes {
     | '/biology'
     | '/joule-home'
     | '/photography'
+    | '/joule-home/analysis'
     | '/joule-home/current-system'
-    | '/joule-home/energy-usage-analysis'
     | '/joule-home/energy-usage-form'
     | '/joule-home/'
   fileRoutesById: FileRoutesById
@@ -283,8 +278,8 @@ export const routeTree = rootRoute
     "/joule-home": {
       "filePath": "joule-home.lazy.tsx",
       "children": [
+        "/joule-home/analysis",
         "/joule-home/current-system",
-        "/joule-home/energy-usage-analysis",
         "/joule-home/energy-usage-form",
         "/joule-home/"
       ]
@@ -292,12 +287,12 @@ export const routeTree = rootRoute
     "/photography": {
       "filePath": "photography.lazy.tsx"
     },
-    "/joule-home/current-system": {
-      "filePath": "joule-home/current-system.lazy.tsx",
+    "/joule-home/analysis": {
+      "filePath": "joule-home/analysis.lazy.tsx",
       "parent": "/joule-home"
     },
-    "/joule-home/energy-usage-analysis": {
-      "filePath": "joule-home/energy-usage-analysis.lazy.tsx",
+    "/joule-home/current-system": {
+      "filePath": "joule-home/current-system.lazy.tsx",
       "parent": "/joule-home"
     },
     "/joule-home/energy-usage-form": {
