@@ -1,23 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Button, Grid, IconButton, Paper, } from '@mui/material';
-import { LeftGrow } from '../common/Basic';
 import { QuestionMark } from '@mui/icons-material';
-import { HelpPopover } from '../common/HelpPopover';
-import { EnergyFormData, initEnergyForm, } from '../entities/EnergyFormData';
-import SeasonElectricGraph from './graphs/SeasonElectricGraph';
-import SeasonGasGraph from './graphs/SeasonGasGraph';
-import YearBtuGraph from './graphs/YearBtuGraph';
-import YearBtuNeedsGraph from './graphs/YearBtuNeedsGraph';
-import { MonthData } from '../entities/CalculatedData';
-import NewSystemCostGraph from './graphs/NewSystemCostGraph';
-import NewSystemUsageGraph from './graphs/NewSystemUsageGraph';
-import { Link, useOutletContext } from 'react-router-dom';
-import { ContextType } from '../pages/joule-home';
+import { Box, Button, Grid, IconButton, Paper, } from '@mui/material';
+import { createLazyFileRoute, Link } from '@tanstack/react-router';
+import React, { useEffect, useState } from 'react';
+import NewSystemCostGraph from '../../calculator/graphs/NewSystemCostGraph';
+import NewSystemUsageGraph from '../../calculator/graphs/NewSystemUsageGraph';
+import SeasonElectricGraph from '../../calculator/graphs/SeasonElectricGraph';
+import SeasonGasGraph from '../../calculator/graphs/SeasonGasGraph';
+import YearBtuGraph from '../../calculator/graphs/YearBtuGraph';
+import YearBtuNeedsGraph from '../../calculator/graphs/YearBtuNeedsGraph';
+import { LeftGrow } from '../../common/Basic';
+import { HelpPopover } from '../../common/HelpPopover';
+import { MonthData } from '../../entities/CalculatedData';
+import { EnergyFormData, initEnergyForm } from '../../entities/EnergyFormData';
+import { useJouleHomeContext } from '../../entities/joule-home-context';
+
+export const Route = createLazyFileRoute('/joule-home/energy-usage-analysis')({
+  component: EnergyUsageAnalysis,
+})
 
 export type MonthDataEntry = [string, [number, number]];
 
-const EnergyUsageAnalysis: React.FC = () => {
-  const { formData, setFormData } = useOutletContext<ContextType>();
+function EnergyUsageAnalysis() {
+  const { formData, setFormData } = useJouleHomeContext();
   const [energyFormData,] = useState<EnergyFormData>(initEnergyForm(formData));
 
   const [showHelpPopover, setShowHelpPopover] = useState(false);
@@ -152,8 +156,6 @@ const EnergyUsageAnalysis: React.FC = () => {
     </LeftGrow>
   );
 }
-
-export default EnergyUsageAnalysis;
 
 type HeaderItemProps = {
   children: React.ReactNode;

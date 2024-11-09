@@ -1,15 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Box, Button, IconButton, InputAdornment } from '@mui/material';
-import { LeftGrow, ValidatedField } from '../common/Basic';
-import { ZipField } from '../common/ZipField';
-import { SelectClimate } from '../common/SelectClimate';
 import { QuestionMark } from '@mui/icons-material';
-import { HelpPopover } from '../common/HelpPopover';
-import { Link, useOutletContext } from 'react-router-dom';
-import { ContextType } from '../pages/joule-home';
+import { createLazyFileRoute, Link } from '@tanstack/react-router';
+import { LeftGrow, ValidatedField } from '../../common/Basic';
+import { HelpPopover } from '../../common/HelpPopover';
+import { SelectClimate } from '../../common/SelectClimate';
+import { ZipField } from '../../common/ZipField';
+import { useJouleHomeContext } from '../../entities/joule-home-context';
 
-const CurrentSystemForm: React.FC = () => {
-  const { formData, setFormData } = useOutletContext<ContextType>();
+export const Route = createLazyFileRoute('/joule-home/current-system')({
+  component: CurrentSystemForm,
+})
+
+function CurrentSystemForm() {
+  const { formData, setFormData } = useJouleHomeContext();
 
   const [showHelpPopover, setShowHelpPopover] = useState(false);
   const haveZipDistData = Object.keys(formData.zipDistData).length !== 0;
@@ -137,7 +141,7 @@ const CurrentSystemForm: React.FC = () => {
         }}>
           <Button
             component={Link}
-            to='/joule-home'
+            to='/joule-home/introduction'
             style={{
               transition: 'width 0.5s ease-in-out, opacity 0.5s ease-in-out',
               left: 0,
@@ -159,5 +163,3 @@ const CurrentSystemForm: React.FC = () => {
     </LeftGrow>
   );
 };
-
-export default CurrentSystemForm;

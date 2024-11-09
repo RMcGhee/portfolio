@@ -1,12 +1,10 @@
 import { Box } from '@mui/system';
-
-import '../App.css';
-
-import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css';
 import { LeftGrow } from '../common/Basic';
+import { createLazyFileRoute } from '@tanstack/react-router';
+
+export const Route = createLazyFileRoute('/biology')({
+  component: Biology,
+})
 
 function Biology() {
   return (
@@ -44,4 +42,3 @@ function Biology() {
   );
 }
 
-export default Biology;
