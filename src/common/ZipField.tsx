@@ -8,6 +8,19 @@ import { getZipDist } from '../apis/worker-apis';
 type ZipFieldProps = ValidatedFieldProps & {
   onZipDataReceived: (data: ZipDist, zipCode: string) => void; // Callback to update state in parent
 };
+
+function coerceZips(zipDist: ZipDist) {
+  let res = {
+    ...zipDist,
+    zip: zipDist['zip'].toString().padStart(5, '0'),
+    near_zip_1: zipDist['near_zip_1'].toString().padStart(5, '0'),
+    near_zip_2: zipDist['near_zip_2'].toString().padStart(5, '0'),
+    near_zip_3: zipDist['near_zip_3'].toString().padStart(5, '0'),
+    near_zip_4: zipDist['near_zip_4'].toString().padStart(5, '0'),
+    near_zip_5: zipDist['near_zip_5'].toString().padStart(5, '0'),
+  }
+  return res;
+}
   
 export const ZipField: React.FC<ZipFieldProps> = ({
   onZipDataReceived,
@@ -33,7 +46,7 @@ export const ZipField: React.FC<ZipFieldProps> = ({
         const responseData = await response.json();
         zips = responseData.data[0] as ZipDist;
       } catch (e) {
-        console.log(e)
+        console.log(e);
         zips = {
           "id": "28506",
           "zip": "64131",
@@ -66,11 +79,7 @@ export const ZipField: React.FC<ZipFieldProps> = ({
       console.log(zips);
       
       if (zips !== undefined) {
-        for (let [key, value] of Object.entries(zips)) {
-          if (key.includes('zip') && typeof value === 'number') {
-            zips[key] = value.toString().padStart(5, '0');
-          }
-        }
+        zips = coerceZips(zips)
       }
       const data = zips as ZipDist;
       onZipDataReceived(data === undefined ? {} as ZipDist : data, zipCode);
