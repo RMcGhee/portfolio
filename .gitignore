@@ -11,6 +11,7 @@
 # production
 /dist
 *.tsbuildinfo
+.env*
 
 # misc
 .DS_Store
