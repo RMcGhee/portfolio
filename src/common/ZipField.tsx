@@ -62,6 +62,7 @@ export const ZipField: React.FC<ZipFieldProps> = ({
         }
       }
       setZipDataLoading(false);
+      console.log(zips);
       
       if (zips !== undefined) {
         for (let [key, value] of Object.entries(zips)) {
