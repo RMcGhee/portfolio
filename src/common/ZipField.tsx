@@ -44,6 +44,7 @@ export const ZipField: React.FC<ZipFieldProps> = ({
         });
         // if (!response.ok) throw new Error('Network response was not ok');s
         const responseData = await response.json();
+        console.log(responseData)
         zips = responseData.data[0] as ZipDist;
         console.log(zips)
       // } catch (e) {
