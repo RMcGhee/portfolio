@@ -34,7 +34,7 @@ export const ZipField: React.FC<ZipFieldProps> = ({
     if (validateZip(zipCode)) {
       let zips = null;
       setZipDataLoading(true);
-      try {
+      // try {
         const response = await fetch(getZipDist, {
           method: 'POST',
           body: JSON.stringify({ 'zip': zipCode }),
@@ -45,36 +45,37 @@ export const ZipField: React.FC<ZipFieldProps> = ({
         // if (!response.ok) throw new Error('Network response was not ok');s
         const responseData = await response.json();
         zips = responseData.data[0] as ZipDist;
-      } catch (e) {
-        console.log(e);
-        zips = {
-          "id": "28506",
-          "zip": "64131",
-          "city": "Kansas City, MO",
-          "lat": 38.94,
-          "lon": -94.59,
-          "near_city_1": "KANSAS CITY, MO",
-          "near_id_1": 174,
-          "near_zip_1": "64124",
-          "near_dist_1": 8,
-          "near_city_2": "TOPEKA, KS",
-          "near_id_2": 129,
-          "near_zip_2": "66604",
-          "near_dist_2": 103,
-          "near_city_3": "CHANUTE, KS",
-          "near_id_3": 122,
-          "near_zip_3": "66720",
-          "near_dist_3": 176,
-          "near_city_4": "COLUMBIA, MO",
-          "near_id_4": 172,
-          "near_zip_4": "65203",
-          "near_dist_4": 183,
-          "near_city_5": "JOPLIN, MO",
-          "near_id_5": 173,
-          "near_zip_5": "64801",
-          "near_dist_5": 219
-        }
-      }
+        console.log(zips)
+      // } catch (e) {
+        // console.log(e);
+        // zips = {
+        //   "id": "28506",
+        //   "zip": "64131",
+        //   "city": "Kansas City, MO",
+        //   "lat": 38.94,
+        //   "lon": -94.59,
+        //   "near_city_1": "KANSAS CITY, MO",
+        //   "near_id_1": 174,
+        //   "near_zip_1": "64124",
+        //   "near_dist_1": 8,
+        //   "near_city_2": "TOPEKA, KS",
+        //   "near_id_2": 129,
+        //   "near_zip_2": "66604",
+        //   "near_dist_2": 103,
+        //   "near_city_3": "CHANUTE, KS",
+        //   "near_id_3": 122,
+        //   "near_zip_3": "66720",
+        //   "near_dist_3": 176,
+        //   "near_city_4": "COLUMBIA, MO",
+        //   "near_id_4": 172,
+        //   "near_zip_4": "65203",
+        //   "near_dist_4": 183,
+        //   "near_city_5": "JOPLIN, MO",
+        //   "near_id_5": 173,
+        //   "near_zip_5": "64801",
+        //   "near_dist_5": 219
+        // }
+      // }
       setZipDataLoading(false);
       console.log(zips);
       
