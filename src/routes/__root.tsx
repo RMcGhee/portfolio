@@ -19,13 +19,21 @@ function RootComponent() {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <QueryClientProvider client={queryClient}>
-          <Box sx={{ display: 'flex', padding: '1em' }}>
-            <Outlet />
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              minHeight: '100vh',
+            }}
+          >
+            <Box sx={{ display: 'flex', flexGrow: 1, padding: '1em' }}>
+              <Outlet />
+            </Box>
+            <Box marginBottom='0px'> {/* Prevents marginBottom on BottomNav from being rendered off page */}
+              <BottomNav/>
+            </Box>
           </Box>
         </QueryClientProvider>
-        <Box marginBottom='0px'> {/* Prevents marginBottom on BottomNav from being rendered off page */}
-          <BottomNav/>
-        </Box>
       </ThemeProvider>
     </>
   );

@@ -76,7 +76,6 @@ export const ZipField: React.FC<ZipFieldProps> = ({
         };
       }
       setZipDataLoading(false);
-      console.log(zips);
       
       if (zips !== undefined) {
         zips = coerceZips(zips)

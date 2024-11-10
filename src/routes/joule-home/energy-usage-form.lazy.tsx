@@ -150,7 +150,7 @@ function EnergyUsageForm() {
   }, [energyFormData])
 
   useEffect(() => {
-    setFormValid(validateEnergyFormData(formData)); // TODO: might be causing render setState issue
+    setFormValid(validateEnergyFormData(formData));
   }, [formData])
 
   const helpText = (
