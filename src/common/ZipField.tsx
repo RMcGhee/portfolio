@@ -21,7 +21,7 @@ export const ZipField: React.FC<ZipFieldProps> = ({
     if (validateZip(zipCode)) {
       let zips = null;
       setZipDataLoading(true);
-      // try {
+      try {
         const response = await fetch(getZipDist, {
           method: 'POST',
           body: JSON.stringify({ 'zip': zipCode }),
@@ -32,7 +32,8 @@ export const ZipField: React.FC<ZipFieldProps> = ({
         // if (!response.ok) throw new Error('Network response was not ok');s
         const responseData = await response.json();
         zips = responseData.data[0] as ZipDist;
-      // } catch (e) {
+      } catch (e) {
+        console.log(e)
         zips = {
           "id": "28506",
           "zip": "64131",
@@ -60,7 +61,7 @@ export const ZipField: React.FC<ZipFieldProps> = ({
           "near_zip_5": "64801",
           "near_dist_5": 219
         }
-      // }
+      }
       setZipDataLoading(false);
       console.log(zips);
       
