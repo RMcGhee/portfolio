@@ -25,7 +25,7 @@ function CurrentSystemForm() {
     });
     // intentionally not dependencies; formData and setFormData
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formData]);
+  }, []);
 
   const helpText = (
     <div>
@@ -85,6 +85,7 @@ function CurrentSystemForm() {
           <ZipField
             label="Zip Code"
             value={formData.zipCode}
+            zipCode={formData.zipCode}
             len={5}
             inputType='int'
             inputProps={{ inputMode: 'numeric' }}
