@@ -18,6 +18,7 @@ import { type DegreeDayData, dummyData, initDegreeDayMonths } from '../../entiti
 import { type EnergyFormData, initEnergyForm, type MonthlyUsage, validateEnergyFormData } from '../../entities/EnergyFormData'
 import type { FormData } from '../../entities/FormData'
 import { useJouleHomeContext } from '../../entities/joule-home-context'
+import { getDdData } from '../../apis/worker-apis'
 
 export const Route = createLazyFileRoute('/joule-home/energy-usage-form')({
   component: EnergyUsageForm,
@@ -98,9 +99,8 @@ function EnergyUsageForm() {
     ) {
       const getDegreeDayData = async () => {
         let data: DegreeDayData | null = null
-        const edgeFunction = 'https://joule-home.richmcghee.workers.dev/get-dd-data'
         try {
-          const response = await fetch(edgeFunction, {
+          const response = await fetch(getDdData, {
             method: 'POST',
             body: JSON.stringify({ zip: formData.selectedClimate }),
             headers: {

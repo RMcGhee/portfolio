@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import type { ZipDist } from '../entities/ZipDist';
 import { ValidatedField, type ValidatedFieldProps } from './Basic';
 import { validateZip } from './Util';
+import { getZipDist } from '../apis/worker-apis';
 
 type ZipFieldProps = ValidatedFieldProps & {
   onZipDataReceived: (data: ZipDist, zipCode: string) => void; // Callback to update state in parent
@@ -15,14 +16,13 @@ export const ZipField: React.FC<ZipFieldProps> = ({
   const [zipDataLoading, setZipDataLoading] = useState(false);
   
   const fetchZipData = async (zipCode: string) => {
-    const edgeFunction = 'https://joule-home.richmcghee.workers.dev/get-zip-dist';
     // Need to validate here too, since the setter is always called after validation, even
     // if validation fails.
     if (validateZip(zipCode)) {
       let zips = null;
       setZipDataLoading(true);
       try {
-        const response = await fetch(edgeFunction, {
+        const response = await fetch(getZipDist, {
           method: 'POST',
           body: JSON.stringify({ 'zip': zipCode }),
           headers: {
