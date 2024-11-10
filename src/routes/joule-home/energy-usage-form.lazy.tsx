@@ -107,9 +107,8 @@ function EnergyUsageForm() {
               'Content-Type': 'application/json',
             },
           })
-          // if (!response.ok) throw new Error('Network response was not ok');
           const responseData = await response.json()
-          data = responseData.data[0] as DegreeDayData
+          data = responseData[0] as DegreeDayData
         } catch (e) {
           data = dummyData
         }
