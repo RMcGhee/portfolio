@@ -25,7 +25,7 @@ export const Route = createLazyFileRoute('/joule-home/energy-usage-form')({
 })
 
 function EnergyUsageForm() {
-  const bypassCorsToken = import.meta.env.VITE_BYPASS_CORS_TOKEN ?? 'x';
+  const bypassCorsToken = import.meta.env.VITE_BYPASS_CORS_TOKEN;
 
   const { formData, setFormData } = useJouleHomeContext();
   const [energyFormData, setEnergyFormData] = useState<EnergyFormData>(
@@ -102,7 +102,7 @@ function EnergyUsageForm() {
       const getDegreeDayData = async () => {
         let data: DegreeDayData | null = null
         try {
-          const response = await fetch(`${getDdData}?bypassCorsToken=${bypassCorsToken}`, {
+          const response = await fetch(`${getDdData}${bypassCorsToken ? '?bypassCorsToken=' + bypassCorsToken : ''}`, {
             method: 'POST',
             body: JSON.stringify({ zip: formData.selectedClimate }),
             headers: {

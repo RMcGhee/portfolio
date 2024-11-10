@@ -27,7 +27,7 @@ export const ZipField: React.FC<ZipFieldProps> = ({
   ...validatedFieldProps
 }) => {
   const [zipDataLoading, setZipDataLoading] = useState(false);
-  const bypassCorsToken = import.meta.env.VITE_BYPASS_CORS_TOKEN ?? 'x';
+  const bypassCorsToken = import.meta.env.VITE_BYPASS_CORS_TOKEN;
   
   const fetchZipData = async (zipCode: string) => {
     // Need to validate here too, since the setter is always called after validation, even
@@ -36,7 +36,7 @@ export const ZipField: React.FC<ZipFieldProps> = ({
       let zips = null;
       setZipDataLoading(true);
       try {
-        const response = await fetch(`${getZipDist}?bypassCorsToken=${bypassCorsToken}`, {
+        const response = await fetch(`${getZipDist}${bypassCorsToken ? '?bypassCorsToken=' + bypassCorsToken : ''}`, {
           method: 'POST',
           body: JSON.stringify({ 'zip': zipCode }),
           headers: {
