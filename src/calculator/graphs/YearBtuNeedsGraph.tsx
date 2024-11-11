@@ -1,6 +1,6 @@
 import { useTheme } from '@mui/material';
-import { CategoryScale, Chart as ChartJS, Legend, LineElement, LinearScale, PointElement, Title, Tooltip, } from 'chart.js';
-import React, { useEffect, useRef } from 'react';
+import { CategoryScale, type ChartData, Chart as ChartJS, Legend, LineElement, LinearScale, PointElement, Title, Tooltip, } from 'chart.js';
+import React, { useEffect, useMemo, useRef } from 'react';
 import { Line } from 'react-chartjs-2';
 import type { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 import { btuInCcf, btuInkWh, copInSeer, months } from '../../common/Basic';
@@ -28,28 +28,37 @@ const YearBtuNeedsGraph: React.FC<YearBtuNeedsGraphProps> = ({
   const furnaceEfficiency = Number(formData.currentFurnaceEfficiency) / 100;
 
   // in kBTU
-  const realBtuMonths = months.map((month: string) => {
-    return (
-      ((Number(formData.monthlyElectricUsage[month.toLowerCase() as keyof MonthlyUsage]) - formData.baseElectricUsage) * btuInkWh * acCop) +
-      ((Number(formData.monthlyGasUsage[month.toLowerCase() as keyof MonthlyUsage]) - formData.baseGasUsage) * btuInCcf * furnaceEfficiency)
-    ) / 1000;
-  });
+  const realBtuMonths = useMemo(() => {
+    return months.map((month: string) => {
+      return (
+        ((Number(formData.monthlyElectricUsage[month.toLowerCase() as keyof MonthlyUsage]) - formData.baseElectricUsage) * btuInkWh * acCop) +
+        ((Number(formData.monthlyGasUsage[month.toLowerCase() as keyof MonthlyUsage]) - formData.baseGasUsage) * btuInCcf * furnaceEfficiency)
+      ) / 1000;
+    });
+  }, [ formData, acCop, furnaceEfficiency ]);
 
-  const [ddMonthsCooling, ddMonthsHeating] = ddDataForYear(formData);
+  const [ ddMonthsCooling, ddMonthsHeating ] = useMemo(() => ddDataForYear(formData), [formData]);
 
-  const ddMonths = months.map((month) => Number(ddMonthsCooling[month.toLowerCase() as keyof MonthlyUsage]) + Number(ddMonthsHeating[month.toLowerCase() as keyof MonthlyUsage]));
+  const ddMonths = useMemo(() => {
+    return months.map((month) => Number(ddMonthsCooling[month.toLowerCase() as keyof MonthlyUsage]) + Number(ddMonthsHeating[month.toLowerCase() as keyof MonthlyUsage]));
+  }, [ ddMonthsCooling, ddMonthsHeating ]);
 
-  const averageBtuDd = realBtuMonths.reduce((acc, next, i) => (acc + (next / ddMonths[i])), 0) / 12;
+  const averageBtuDd = useMemo(() => {
+    return realBtuMonths.reduce((acc, next, i) => (acc + (next / ddMonths[i])), 0) / 12;
+  }, [ realBtuMonths, ddMonths ]);
 
-  const naiveBtuNeeds = ddMonths.map((dd) => dd * averageBtuDd);
+  const estimatedBtuNeeds = useMemo(() => {
+    return months.map((month) => ((Number(ddMonthsCooling[month.toLowerCase() as keyof MonthlyUsage]) * 1.10) + (Number(ddMonthsHeating[month.toLowerCase() as keyof MonthlyUsage]) * 0.85)) * averageBtuDd);
+  }, [ ddMonthsCooling, ddMonthsHeating, averageBtuDd ]);
 
-  const estimatedBtuNeeds = months.map((month) => ((Number(ddMonthsCooling[month.toLowerCase() as keyof MonthlyUsage]) * 1.10) + (Number(ddMonthsHeating[month.toLowerCase() as keyof MonthlyUsage]) * 0.85)) * averageBtuDd);
+  const naiveBtuNeeds = useMemo(() => {
+    ddMonths.map((dd) => dd * averageBtuDd);
+  }, [ ddMonths ]);
 
   useEffect(() => {
     setkBTUNeeds(initMonthData(estimatedBtuNeeds));
     setAveragekBTUdd(averageBtuDd);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [ estimatedBtuNeeds, averageBtuDd, setkBTUNeeds, setAveragekBTUdd ]);
 
   const getLinearGradient = (chartRef: React.RefObject<ChartJSOrUndefined<"line", number[], unknown>>) => {
     if (chartRef && chartRef.current) {
@@ -97,7 +106,7 @@ const YearBtuNeedsGraph: React.FC<YearBtuNeedsGraphProps> = ({
         lineTension: 0.3,
       },
     ],
-  };
+  } as unknown as ChartData<"line", number[], unknown>;
 
   const btuOptions = {
       stacked: false,

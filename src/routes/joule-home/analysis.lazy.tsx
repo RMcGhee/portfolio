@@ -48,7 +48,6 @@ function EnergyUsageAnalysis() {
       formDataDraft.currentTotalCost = currentTotalCost;
       formDataDraft.desiredHvacCost = desiredHvacYearlyCost;
       formDataDraft.desiredTotalCost = desiredTotalYearlyCost;
-      formDataDraft.desiredTotalCost = desiredTotalYearlyCost;
       formDataDraft.oldHvacCost = oldHvacYearlyCost;
       return formDataDraft;
     });
@@ -119,6 +118,7 @@ function EnergyUsageAnalysis() {
           <QuestionMark />
         </IconButton>
         <HelpPopover helpText={helpText} isOpen={showHelpPopover} onClose={() => setShowHelpPopover(false)}></HelpPopover>
+        <h5>kWh price: ${formData.electricPrice} gas price: ${formData.gasPrice}</h5>
         <Grid container spacing={2}>
           <HeaderItem>Old HVAC Cost</HeaderItem> <DataItem asDollars={true}>{formData.oldHvacCost}</DataItem>
           <HeaderItem>New HVAC Cost</HeaderItem> <DataItem asDollars={true}>{formData.desiredHvacCost}</DataItem>
@@ -145,7 +145,6 @@ function EnergyUsageAnalysis() {
           <Button
             component={Link}
             to='/joule-home'
-            // disabled={!haveZipDistData}
             style={{
               transition: 'width 0.5s ease-in-out, opacity 0.5s ease-in-out',
               left: 0,
