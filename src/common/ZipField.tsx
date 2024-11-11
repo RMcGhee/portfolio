@@ -1,6 +1,6 @@
 import { CircularProgress, InputAdornment } from '@mui/material';
 import React, { useEffect } from 'react';
-import type { ZipDist } from '../entities/ZipDist';
+import { dummyData, type ZipDist } from '../entities/ZipDist';
 import { ValidatedField, type ValidatedFieldProps } from './Basic';
 import { getZipDist } from '../apis/worker-apis';
 import { useQuery } from '@tanstack/react-query';
@@ -22,34 +22,6 @@ function coerceZips(zipDist: ZipDist) {
   }
   return res;
 }
-
-const dummyData = {
-  "id": "28506",
-  "zip": "64131",
-  "city": "Kansas City, MO",
-  "lat": 38.94,
-  "lon": -94.59,
-  "near_city_1": "KANSAS CITY, MO",
-  "near_id_1": 174,
-  "near_zip_1": "64124",
-  "near_dist_1": 8,
-  "near_city_2": "TOPEKA, KS",
-  "near_id_2": 129,
-  "near_zip_2": "66604",
-  "near_dist_2": 103,
-  "near_city_3": "CHANUTE, KS",
-  "near_id_3": 122,
-  "near_zip_3": "66720",
-  "near_dist_3": 176,
-  "near_city_4": "COLUMBIA, MO",
-  "near_id_4": 172,
-  "near_zip_4": "65203",
-  "near_dist_4": 183,
-  "near_city_5": "JOPLIN, MO",
-  "near_id_5": 173,
-  "near_zip_5": "64801",
-  "near_dist_5": 219
-};
   
 export const ZipField: React.FC<ZipFieldProps> = ({
   onZipDataReceived,

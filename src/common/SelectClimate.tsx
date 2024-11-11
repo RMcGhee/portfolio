@@ -49,7 +49,6 @@ export const SelectClimate: React.FC<SelectClimateProps> = ({
   }, [menuItems]);
   
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('set this: ' + event.target.value);
     setSelectedClimate(event.target.value as string);
   };
 

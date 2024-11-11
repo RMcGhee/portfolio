@@ -92,6 +92,7 @@ function EnergyUsageAnalysis() {
   return (
     <LeftGrow>
       <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: 2 }}>
+      <h3>Zip Selected: {formData.selectedClimate}</h3>
         <div id='seasonElectricGraph' style={{ width: '1' }}>
           <SeasonElectricGraph formData={formData} setBaseElectricUsage={setBaseElectricUsage}/>
         </div>

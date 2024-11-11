@@ -9,16 +9,17 @@ import {
   ToggleButtonGroup,
   Tooltip,
 } from '@mui/material'
+import { useQuery } from '@tanstack/react-query'
 import { createLazyFileRoute, Link } from '@tanstack/react-router'
 import React, { useEffect, useState } from 'react'
+import { getDdData } from '../../apis/worker-apis'
 import { LeftGrow, ValidatedField } from '../../common/Basic'
 import { HelpPopover } from '../../common/HelpPopover'
-import { isEmpty, validateZip } from '../../common/Util'
-import { type DegreeDayData, dummyData, initDegreeDayMonths } from '../../entities/DegreeDayData'
-import { type EnergyFormData, initEnergyForm, type MonthlyUsage, validateEnergyFormData } from '../../entities/EnergyFormData'
+import { isEmpty } from '../../common/Util'
+import { type DegreeDayData, initDegreeDayMonths } from '../../entities/DegreeDayData'
+import { type EnergyFormData, fixtureElectricUsage, fixtureGasUsage, initEnergyForm, type MonthlyUsage, validateEnergyFormData } from '../../entities/EnergyFormData'
 import type { FormData } from '../../entities/FormData'
 import { useJouleHomeContext } from '../../entities/joule-home-context'
-import { getDdData } from '../../apis/worker-apis'
 
 export const Route = createLazyFileRoute('/joule-home/energy-usage-form')({
   component: EnergyUsageForm,
@@ -35,54 +36,13 @@ function EnergyUsageForm() {
   const [formValid, setFormValid] = useState(false)
   const [showHelpPopover, setShowHelpPopover] = useState(false)
 
-  const months = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
-  ]
-  const kWhData = {
-    jan: '743',
-    feb: '725',
-    mar: '589',
-    apr: '550',
-    may: '714',
-    jun: '1243',
-    jul: '1635',
-    aug: '1384',
-    sep: '972',
-    oct: '529',
-    nov: '620',
-    dec: '723',
-  }
-  const gasData = {
-    jan: '171',
-    feb: '156',
-    mar: '143',
-    apr: '65',
-    may: '25',
-    jun: '13',
-    jul: '12',
-    aug: '12',
-    sep: '11',
-    oct: '20',
-    nov: '69',
-    dec: '134',
-  }
+  const months = Object.keys(fixtureElectricUsage).map((mon) => mon[0].toUpperCase() + mon.substring(1));
 
   const fillWithExampleData = (): void => {
     setEnergyFormData({
       ...energyFormData,
-      monthlyElectricUsage: { ...kWhData },
-      monthlyGasUsage: { ...gasData },
+      monthlyElectricUsage: { ...fixtureElectricUsage },
+      monthlyGasUsage: { ...fixtureGasUsage },
     })
   }
 
@@ -94,48 +54,38 @@ function EnergyUsageForm() {
     return res
   }
 
-  useEffect(() => {
-    if (
-      validateZip(formData.selectedClimate) &&
-      degreeDayDataOutOfDate(formData.degreeDayData)
-    ) {
-      const getDegreeDayData = async () => {
-        let data: DegreeDayData | null = null
-        try {
-          const response = await fetch(`${getDdData}${bypassCorsToken ? '?bypassCorsToken=' + bypassCorsToken : ''}`, {
-            method: 'POST',
-            body: JSON.stringify({ zip: formData.selectedClimate }),
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          })
-          const responseData = await response.json()
-          data = responseData[0] as DegreeDayData
-        } catch (e) {
-          data = dummyData
-        }
-        if (data !== null) {
-          data.cooling = initDegreeDayMonths(data.cooling)
-          data.heating = initDegreeDayMonths(data.heating)
-          data.year_2021.cooling = initDegreeDayMonths(data.year_2021.cooling)
-          data.year_2021.heating = initDegreeDayMonths(data.year_2021.heating)
-          data.year_2022.cooling = initDegreeDayMonths(data.year_2022.cooling)
-          data.year_2022.heating = initDegreeDayMonths(data.year_2022.heating)
-          data.year_2023.cooling = initDegreeDayMonths(data.year_2023.cooling)
-          data.year_2023.heating = initDegreeDayMonths(data.year_2023.heating)
+  const { data  } = useQuery({
+    queryKey: [`get-dd-data--${formData.selectedClimate}`],
+    queryFn: () => getDdData(formData.selectedClimate, bypassCorsToken), staleTime: 300 * 1000,
+    enabled: (formData.selectedClimate.length === 5),
+  });
 
-          setFormData((formDataDraft) => {
-            if (data !== null) {
-              formDataDraft.degreeDayData = data
-            }
-            return formDataDraft
-          })
-        }
+  useEffect(() => {
+    if (degreeDayDataOutOfDate(formData.degreeDayData)) {
+      if (data) {
+        let draftData = {
+          year_2021: {},
+          year_2022: {},
+          year_2023: {},
+        } as DegreeDayData;
+        draftData.cooling = initDegreeDayMonths(data.cooling)
+        draftData.heating = initDegreeDayMonths(data.heating)
+        draftData.year_2021.cooling = initDegreeDayMonths(data.year_2021.cooling)
+        draftData.year_2021.heating = initDegreeDayMonths(data.year_2021.heating)
+        draftData.year_2022.cooling = initDegreeDayMonths(data.year_2022.cooling)
+        draftData.year_2022.heating = initDegreeDayMonths(data.year_2022.heating)
+        draftData.year_2023.cooling = initDegreeDayMonths(data.year_2023.cooling)
+        draftData.year_2023.heating = initDegreeDayMonths(data.year_2023.heating)
+
+        setFormData((formDataDraft) => {
+          if (draftData !== null) {
+            formDataDraft.degreeDayData = draftData
+          }
+          return formDataDraft
+        })
       }
-      getDegreeDayData()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [ data ])
 
   useEffect(() => {
     setFormData((formDataDraft) => {
@@ -149,7 +99,7 @@ function EnergyUsageForm() {
       } as FormData)
       return formDataDraft
     })
-  }, [energyFormData])
+  }, [ energyFormData ])
 
   useEffect(() => {
     setFormValid(validateEnergyFormData(formData));
