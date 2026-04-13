@@ -1,13 +1,22 @@
-import { useTheme } from '@mui/material';
-import { CategoryScale, Chart as ChartJS, Legend, LineElement, LinearScale, PointElement, ScatterController, Title, Tooltip, } from 'chart.js';
-import { SimpleLinearRegression } from 'ml-regression-simple-linear';
-import React, { useEffect, useRef } from 'react';
-import { Chart } from 'react-chartjs-2';
-import type { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
-import type { DegreeDayMonths } from '../../entities/DegreeDayData';
-import type { MonthlyUsage, } from '../../entities/EnergyFormData';
-import { type FormData, ddDataForYear } from '../../entities/FormData';
-import type { MonthDataEntry } from '../../routes/joule-home/analysis.lazy';
+import {
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LineElement,
+  LinearScale,
+  PointElement,
+  ScatterController,
+  Title,
+  Tooltip,
+} from "chart.js";
+import { SimpleLinearRegression } from "ml-regression-simple-linear";
+import React, { useEffect, useRef } from "react";
+import { Chart } from "react-chartjs-2";
+import type { ChartJSOrUndefined } from "react-chartjs-2/dist/types";
+import type { DegreeDayMonths } from "../../entities/DegreeDayData";
+import type { MonthlyUsage } from "../../entities/EnergyFormData";
+import { type FormData, ddDataForYear } from "../../entities/FormData";
+import type { MonthDataEntry } from "../../routes/joule-home/analysis.lazy";
 
 type SeasonGasGraphProps = {
   formData: FormData;
@@ -18,19 +27,42 @@ const SeasonGasGraph: React.FC<SeasonGasGraphProps> = ({
   formData,
   setBaseGasUsage,
 }) => {
-  const theme = useTheme();
-  ChartJS.register(LinearScale, CategoryScale, PointElement, LineElement, Legend, Tooltip, Title, ScatterController);
+  ChartJS.register(
+    LinearScale,
+    CategoryScale,
+    PointElement,
+    LineElement,
+    Legend,
+    Tooltip,
+    Title,
+    ScatterController,
+  );
 
-  const chartRefGas = useRef <ChartJSOrUndefined<"line" | "scatter", {x: number; y: number;}[], unknown>>(null);
+  const chartRefGas =
+    useRef<
+      ChartJSOrUndefined<
+        "line" | "scatter",
+        { x: number; y: number }[],
+        unknown
+      >
+    >(null);
 
-  const getLinearGradient = (chartRef: React.RefObject<ChartJSOrUndefined<"line" | "scatter", {x: number; y: number;}[], unknown>>) => {
+  const getLinearGradient = (
+    chartRef: React.RefObject<
+      ChartJSOrUndefined<
+        "line" | "scatter",
+        { x: number; y: number }[],
+        unknown
+      >
+    >,
+  ) => {
     if (chartRef && chartRef.current) {
       const chart = chartRef.current;
       const ctx = chart.ctx;
-      
+
       const gradient = ctx.createLinearGradient(0, 0, 25, 0);
-      gradient.addColorStop(0, 'blue');
-      gradient.addColorStop(1, 'red');
+      gradient.addColorStop(0, "blue");
+      gradient.addColorStop(1, "red");
       return gradient;
     }
   };
@@ -38,32 +70,60 @@ const SeasonGasGraph: React.FC<SeasonGasGraphProps> = ({
   const [yearCoolingData, yearHeatingData] = ddDataForYear(formData);
 
   // Where the next two return [['mon', [kWh/gas usage for month, dd for month]]
-  const coolingMonthsGas = Object.entries(yearCoolingData).map(([month, dd]) => {
-    if (dd > formData.degreeDayData.heating[month as keyof DegreeDayMonths]) {
-      return [month, [Number(formData.monthlyGasUsage[month as keyof MonthlyUsage]), dd]];
-    }
-    return null;
-  })
-  .filter((entry): entry is MonthDataEntry => entry !== null);
+  const coolingMonthsGas = Object.entries(yearCoolingData)
+    .map(([month, dd]) => {
+      if (dd > formData.degreeDayData.heating[month as keyof DegreeDayMonths]) {
+        return [
+          month,
+          [Number(formData.monthlyGasUsage[month as keyof MonthlyUsage]), dd],
+        ];
+      }
+      return null;
+    })
+    .filter((entry): entry is MonthDataEntry => entry !== null);
 
-  const heatingMonthsGas = Object.entries(yearHeatingData).map(([month, dd]) => {
-    if (dd > formData.degreeDayData.cooling[month as keyof DegreeDayMonths]) {
-      return [month, [Number(formData.monthlyGasUsage[month as keyof MonthlyUsage]), dd]];
-    }
-    return null;
-  })
-  .filter((entry): entry is MonthDataEntry => entry !== null);
-  
-  const coolingMonthScatter = coolingMonthsGas.map(([k, [unit, dd]]) => ({ x: dd, y: unit }));
-  const heatingMonthScatter = heatingMonthsGas.map(([k, [unit, dd]]) => ({ x: dd, y: unit }));
-  const coolingMonthLine = new SimpleLinearRegression(coolingMonthScatter.map((pair) => pair.x), coolingMonthScatter.map((pair) => pair.y));
-  const heatingMonthLine = new SimpleLinearRegression(heatingMonthScatter.map((pair) => pair.x), heatingMonthScatter.map((pair) => pair.y));
-  const coolingMonthMaxDd = Math.max(...coolingMonthsGas.map(([k, [unit, dd]]) => dd));
-  const heatingMonthMaxDd = Math.max(...heatingMonthsGas.map(([k, [unit, dd]]) => dd));
+  const heatingMonthsGas = Object.entries(yearHeatingData)
+    .map(([month, dd]) => {
+      if (dd > formData.degreeDayData.cooling[month as keyof DegreeDayMonths]) {
+        return [
+          month,
+          [Number(formData.monthlyGasUsage[month as keyof MonthlyUsage]), dd],
+        ];
+      }
+      return null;
+    })
+    .filter((entry): entry is MonthDataEntry => entry !== null);
+
+  const coolingMonthScatter = coolingMonthsGas.map(([k, [unit, dd]]) => ({
+    x: dd,
+    y: unit,
+  }));
+  const heatingMonthScatter = heatingMonthsGas.map(([k, [unit, dd]]) => ({
+    x: dd,
+    y: unit,
+  }));
+  const coolingMonthLine = new SimpleLinearRegression(
+    coolingMonthScatter.map((pair) => pair.x),
+    coolingMonthScatter.map((pair) => pair.y),
+  );
+  const heatingMonthLine = new SimpleLinearRegression(
+    heatingMonthScatter.map((pair) => pair.x),
+    heatingMonthScatter.map((pair) => pair.y),
+  );
+  const coolingMonthMaxDd = Math.max(
+    ...coolingMonthsGas.map(([k, [unit, dd]]) => dd),
+  );
+  const heatingMonthMaxDd = Math.max(
+    ...heatingMonthsGas.map(([k, [unit, dd]]) => dd),
+  );
 
   useEffect(() => {
     if (coolingMonthLine && heatingMonthLine) {
-      setBaseGasUsage(coolingMonthsGas.map(([k, [unit, dd]]) => unit).reduce((a, b) => a + b) / coolingMonthsGas.length);
+      setBaseGasUsage(
+        coolingMonthsGas
+          .map(([k, [unit, dd]]) => unit)
+          .reduce((a, b) => a + b) / coolingMonthsGas.length,
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [coolingMonthLine, heatingMonthLine]);
@@ -71,29 +131,41 @@ const SeasonGasGraph: React.FC<SeasonGasGraphProps> = ({
   const chartData = {
     datasets: [
       {
-        type: 'scatter' as const,
-        label: 'Cooling gas',
+        type: "scatter" as const,
+        label: "Cooling gas",
         data: coolingMonthsGas.map(([k, [unit, dd]]) => ({ x: dd, y: unit })),
-        backgroundColor: '#4e79a7',
+        backgroundColor: "#4e79a7",
       },
       {
-        type: 'line' as const,
-        label: 'Trend',
-        data: [{x: 0, y: coolingMonthLine.intercept}, {x: coolingMonthMaxDd, y: coolingMonthLine.predict(coolingMonthMaxDd)}],
-        borderColor: '#4e79a7',
+        type: "line" as const,
+        label: "Trend",
+        data: [
+          { x: 0, y: coolingMonthLine.intercept },
+          {
+            x: coolingMonthMaxDd,
+            y: coolingMonthLine.predict(coolingMonthMaxDd),
+          },
+        ],
+        borderColor: "#4e79a7",
         borderWidth: 2,
       },
       {
-        type: 'scatter' as const,
-        label: 'Heating gas',
+        type: "scatter" as const,
+        label: "Heating gas",
         data: heatingMonthsGas.map(([k, [unit, dd]]) => ({ x: dd, y: unit })),
-        backgroundColor: '#e15759',
+        backgroundColor: "#e15759",
       },
       {
-        type: 'line' as const,
-        label: 'Trend',
-        data: [{x: 0, y: heatingMonthLine.intercept}, {x: heatingMonthMaxDd, y: heatingMonthLine.predict(heatingMonthMaxDd)}],
-        borderColor: '#e15759',
+        type: "line" as const,
+        label: "Trend",
+        data: [
+          { x: 0, y: heatingMonthLine.intercept },
+          {
+            x: heatingMonthMaxDd,
+            y: heatingMonthLine.predict(heatingMonthMaxDd),
+          },
+        ],
+        borderColor: "#e15759",
         borderWidth: 2,
       },
     ],
@@ -102,9 +174,9 @@ const SeasonGasGraph: React.FC<SeasonGasGraphProps> = ({
   return (
     <Chart
       ref={chartRefGas}
-      key='seasonGasGraph'
+      key="seasonGasGraph"
       title={`Gas (${formData.gasUnits}) per season`}
-      type='scatter'
+      type="scatter"
       data={chartData}
       width={400}
       height={400}
@@ -113,40 +185,40 @@ const SeasonGasGraph: React.FC<SeasonGasGraphProps> = ({
           x: {
             beginAtZero: true,
             title: {
-              text: 'DegreeDays',
+              text: "DegreeDays",
               display: true,
               color: getLinearGradient(chartRefGas),
             },
             ticks: {
-              color: theme.palette.text.primary,
-            }
+              color: "rgba(255, 255, 255, 0.87)",
+            },
           },
           y: {
             beginAtZero: true,
             title: {
               text: `Gas (${formData.gasUnits})`,
               display: true,
-              color: theme.palette.text.primary,
+              color: "rgba(255, 255, 255, 0.87)",
             },
             ticks: {
-              color: theme.palette.text.primary,
+              color: "rgba(255, 255, 255, 0.87)",
             },
-          }
+          },
         },
         plugins: {
           title: {
             display: true,
             text: `Gas (${formData.gasUnits}) per season`,
-            align: 'center',
-            color: theme.palette.text.primary,
+            align: "center",
+            color: "rgba(255, 255, 255, 0.87)",
             font: {
-              size: 18
-            }
+              size: 18,
+            },
           },
         },
       }}
     />
   );
-}
+};
 
 export default SeasonGasGraph;

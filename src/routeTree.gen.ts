@@ -8,211 +8,211 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from "@tanstack/react-router";
 
-import { Route as rootRouteImport } from './routes/__root'
+import { Route as rootRouteImport } from "./routes/__root";
 
-const PhotographyLazyRouteImport = createFileRoute('/photography')()
-const JouleHomeLazyRouteImport = createFileRoute('/joule-home')()
-const BiologyLazyRouteImport = createFileRoute('/biology')()
-const IndexLazyRouteImport = createFileRoute('/')()
-const JouleHomeIndexLazyRouteImport = createFileRoute('/joule-home/')()
+const PhotographyLazyRouteImport = createFileRoute("/photography")();
+const JouleHomeLazyRouteImport = createFileRoute("/joule-home")();
+const BiologyLazyRouteImport = createFileRoute("/biology")();
+const IndexLazyRouteImport = createFileRoute("/")();
+const JouleHomeIndexLazyRouteImport = createFileRoute("/joule-home/")();
 const JouleHomeEnergyUsageFormLazyRouteImport = createFileRoute(
-  '/joule-home/energy-usage-form',
-)()
+  "/joule-home/energy-usage-form",
+)();
 const JouleHomeCurrentSystemLazyRouteImport = createFileRoute(
-  '/joule-home/current-system',
-)()
+  "/joule-home/current-system",
+)();
 const JouleHomeAnalysisLazyRouteImport = createFileRoute(
-  '/joule-home/analysis',
-)()
+  "/joule-home/analysis",
+)();
 
 const PhotographyLazyRoute = PhotographyLazyRouteImport.update({
-  id: '/photography',
-  path: '/photography',
+  id: "/photography",
+  path: "/photography",
   getParentRoute: () => rootRouteImport,
-} as any).lazy(() => import('./routes/photography.lazy').then((d) => d.Route))
+} as any).lazy(() => import("./routes/photography.lazy").then((d) => d.Route));
 const JouleHomeLazyRoute = JouleHomeLazyRouteImport.update({
-  id: '/joule-home',
-  path: '/joule-home',
+  id: "/joule-home",
+  path: "/joule-home",
   getParentRoute: () => rootRouteImport,
-} as any).lazy(() => import('./routes/joule-home.lazy').then((d) => d.Route))
+} as any).lazy(() => import("./routes/joule-home.lazy").then((d) => d.Route));
 const BiologyLazyRoute = BiologyLazyRouteImport.update({
-  id: '/biology',
-  path: '/biology',
+  id: "/biology",
+  path: "/biology",
   getParentRoute: () => rootRouteImport,
-} as any).lazy(() => import('./routes/biology.lazy').then((d) => d.Route))
+} as any).lazy(() => import("./routes/biology.lazy").then((d) => d.Route));
 const IndexLazyRoute = IndexLazyRouteImport.update({
-  id: '/',
-  path: '/',
+  id: "/",
+  path: "/",
   getParentRoute: () => rootRouteImport,
-} as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+} as any).lazy(() => import("./routes/index.lazy").then((d) => d.Route));
 const JouleHomeIndexLazyRoute = JouleHomeIndexLazyRouteImport.update({
-  id: '/',
-  path: '/',
+  id: "/",
+  path: "/",
   getParentRoute: () => JouleHomeLazyRoute,
 } as any).lazy(() =>
-  import('./routes/joule-home/index.lazy').then((d) => d.Route),
-)
+  import("./routes/joule-home/index.lazy").then((d) => d.Route),
+);
 const JouleHomeEnergyUsageFormLazyRoute =
   JouleHomeEnergyUsageFormLazyRouteImport.update({
-    id: '/energy-usage-form',
-    path: '/energy-usage-form',
+    id: "/energy-usage-form",
+    path: "/energy-usage-form",
     getParentRoute: () => JouleHomeLazyRoute,
   } as any).lazy(() =>
-    import('./routes/joule-home/energy-usage-form.lazy').then((d) => d.Route),
-  )
+    import("./routes/joule-home/energy-usage-form.lazy").then((d) => d.Route),
+  );
 const JouleHomeCurrentSystemLazyRoute =
   JouleHomeCurrentSystemLazyRouteImport.update({
-    id: '/current-system',
-    path: '/current-system',
+    id: "/current-system",
+    path: "/current-system",
     getParentRoute: () => JouleHomeLazyRoute,
   } as any).lazy(() =>
-    import('./routes/joule-home/current-system.lazy').then((d) => d.Route),
-  )
+    import("./routes/joule-home/current-system.lazy").then((d) => d.Route),
+  );
 const JouleHomeAnalysisLazyRoute = JouleHomeAnalysisLazyRouteImport.update({
-  id: '/analysis',
-  path: '/analysis',
+  id: "/analysis",
+  path: "/analysis",
   getParentRoute: () => JouleHomeLazyRoute,
 } as any).lazy(() =>
-  import('./routes/joule-home/analysis.lazy').then((d) => d.Route),
-)
+  import("./routes/joule-home/analysis.lazy").then((d) => d.Route),
+);
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexLazyRoute
-  '/biology': typeof BiologyLazyRoute
-  '/joule-home': typeof JouleHomeLazyRouteWithChildren
-  '/photography': typeof PhotographyLazyRoute
-  '/joule-home/analysis': typeof JouleHomeAnalysisLazyRoute
-  '/joule-home/current-system': typeof JouleHomeCurrentSystemLazyRoute
-  '/joule-home/energy-usage-form': typeof JouleHomeEnergyUsageFormLazyRoute
-  '/joule-home/': typeof JouleHomeIndexLazyRoute
+  "/": typeof IndexLazyRoute;
+  "/biology": typeof BiologyLazyRoute;
+  "/joule-home": typeof JouleHomeLazyRouteWithChildren;
+  "/photography": typeof PhotographyLazyRoute;
+  "/joule-home/analysis": typeof JouleHomeAnalysisLazyRoute;
+  "/joule-home/current-system": typeof JouleHomeCurrentSystemLazyRoute;
+  "/joule-home/energy-usage-form": typeof JouleHomeEnergyUsageFormLazyRoute;
+  "/joule-home/": typeof JouleHomeIndexLazyRoute;
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexLazyRoute
-  '/biology': typeof BiologyLazyRoute
-  '/photography': typeof PhotographyLazyRoute
-  '/joule-home/analysis': typeof JouleHomeAnalysisLazyRoute
-  '/joule-home/current-system': typeof JouleHomeCurrentSystemLazyRoute
-  '/joule-home/energy-usage-form': typeof JouleHomeEnergyUsageFormLazyRoute
-  '/joule-home': typeof JouleHomeIndexLazyRoute
+  "/": typeof IndexLazyRoute;
+  "/biology": typeof BiologyLazyRoute;
+  "/photography": typeof PhotographyLazyRoute;
+  "/joule-home/analysis": typeof JouleHomeAnalysisLazyRoute;
+  "/joule-home/current-system": typeof JouleHomeCurrentSystemLazyRoute;
+  "/joule-home/energy-usage-form": typeof JouleHomeEnergyUsageFormLazyRoute;
+  "/joule-home": typeof JouleHomeIndexLazyRoute;
 }
 export interface FileRoutesById {
-  __root__: typeof rootRouteImport
-  '/': typeof IndexLazyRoute
-  '/biology': typeof BiologyLazyRoute
-  '/joule-home': typeof JouleHomeLazyRouteWithChildren
-  '/photography': typeof PhotographyLazyRoute
-  '/joule-home/analysis': typeof JouleHomeAnalysisLazyRoute
-  '/joule-home/current-system': typeof JouleHomeCurrentSystemLazyRoute
-  '/joule-home/energy-usage-form': typeof JouleHomeEnergyUsageFormLazyRoute
-  '/joule-home/': typeof JouleHomeIndexLazyRoute
+  __root__: typeof rootRouteImport;
+  "/": typeof IndexLazyRoute;
+  "/biology": typeof BiologyLazyRoute;
+  "/joule-home": typeof JouleHomeLazyRouteWithChildren;
+  "/photography": typeof PhotographyLazyRoute;
+  "/joule-home/analysis": typeof JouleHomeAnalysisLazyRoute;
+  "/joule-home/current-system": typeof JouleHomeCurrentSystemLazyRoute;
+  "/joule-home/energy-usage-form": typeof JouleHomeEnergyUsageFormLazyRoute;
+  "/joule-home/": typeof JouleHomeIndexLazyRoute;
 }
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
+  fileRoutesByFullPath: FileRoutesByFullPath;
   fullPaths:
-    | '/'
-    | '/biology'
-    | '/joule-home'
-    | '/photography'
-    | '/joule-home/analysis'
-    | '/joule-home/current-system'
-    | '/joule-home/energy-usage-form'
-    | '/joule-home/'
-  fileRoutesByTo: FileRoutesByTo
+    | "/"
+    | "/biology"
+    | "/joule-home"
+    | "/photography"
+    | "/joule-home/analysis"
+    | "/joule-home/current-system"
+    | "/joule-home/energy-usage-form"
+    | "/joule-home/";
+  fileRoutesByTo: FileRoutesByTo;
   to:
-    | '/'
-    | '/biology'
-    | '/photography'
-    | '/joule-home/analysis'
-    | '/joule-home/current-system'
-    | '/joule-home/energy-usage-form'
-    | '/joule-home'
+    | "/"
+    | "/biology"
+    | "/photography"
+    | "/joule-home/analysis"
+    | "/joule-home/current-system"
+    | "/joule-home/energy-usage-form"
+    | "/joule-home";
   id:
-    | '__root__'
-    | '/'
-    | '/biology'
-    | '/joule-home'
-    | '/photography'
-    | '/joule-home/analysis'
-    | '/joule-home/current-system'
-    | '/joule-home/energy-usage-form'
-    | '/joule-home/'
-  fileRoutesById: FileRoutesById
+    | "__root__"
+    | "/"
+    | "/biology"
+    | "/joule-home"
+    | "/photography"
+    | "/joule-home/analysis"
+    | "/joule-home/current-system"
+    | "/joule-home/energy-usage-form"
+    | "/joule-home/";
+  fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
-  IndexLazyRoute: typeof IndexLazyRoute
-  BiologyLazyRoute: typeof BiologyLazyRoute
-  JouleHomeLazyRoute: typeof JouleHomeLazyRouteWithChildren
-  PhotographyLazyRoute: typeof PhotographyLazyRoute
+  IndexLazyRoute: typeof IndexLazyRoute;
+  BiologyLazyRoute: typeof BiologyLazyRoute;
+  JouleHomeLazyRoute: typeof JouleHomeLazyRouteWithChildren;
+  PhotographyLazyRoute: typeof PhotographyLazyRoute;
 }
 
-declare module '@tanstack/react-router' {
+declare module "@tanstack/react-router" {
   interface FileRoutesByPath {
-    '/photography': {
-      id: '/photography'
-      path: '/photography'
-      fullPath: '/photography'
-      preLoaderRoute: typeof PhotographyLazyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/joule-home': {
-      id: '/joule-home'
-      path: '/joule-home'
-      fullPath: '/joule-home'
-      preLoaderRoute: typeof JouleHomeLazyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/biology': {
-      id: '/biology'
-      path: '/biology'
-      fullPath: '/biology'
-      preLoaderRoute: typeof BiologyLazyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexLazyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/joule-home/': {
-      id: '/joule-home/'
-      path: '/'
-      fullPath: '/joule-home/'
-      preLoaderRoute: typeof JouleHomeIndexLazyRouteImport
-      parentRoute: typeof JouleHomeLazyRoute
-    }
-    '/joule-home/energy-usage-form': {
-      id: '/joule-home/energy-usage-form'
-      path: '/energy-usage-form'
-      fullPath: '/joule-home/energy-usage-form'
-      preLoaderRoute: typeof JouleHomeEnergyUsageFormLazyRouteImport
-      parentRoute: typeof JouleHomeLazyRoute
-    }
-    '/joule-home/current-system': {
-      id: '/joule-home/current-system'
-      path: '/current-system'
-      fullPath: '/joule-home/current-system'
-      preLoaderRoute: typeof JouleHomeCurrentSystemLazyRouteImport
-      parentRoute: typeof JouleHomeLazyRoute
-    }
-    '/joule-home/analysis': {
-      id: '/joule-home/analysis'
-      path: '/analysis'
-      fullPath: '/joule-home/analysis'
-      preLoaderRoute: typeof JouleHomeAnalysisLazyRouteImport
-      parentRoute: typeof JouleHomeLazyRoute
-    }
+    "/photography": {
+      id: "/photography";
+      path: "/photography";
+      fullPath: "/photography";
+      preLoaderRoute: typeof PhotographyLazyRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/joule-home": {
+      id: "/joule-home";
+      path: "/joule-home";
+      fullPath: "/joule-home";
+      preLoaderRoute: typeof JouleHomeLazyRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/biology": {
+      id: "/biology";
+      path: "/biology";
+      fullPath: "/biology";
+      preLoaderRoute: typeof BiologyLazyRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/": {
+      id: "/";
+      path: "/";
+      fullPath: "/";
+      preLoaderRoute: typeof IndexLazyRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    "/joule-home/": {
+      id: "/joule-home/";
+      path: "/";
+      fullPath: "/joule-home/";
+      preLoaderRoute: typeof JouleHomeIndexLazyRouteImport;
+      parentRoute: typeof JouleHomeLazyRoute;
+    };
+    "/joule-home/energy-usage-form": {
+      id: "/joule-home/energy-usage-form";
+      path: "/energy-usage-form";
+      fullPath: "/joule-home/energy-usage-form";
+      preLoaderRoute: typeof JouleHomeEnergyUsageFormLazyRouteImport;
+      parentRoute: typeof JouleHomeLazyRoute;
+    };
+    "/joule-home/current-system": {
+      id: "/joule-home/current-system";
+      path: "/current-system";
+      fullPath: "/joule-home/current-system";
+      preLoaderRoute: typeof JouleHomeCurrentSystemLazyRouteImport;
+      parentRoute: typeof JouleHomeLazyRoute;
+    };
+    "/joule-home/analysis": {
+      id: "/joule-home/analysis";
+      path: "/analysis";
+      fullPath: "/joule-home/analysis";
+      preLoaderRoute: typeof JouleHomeAnalysisLazyRouteImport;
+      parentRoute: typeof JouleHomeLazyRoute;
+    };
   }
 }
 
 interface JouleHomeLazyRouteChildren {
-  JouleHomeAnalysisLazyRoute: typeof JouleHomeAnalysisLazyRoute
-  JouleHomeCurrentSystemLazyRoute: typeof JouleHomeCurrentSystemLazyRoute
-  JouleHomeEnergyUsageFormLazyRoute: typeof JouleHomeEnergyUsageFormLazyRoute
-  JouleHomeIndexLazyRoute: typeof JouleHomeIndexLazyRoute
+  JouleHomeAnalysisLazyRoute: typeof JouleHomeAnalysisLazyRoute;
+  JouleHomeCurrentSystemLazyRoute: typeof JouleHomeCurrentSystemLazyRoute;
+  JouleHomeEnergyUsageFormLazyRoute: typeof JouleHomeEnergyUsageFormLazyRoute;
+  JouleHomeIndexLazyRoute: typeof JouleHomeIndexLazyRoute;
 }
 
 const JouleHomeLazyRouteChildren: JouleHomeLazyRouteChildren = {
@@ -220,18 +220,18 @@ const JouleHomeLazyRouteChildren: JouleHomeLazyRouteChildren = {
   JouleHomeCurrentSystemLazyRoute: JouleHomeCurrentSystemLazyRoute,
   JouleHomeEnergyUsageFormLazyRoute: JouleHomeEnergyUsageFormLazyRoute,
   JouleHomeIndexLazyRoute: JouleHomeIndexLazyRoute,
-}
+};
 
 const JouleHomeLazyRouteWithChildren = JouleHomeLazyRoute._addFileChildren(
   JouleHomeLazyRouteChildren,
-)
+);
 
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
   BiologyLazyRoute: BiologyLazyRoute,
   JouleHomeLazyRoute: JouleHomeLazyRouteWithChildren,
   PhotographyLazyRoute: PhotographyLazyRoute,
-}
+};
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+  ._addFileTypes<FileRouteTypes>();

@@ -28,5 +28,7 @@ export type MonthData = {
 };
 
 export const initMonthData = (data: number[]) => {
-  return Object.fromEntries(months.map((month, i) => [month, data[i]])) as unknown as MonthData;
+  return Object.fromEntries(
+    months.map((month, i) => [month, data[i]]),
+  ) as unknown as MonthData;
 };

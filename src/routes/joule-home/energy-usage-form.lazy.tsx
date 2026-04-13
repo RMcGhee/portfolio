@@ -1,29 +1,35 @@
-import { QuestionMark } from '@mui/icons-material'
+import { useQuery } from "@tanstack/react-query";
+import { createLazyFileRoute, Link } from "@tanstack/react-router";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
-  Collapse,
   IconButton,
-  InputAdornment,
-  ToggleButton,
-  ToggleButtonGroup,
+  SegmentedControl,
   Tooltip,
-} from '@mui/material'
-import { useQuery } from '@tanstack/react-query'
-import { createLazyFileRoute, Link } from '@tanstack/react-router'
-import React, { useEffect, useState } from 'react'
-import { getDdData } from '../../apis/worker-apis'
-import { LeftGrow, ValidatedField } from '../../common/Basic'
-import { HelpPopover } from '../../common/HelpPopover'
-import { isEmpty } from '../../common/Util'
-import { type DegreeDayData, initDegreeDayMonths } from '../../entities/DegreeDayData'
-import { type EnergyFormData, fixtureElectricUsage, fixtureGasUsage, initEnergyForm, type MonthlyUsage, validateEnergyFormData } from '../../entities/EnergyFormData'
-import type { FormData } from '../../entities/FormData'
-import { useJouleHomeContext } from '../../entities/joule-home-context'
+} from "@radix-ui/themes";
+import { getDdData } from "../../apis/worker-apis";
+import { LeftGrow, ValidatedField } from "../../common/Basic";
+import { HelpPopover } from "../../common/HelpPopover";
+import { isEmpty } from "../../common/Util";
+import {
+  type DegreeDayData,
+  initDegreeDayMonths,
+} from "../../entities/DegreeDayData";
+import {
+  type EnergyFormData,
+  fixtureElectricUsage,
+  fixtureGasUsage,
+  initEnergyForm,
+  type MonthlyUsage,
+  validateEnergyFormData,
+} from "../../entities/EnergyFormData";
+import type { FormData } from "../../entities/FormData";
+import { useJouleHomeContext } from "../../entities/joule-home-context";
 
-export const Route = createLazyFileRoute('/joule-home/energy-usage-form')({
+export const Route = createLazyFileRoute("/joule-home/energy-usage-form")({
   component: EnergyUsageForm,
-})
+});
 
 function EnergyUsageForm() {
   const bypassCorsToken = import.meta.env.VITE_BYPASS_CORS_TOKEN;
@@ -31,33 +37,36 @@ function EnergyUsageForm() {
   const { formData, setFormData } = useJouleHomeContext();
   const [energyFormData, setEnergyFormData] = useState<EnergyFormData>(
     initEnergyForm(formData),
-  )
+  );
 
-  const [formValid, setFormValid] = useState(false)
-  const [showHelpPopover, setShowHelpPopover] = useState(false)
+  const [formValid, setFormValid] = useState(false);
+  const [showHelpPopover, setShowHelpPopover] = useState(false);
 
-  const months = Object.keys(fixtureElectricUsage).map((mon) => mon[0].toUpperCase() + mon.substring(1));
+  const months = Object.keys(fixtureElectricUsage).map(
+    (mon) => mon[0].toUpperCase() + mon.substring(1),
+  );
 
   const fillWithExampleData = (): void => {
     setEnergyFormData({
       ...energyFormData,
       monthlyElectricUsage: { ...fixtureElectricUsage },
       monthlyGasUsage: { ...fixtureGasUsage },
-    })
-  }
+    });
+  };
 
   const degreeDayDataOutOfDate = (degreeDayData: DegreeDayData): boolean => {
     let res =
       isEmpty(degreeDayData) ||
-      degreeDayData.cooling.jan === '' ||
-      degreeDayData.zip !== formData.selectedClimate
-    return res
-  }
+      degreeDayData.cooling.jan === "" ||
+      degreeDayData.zip !== formData.selectedClimate;
+    return res;
+  };
 
-  const { data  } = useQuery({
+  const { data } = useQuery({
     queryKey: [`get-dd-data--${formData.selectedClimate}`],
-    queryFn: () => getDdData(formData.selectedClimate, bypassCorsToken), staleTime: 300 * 1000,
-    enabled: (formData.selectedClimate.length === 5),
+    queryFn: () => getDdData(formData.selectedClimate, bypassCorsToken),
+    staleTime: 300 * 1000,
+    enabled: formData.selectedClimate.length === 5,
   });
 
   useEffect(() => {
@@ -68,22 +77,34 @@ function EnergyUsageForm() {
           year_2022: {},
           year_2023: {},
         } as DegreeDayData;
-        draftData.cooling = initDegreeDayMonths(data.cooling)
-        draftData.heating = initDegreeDayMonths(data.heating)
-        draftData.year_2021.cooling = initDegreeDayMonths(data.year_2021.cooling)
-        draftData.year_2021.heating = initDegreeDayMonths(data.year_2021.heating)
-        draftData.year_2022.cooling = initDegreeDayMonths(data.year_2022.cooling)
-        draftData.year_2022.heating = initDegreeDayMonths(data.year_2022.heating)
-        draftData.year_2023.cooling = initDegreeDayMonths(data.year_2023.cooling)
-        draftData.year_2023.heating = initDegreeDayMonths(data.year_2023.heating)
+        draftData.cooling = initDegreeDayMonths(data.cooling);
+        draftData.heating = initDegreeDayMonths(data.heating);
+        draftData.year_2021.cooling = initDegreeDayMonths(
+          data.year_2021.cooling,
+        );
+        draftData.year_2021.heating = initDegreeDayMonths(
+          data.year_2021.heating,
+        );
+        draftData.year_2022.cooling = initDegreeDayMonths(
+          data.year_2022.cooling,
+        );
+        draftData.year_2022.heating = initDegreeDayMonths(
+          data.year_2022.heating,
+        );
+        draftData.year_2023.cooling = initDegreeDayMonths(
+          data.year_2023.cooling,
+        );
+        draftData.year_2023.heating = initDegreeDayMonths(
+          data.year_2023.heating,
+        );
 
         setFormData((prev) => ({
           ...prev,
           degreeDayData: draftData,
-        }))
+        }));
       }
     }
-  }, [ data ])
+  }, [data]);
 
   useEffect(() => {
     setFormData((prev) => ({
@@ -94,12 +115,12 @@ function EnergyUsageForm() {
       electricPrice: energyFormData.electricPrice,
       gasPrice: energyFormData.gasPrice,
       gasUnits: energyFormData.gasUnits,
-    }))
-  }, [ energyFormData ])
+    }));
+  }, [energyFormData]);
 
   useEffect(() => {
     setFormValid(validateEnergyFormData(formData));
-  }, [formData])
+  }, [formData]);
 
   const helpText = (
     <div>
@@ -130,23 +151,23 @@ function EnergyUsageForm() {
         be relevant in this case, but the cost calculations will be accurate.
       </p>
     </div>
-  )
+  );
 
   const rowSx = {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    gap: '1rem',
-    marginBottom: '1rem',
-  } as React.CSSProperties
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: "1rem",
+    marginBottom: "1rem",
+  } as React.CSSProperties;
 
   const monthlyForm = (
     <Box
-      sx={{
-        justifyContent: 'space-between',
-        flexDirection: 'column',
-        gap: 2,
-        marginTop: '5px',
+      style={{
+        justifyContent: "space-between",
+        flexDirection: "column",
+        gap: "16px",
+        marginTop: "5px",
       }}
     >
       {months.map((month, i) => {
@@ -160,11 +181,9 @@ function EnergyUsageForm() {
                 ]
               }
               inputType="decimal"
-              inputProps={{ inputMode: 'decimal' }}
+              inputProps={{ inputMode: "decimal" }}
               InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">kWh</InputAdornment>
-                ),
+                endAdornment: <span>kWh</span>,
               }}
               InputLabelProps={{ shrink: true }}
               formOrder={i}
@@ -186,13 +205,9 @@ function EnergyUsageForm() {
                 ]
               }
               inputType="decimal"
-              inputProps={{ inputMode: 'decimal' }}
+              inputProps={{ inputMode: "decimal" }}
               InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    {energyFormData.gasUnits}
-                  </InputAdornment>
-                ),
+                endAdornment: <span>{energyFormData.gasUnits}</span>,
               }}
               InputLabelProps={{ shrink: true }}
               formOrder={i + 12}
@@ -207,66 +222,64 @@ function EnergyUsageForm() {
               }
             />
           </div>
-        )
+        );
       })}
     </Box>
-  )
+  );
 
   return (
     <LeftGrow>
       <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'flex-start',
-          gap: 2,
-          transition: 'all 1s',
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "flex-start",
+          gap: "16px",
+          transition: "all 1s",
         }}
       >
         <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
-            gap: 2,
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "16px",
           }}
         >
           Year for data
-          <ToggleButtonGroup
-            color="primary"
-            value={energyFormData.dataYear}
-            exclusive
-            onChange={(_e, newYear: 2021 | 2022 | 2023) => {
+          <SegmentedControl.Root
+            value={String(energyFormData.dataYear)}
+            onValueChange={(newYear: string) => {
               if (newYear !== null) {
-                setEnergyFormData({ ...energyFormData, dataYear: newYear })
+                setEnergyFormData({
+                  ...energyFormData,
+                  dataYear: Number(newYear) as 2021 | 2022 | 2023,
+                });
               }
             }}
-            aria-label="Year for data"
           >
-            <ToggleButton value={2023}>2023</ToggleButton>
-            <ToggleButton value={2022}>2022</ToggleButton>
-            <ToggleButton value={2021}>2021</ToggleButton>
-          </ToggleButtonGroup>
+            <SegmentedControl.Item value="2023">2023</SegmentedControl.Item>
+            <SegmentedControl.Item value="2022">2022</SegmentedControl.Item>
+            <SegmentedControl.Item value="2021">2021</SegmentedControl.Item>
+          </SegmentedControl.Root>
         </Box>
-        <Tooltip title="Data comes from an 1800 sqft home in the midwest, 2023, use Zip 64124.">
-          <Button onClick={fillWithExampleData}>Use Example Data</Button>
+        <Tooltip content="Data comes from an 1800 sqft home in the midwest, 2023, use Zip 64124.">
+          <Button variant="outline" onClick={fillWithExampleData}>
+            Use Example Data
+          </Button>
         </Tooltip>
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          <Collapse in={true} timeout={400}>
-            {monthlyForm}
-          </Collapse>
+        <Box style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+          {monthlyForm}
         </Box>
         <div style={rowSx}>
           <ValidatedField
             label="Electric Price/kWh"
             value={energyFormData.electricPrice}
             inputType="decimal"
-            inputProps={{ inputMode: 'decimal' }}
+            inputProps={{ inputMode: "decimal" }}
             InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">$</InputAdornment>
-              ),
+              startAdornment: <span>$</span>,
             }}
             formOrder={24}
             setter={(e) =>
@@ -280,11 +293,9 @@ function EnergyUsageForm() {
             label={`Gas Price/${energyFormData.gasUnits}`}
             value={energyFormData.gasPrice}
             inputType="decimal"
-            inputProps={{ inputMode: 'decimal' }}
+            inputProps={{ inputMode: "decimal" }}
             InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">$</InputAdornment>
-              ),
+              startAdornment: <span>$</span>,
             }}
             formOrder={25}
             setter={(e) =>
@@ -292,24 +303,31 @@ function EnergyUsageForm() {
             }
           />
         </div>
-        <ToggleButtonGroup
-          color="primary"
+        <SegmentedControl.Root
           value={energyFormData.gasUnits}
-          exclusive
-          onChange={(_e, newUnits) =>
-            setEnergyFormData({ ...energyFormData, gasUnits: newUnits })
+          onValueChange={(newUnits: string) =>
+            setEnergyFormData({
+              ...energyFormData,
+              gasUnits: newUnits as "ccf" | "therm",
+            })
           }
-          aria-label="Gas Units"
         >
-          <ToggleButton value="ccf">Ccf</ToggleButton>
-          <ToggleButton value="therm">therms/kBTU</ToggleButton>
-        </ToggleButtonGroup>
+          <SegmentedControl.Item value="ccf">Ccf</SegmentedControl.Item>
+          <SegmentedControl.Item value="therm">
+            therms/kBTU
+          </SegmentedControl.Item>
+        </SegmentedControl.Root>
         <IconButton
-          color="primary"
-          sx={{ alignSelf: 'flex-end', marginLeft: 'auto', marginRight: '5%' }}
+          variant="soft"
+          color="purple"
+          style={{
+            alignSelf: "flex-end",
+            marginLeft: "auto",
+            marginRight: "5%",
+          }}
           onClick={() => setShowHelpPopover(!showHelpPopover)}
         >
-          <QuestionMark />
+          <span>?</span>
         </IconButton>
         <HelpPopover
           helpText={helpText}
@@ -317,39 +335,39 @@ function EnergyUsageForm() {
           onClose={() => setShowHelpPopover(false)}
         ></HelpPopover>
         <Box
-          sx={{
-            position: 'relative',
-            padding: 2,
-            marginBottom: '30px',
+          style={{
+            position: "relative",
+            padding: "16px",
+            marginBottom: "30px",
             flexGrow: 1,
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-evenly',
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-evenly",
           }}
         >
           <Button
-            component={Link}
-            to="/joule-home/current-system"
+            variant="outline"
+            asChild
             style={{
-              transition: 'width 0.5s ease-in-out, opacity 0.5s ease-in-out',
+              transition: "width 0.5s ease-in-out, opacity 0.5s ease-in-out",
               left: 0,
             }}
           >
-            Previous
+            <Link to="/joule-home/current-system">Previous</Link>
           </Button>
           <Button
-            component={Link}
-            to="/joule-home/analysis"
+            variant="outline"
+            asChild
             disabled={!formValid}
             style={{
-              transition: 'width 0.5s ease-in-out, opacity 0.5s ease-in-out',
+              transition: "width 0.5s ease-in-out, opacity 0.5s ease-in-out",
               left: 0,
             }}
           >
-            Next
+            <Link to="/joule-home/analysis">Next</Link>
           </Button>
         </Box>
       </Box>
     </LeftGrow>
-  )
+  );
 }

@@ -1,5 +1,5 @@
-import React, { createContext, useContext } from 'react';
-import { type FormData } from './FormData';
+import React, { createContext, useContext } from "react";
+import { type FormData } from "./FormData";
 
 // Create the context for form data
 interface JouleHomeContextType {
@@ -7,12 +7,16 @@ interface JouleHomeContextType {
   setFormData: React.Dispatch<React.SetStateAction<FormData>>;
 }
 
-export const JouleHomeContext = createContext<JouleHomeContextType | undefined>(undefined);
+export const JouleHomeContext = createContext<JouleHomeContextType | undefined>(
+  undefined,
+);
 
 export const useJouleHomeContext = () => {
   const context = useContext(JouleHomeContext);
   if (!context) {
-    throw new Error('useJouleHomeContext must be used within a JouleHomeProvider');
+    throw new Error(
+      "useJouleHomeContext must be used within a JouleHomeProvider",
+    );
   }
   return context;
 };

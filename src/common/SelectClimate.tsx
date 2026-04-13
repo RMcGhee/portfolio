@@ -1,12 +1,18 @@
-import { MenuItem, TextField, type TextFieldProps } from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import type { ZipDist } from '../entities/ZipDist';
-import { isEmpty } from './Util';
+import { Select, Text } from "@radix-ui/themes";
+import React, { useEffect, useState } from "react";
+import type { ZipDist } from "../entities/ZipDist";
+import { isEmpty } from "./Util";
 
-type SelectClimateProps = TextFieldProps & {
+type SelectClimateProps = {
   zipData: ZipDist;
   selectedClimate: string;
   setSelectedClimate: (data: string) => void;
+  label?: string;
+  hidden?: boolean;
+  style?: React.CSSProperties;
+  InputProps?: {
+    style?: React.CSSProperties;
+  };
 };
 
 type ClimateMenuItem = {
@@ -19,10 +25,10 @@ const generateMenuItems = (zipData: ZipDist): ClimateMenuItem[] => {
     return Array.from({ length: 5 }, (_, i) => {
       const cityKey = `near_city_${i + 1}` as keyof ZipDist;
       const zipKey = `near_zip_${i + 1}` as keyof ZipDist;
-      return {itemKey: zipData[cityKey], value: zipData[zipKey]};
+      return { itemKey: zipData[cityKey], value: zipData[zipKey] };
     });
   } else {
-    return [{itemKey: 'placeholder', value: ''}];
+    return [{ itemKey: "placeholder", value: "" }];
   }
 };
 
@@ -30,9 +36,14 @@ export const SelectClimate: React.FC<SelectClimateProps> = ({
   zipData,
   selectedClimate,
   setSelectedClimate,
-  ...textFieldProps
+  label,
+  hidden,
+  style,
+  InputProps,
 }) => {
-  const [menuItems, setMenuItems] = useState<ClimateMenuItem[]>(generateMenuItems(zipData));
+  const [menuItems, setMenuItems] = useState<ClimateMenuItem[]>(
+    generateMenuItems(zipData),
+  );
 
   useEffect(() => {
     setMenuItems(generateMenuItems(zipData));
@@ -40,39 +51,33 @@ export const SelectClimate: React.FC<SelectClimateProps> = ({
 
   useEffect(() => {
     if (menuItems.length > 1) {
-      if (selectedClimate !== '') {
-        setSelectedClimate(selectedClimate);
-      } else {
+      if (selectedClimate === "") {
         setSelectedClimate(menuItems[0].value as string);
       }
     }
   }, [menuItems]);
-  
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedClimate(event.target.value as string);
-  };
 
-  const fieldStyle = {
-    ...textFieldProps.style,
-    transition: `${textFieldProps.style?.transition ? textFieldProps.style?.transition + ', ' : ''}background-color 1.0s ease`,
-    backgroundColor: textFieldProps.disabled ? '#202020' : 'transparent',
-  };
+  if (hidden) return null;
 
   return (
-    <TextField
-      {...textFieldProps}
-      value={selectedClimate}
-      select
-      label='Closest Climate'
-      onChange={handleChange}
-      style={{
-        ...fieldStyle
-      }}
+    <div
+      style={{ display: "flex", flexDirection: "column", gap: "4px", ...style }}
     >
-      {menuItems.map(item => (
-        <MenuItem key={item.itemKey} value={item.value}>{item.value} : {item.itemKey}</MenuItem>
-      ))}
-    </TextField>
+      {label && (
+        <Text as="label" size="2" color="gray">
+          {label}
+        </Text>
+      )}
+      <Select.Root value={selectedClimate} onValueChange={setSelectedClimate}>
+        <Select.Trigger style={InputProps?.style} />
+        <Select.Content>
+          {menuItems.map((item) => (
+            <Select.Item key={String(item.itemKey)} value={String(item.value)}>
+              {item.value} : {item.itemKey}
+            </Select.Item>
+          ))}
+        </Select.Content>
+      </Select.Root>
+    </div>
   );
 };
-  

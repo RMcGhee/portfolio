@@ -1,28 +1,30 @@
-import { QuestionMark } from '@mui/icons-material';
-import { Box, Button, Grid, IconButton, Paper, } from '@mui/material';
-import { createLazyFileRoute, Link } from '@tanstack/react-router';
-import React, { useEffect, useState } from 'react';
-import NewSystemCostGraph from '../../calculator/graphs/NewSystemCostGraph';
-import NewSystemUsageGraph from '../../calculator/graphs/NewSystemUsageGraph';
-import SeasonElectricGraph from '../../calculator/graphs/SeasonElectricGraph';
-import SeasonGasGraph from '../../calculator/graphs/SeasonGasGraph';
-import YearBtuGraph from '../../calculator/graphs/YearBtuGraph';
-import YearBtuNeedsGraph from '../../calculator/graphs/YearBtuNeedsGraph';
-import { LeftGrow } from '../../common/Basic';
-import { HelpPopover } from '../../common/HelpPopover';
-import { type MonthData } from '../../entities/CalculatedData';
-import { type EnergyFormData, initEnergyForm } from '../../entities/EnergyFormData';
-import { useJouleHomeContext } from '../../entities/joule-home-context';
+import { Box, Button, Card, Grid, IconButton } from "@radix-ui/themes";
+import { createLazyFileRoute, Link } from "@tanstack/react-router";
+import React, { useEffect, useState } from "react";
+import NewSystemCostGraph from "../../calculator/graphs/NewSystemCostGraph";
+import NewSystemUsageGraph from "../../calculator/graphs/NewSystemUsageGraph";
+import SeasonElectricGraph from "../../calculator/graphs/SeasonElectricGraph";
+import SeasonGasGraph from "../../calculator/graphs/SeasonGasGraph";
+import YearBtuGraph from "../../calculator/graphs/YearBtuGraph";
+import YearBtuNeedsGraph from "../../calculator/graphs/YearBtuNeedsGraph";
+import { LeftGrow } from "../../common/Basic";
+import { HelpPopover } from "../../common/HelpPopover";
+import { type MonthData } from "../../entities/CalculatedData";
+import {
+  type EnergyFormData,
+  initEnergyForm,
+} from "../../entities/EnergyFormData";
+import { useJouleHomeContext } from "../../entities/joule-home-context";
 
-export const Route = createLazyFileRoute('/joule-home/analysis')({
+export const Route = createLazyFileRoute("/joule-home/analysis")({
   component: EnergyUsageAnalysis,
-})
+});
 
 export type MonthDataEntry = [string, [number, number]];
 
 function EnergyUsageAnalysis() {
   const { formData, setFormData } = useJouleHomeContext();
-  const [energyFormData,] = useState<EnergyFormData>(initEnergyForm(formData));
+  const [energyFormData] = useState<EnergyFormData>(initEnergyForm(formData));
 
   const [showHelpPopover, setShowHelpPopover] = useState(false);
 
@@ -39,7 +41,7 @@ function EnergyUsageAnalysis() {
 
   useEffect(() => {
     setFormData((formDataDraft) => {
-      formDataDraft = {...formData};
+      formDataDraft = { ...formData };
       formDataDraft.baseElectricUsage = baseElectricUsage;
       formDataDraft.baseGasUsage = baseGasUsage;
       formDataDraft.averagekBTUdd = averagekBTUdd;
@@ -51,38 +53,64 @@ function EnergyUsageAnalysis() {
       formDataDraft.oldHvacCost = oldHvacYearlyCost;
       return formDataDraft;
     });
-  }, [energyFormData, baseElectricUsage, baseGasUsage, averagekBTUdd, kBTUNeeds, currentHVACCost, currentTotalCost, desiredHvacYearlyCost, desiredTotalYearlyCost, oldHvacYearlyCost, setFormData]);
+  }, [
+    energyFormData,
+    baseElectricUsage,
+    baseGasUsage,
+    averagekBTUdd,
+    kBTUNeeds,
+    currentHVACCost,
+    currentTotalCost,
+    desiredHvacYearlyCost,
+    desiredTotalYearlyCost,
+    oldHvacYearlyCost,
+    setFormData,
+  ]);
 
   const helpText = (
     <div>
       <h3>kWh per Season</h3>
-      <p>This represents the kWh that your household uses (heating or cooling), versus the total degree days seen in a month.
-        A heating season is one in which your heating needs exceed your cooling needs, and vice versa for the cooling season.
-        Since an HVAC system uses electricity to run the air handler for the furnace, the calculation of base kWh load for
-        your household takes this into account.
+      <p>
+        This represents the kWh that your household uses (heating or cooling),
+        versus the total degree days seen in a month. A heating season is one in
+        which your heating needs exceed your cooling needs, and vice versa for
+        the cooling season. Since an HVAC system uses electricity to run the air
+        handler for the furnace, the calculation of base kWh load for your
+        household takes this into account.
       </p>
       <hr />
       <h3>Gas ({formData.gasUnits}) per Season</h3>
-      <p>This represents the gas that your household uses, and heating/cooling season is determined as above. Since gas is not
-        used to run an air conditioner, the base gas usage for your household is calculated as an average of the usage
-        during cooling months. While not perfectly accurate, it's pretty close.
+      <p>
+        This represents the gas that your household uses, and heating/cooling
+        season is determined as above. Since gas is not used to run an air
+        conditioner, the base gas usage for your household is calculated as an
+        average of the usage during cooling months. While not perfectly
+        accurate, it's pretty close.
       </p>
       <hr />
       <h3>HVAC energy transfer/month</h3>
-      <p>This graph shows the raw kBTUs used by your household for heating and cooling each month (less your base usage). It
-        also shows the 'Real' kBTU transfered by your system, taking into account furnace efficiency, and COP of your AC.
-        Since AC's can move more heat than the energy content of the electricity they use, 'Real' kBTU will be higher in
-        the summer, and lower in the winter. This graph also shows the cost to purchase this energy, based on the electric and
-        gas cost you provided.
+      <p>
+        This graph shows the raw kBTUs used by your household for heating and
+        cooling each month (less your base usage). It also shows the 'Real' kBTU
+        transfered by your system, taking into account furnace efficiency, and
+        COP of your AC. Since AC's can move more heat than the energy content of
+        the electricity they use, 'Real' kBTU will be higher in the summer, and
+        lower in the winter. This graph also shows the cost to purchase this
+        energy, based on the electric and gas cost you provided.
       </p>
       <hr />
       <h3>Estimated kBTU needs</h3>
-      <p>This graph shows the approximate kBTUs need to heat and cool your home based on your current energy usage and solar
-        heat gain. In the winter, your heating needs are decreased by this (~15%), and in the summer, your cooling needs are
-        increased (~10%). This is only an estimate, and is influenced by the efficiency of your current system. If your actual
-        cooling or heating needs deviate from this significantly, it may indicate that your current system isn't running
-        at the efficiency expected, that other activities are increasing your heating and cooling needs, or that your home
-        may have a larger or smaller influence from solar heat gain than the average home.
+      <p>
+        This graph shows the approximate kBTUs need to heat and cool your home
+        based on your current energy usage and solar heat gain. In the winter,
+        your heating needs are decreased by this (~15%), and in the summer, your
+        cooling needs are increased (~10%). This is only an estimate, and is
+        influenced by the efficiency of your current system. If your actual
+        cooling or heating needs deviate from this significantly, it may
+        indicate that your current system isn't running at the efficiency
+        expected, that other activities are increasing your heating and cooling
+        needs, or that your home may have a larger or smaller influence from
+        solar heat gain than the average home.
       </p>
       <hr />
     </div>
@@ -90,66 +118,118 @@ function EnergyUsageAnalysis() {
 
   return (
     <LeftGrow>
-      <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: 2 }}>
-      <h3>Zip Selected: {formData.selectedClimate}</h3>
-        <div id='seasonElectricGraph' style={{ width: '1' }}>
-          <SeasonElectricGraph formData={formData} setBaseElectricUsage={setBaseElectricUsage}/>
+      <Box
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "flex-start",
+          gap: "16px",
+        }}
+      >
+        <h3>Zip Selected: {formData.selectedClimate}</h3>
+        <div id="seasonElectricGraph" style={{ width: "1" }}>
+          <SeasonElectricGraph
+            formData={formData}
+            setBaseElectricUsage={setBaseElectricUsage}
+          />
         </div>
-        <div id='seasonGasGraph' style={{ width: '1' }}>
-          <SeasonGasGraph formData={formData} setBaseGasUsage={setBaseGasUsage}/>
+        <div id="seasonGasGraph" style={{ width: "1" }}>
+          <SeasonGasGraph
+            formData={formData}
+            setBaseGasUsage={setBaseGasUsage}
+          />
         </div>
-        <div id='yearBtuGraph' style={{ width: '1' }}>
-          <YearBtuGraph formData={formData} setCurrentHVACCost={setCurrentHVACCost} setCurrentTotalCost={setCurrentTotalCost}/>
+        <div id="yearBtuGraph" style={{ width: "1" }}>
+          <YearBtuGraph
+            formData={formData}
+            setCurrentHVACCost={setCurrentHVACCost}
+            setCurrentTotalCost={setCurrentTotalCost}
+          />
         </div>
-        <div id='yearBtuNeedsGraph' style={{ width: '1' }}>
-          <YearBtuNeedsGraph formData={formData} setAveragekBTUdd={setAveragekBTUdd} setkBTUNeeds={setkBTUNeeds}/>
+        <div id="yearBtuNeedsGraph" style={{ width: "1" }}>
+          <YearBtuNeedsGraph
+            formData={formData}
+            setAveragekBTUdd={setAveragekBTUdd}
+            setkBTUNeeds={setkBTUNeeds}
+          />
         </div>
-        <div id='newSystemCostGraph' style={{ width: '1' }}>
-          <NewSystemCostGraph formData={formData} setDesiredHvacYearlyCost={setDesiredHvacYearlyCost} setDesiredTotalYearlyCost={setDesiredTotalYearlyCost} setOldHvacYearlyCost={setOldHvacYearlyCost} setOldYearlyCost={setOldYearlyCost}/>
+        <div id="newSystemCostGraph" style={{ width: "1" }}>
+          <NewSystemCostGraph
+            formData={formData}
+            setDesiredHvacYearlyCost={setDesiredHvacYearlyCost}
+            setDesiredTotalYearlyCost={setDesiredTotalYearlyCost}
+            setOldHvacYearlyCost={setOldHvacYearlyCost}
+            setOldYearlyCost={setOldYearlyCost}
+          />
         </div>
-        <div id='newSystemUsageGraph' style={{ width: '1' }}>
-          <NewSystemUsageGraph formData={formData} setDesiredHvacYearlyCost={setDesiredHvacYearlyCost} setDesiredTotalYearlyCost={setDesiredTotalYearlyCost} setOldHvacYearlyCost={setOldHvacYearlyCost}/>
+        <div id="newSystemUsageGraph" style={{ width: "1" }}>
+          <NewSystemUsageGraph
+            formData={formData}
+            setDesiredHvacYearlyCost={setDesiredHvacYearlyCost}
+            setDesiredTotalYearlyCost={setDesiredTotalYearlyCost}
+            setOldHvacYearlyCost={setOldHvacYearlyCost}
+          />
         </div>
         <IconButton
-          color='primary'
-          sx={{ alignSelf: 'flex-end', marginLeft: 'auto', marginRight: '5%' }}
+          variant="soft"
+          color="purple"
+          style={{
+            alignSelf: "flex-end",
+            marginLeft: "auto",
+            marginRight: "5%",
+          }}
           onClick={() => setShowHelpPopover(!showHelpPopover)}
         >
-          <QuestionMark />
+          <span>?</span>
         </IconButton>
-        <HelpPopover helpText={helpText} isOpen={showHelpPopover} onClose={() => setShowHelpPopover(false)}></HelpPopover>
-        <h5>kWh price: ${formData.electricPrice} gas price: ${formData.gasPrice}</h5>
-        <Grid container spacing={2}>
-          <HeaderItem>Old HVAC Cost</HeaderItem> <DataItem asDollars={true}>{formData.oldHvacCost}</DataItem>
-          <HeaderItem>New HVAC Cost</HeaderItem> <DataItem asDollars={true}>{formData.desiredHvacCost}</DataItem>
-          <HeaderItem>Difference</HeaderItem> <DataItem asDollars={true}>{formData.oldHvacCost - formData.desiredHvacCost}</DataItem>
+        <HelpPopover
+          helpText={helpText}
+          isOpen={showHelpPopover}
+          onClose={() => setShowHelpPopover(false)}
+        ></HelpPopover>
+        <h5>
+          kWh price: ${formData.electricPrice} gas price: ${formData.gasPrice}
+        </h5>
+        <Grid columns="2" gap="2" width="auto">
+          <HeaderItem>Old HVAC Cost</HeaderItem>{" "}
+          <DataItem asDollars={true}>{formData.oldHvacCost}</DataItem>
+          <HeaderItem>New HVAC Cost</HeaderItem>{" "}
+          <DataItem asDollars={true}>{formData.desiredHvacCost}</DataItem>
+          <HeaderItem>Difference</HeaderItem>{" "}
+          <DataItem asDollars={true}>
+            {formData.oldHvacCost - formData.desiredHvacCost}
+          </DataItem>
         </Grid>
-        <Box sx={{
-          position: 'relative',
-          padding: 2,
-          marginBottom: '30px',
-          flexGrow: 1,
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-evenly',
-        }}>
+        <Box
+          style={{
+            position: "relative",
+            padding: "16px",
+            marginBottom: "30px",
+            flexGrow: 1,
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-evenly",
+          }}
+        >
           <Button
-            component={Link}
-            to='/joule-home/energy-usage-form'
+            variant="outline"
+            asChild
             style={{
-              transition: 'width 0.5s ease-in-out, opacity 0.5s ease-in-out',
+              transition: "width 0.5s ease-in-out, opacity 0.5s ease-in-out",
               left: 0,
-          }}>
-            Previous
+            }}
+          >
+            <Link to="/joule-home/energy-usage-form">Previous</Link>
           </Button>
           <Button
-            component={Link}
-            to='/joule-home'
+            variant="outline"
+            asChild
             style={{
-              transition: 'width 0.5s ease-in-out, opacity 0.5s ease-in-out',
+              transition: "width 0.5s ease-in-out, opacity 0.5s ease-in-out",
               left: 0,
-          }}>
-            Start Over
+            }}
+          >
+            <Link to="/joule-home">Start Over</Link>
           </Button>
         </Box>
       </Box>
@@ -163,11 +243,7 @@ type HeaderItemProps = {
 
 const HeaderItem: React.FC<HeaderItemProps> = ({ children }) => {
   return (
-    <Grid item xs={6}>
-      <Paper sx={{ padding: 1, textAlign: 'center' }}>
-        {children}
-      </Paper>
-    </Grid>
+    <Card style={{ padding: "8px", textAlign: "center" }}>{children}</Card>
   );
 };
 
@@ -176,16 +252,17 @@ type DataItemProps = {
   asDollars: boolean;
 };
 
-const DataItem: React.FC<DataItemProps> = ({ children }, asDollars) => {
+const DataItem: React.FC<DataItemProps> = ({ children, asDollars }) => {
   let formatted = null;
-  if (asDollars && typeof children === 'number') {
-    formatted = Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' })
+  if (asDollars && typeof children === "number") {
+    formatted = Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+    });
   }
   return (
-    <Grid item xs={6}>
-      <Paper sx={{ padding: 1, textAlign: 'center' }}>
-        {formatted !== null ? formatted.format(children as number) : children}
-      </Paper>
-    </Grid>
+    <Card style={{ padding: "8px", textAlign: "center" }}>
+      {formatted !== null ? formatted.format(children as number) : children}
+    </Card>
   );
 };

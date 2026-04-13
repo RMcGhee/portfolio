@@ -1,11 +1,19 @@
-import { useTheme } from '@mui/material';
-import { CategoryScale, Chart as ChartJS, Legend, LinearScale, LineElement, PointElement, Title, Tooltip, } from 'chart.js';
-import React, { useEffect, useRef } from 'react';
-import { Line } from 'react-chartjs-2';
-import type { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
-import { btuInCcf, btuInkWh, copInSeer, months } from '../../common/Basic';
-import type { MonthlyUsage, } from '../../entities/EnergyFormData';
-import type { FormData } from '../../entities/FormData';
+import {
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LinearScale,
+  LineElement,
+  PointElement,
+  Title,
+  Tooltip,
+} from "chart.js";
+import React, { useEffect, useRef } from "react";
+import { Line } from "react-chartjs-2";
+import type { ChartJSOrUndefined } from "react-chartjs-2/dist/types";
+import { btuInCcf, btuInkWh, copInSeer, months } from "../../common/Basic";
+import type { MonthlyUsage } from "../../entities/EnergyFormData";
+import type { FormData } from "../../entities/FormData";
 
 type YearBtuGraphProps = {
   formData: FormData;
@@ -18,10 +26,18 @@ const YearBtuGraph: React.FC<YearBtuGraphProps> = ({
   setCurrentHVACCost,
   setCurrentTotalCost,
 }) => {
-  const theme = useTheme();
-  ChartJS.register(LinearScale, CategoryScale, PointElement, LineElement, Legend, Tooltip, Title);
+  ChartJS.register(
+    LinearScale,
+    CategoryScale,
+    PointElement,
+    LineElement,
+    Legend,
+    Tooltip,
+    Title,
+  );
 
-  const chartRefBtu = useRef <ChartJSOrUndefined<"line", number[], unknown>>(null);
+  const chartRefBtu =
+    useRef<ChartJSOrUndefined<"line", number[], unknown>>(null);
 
   const acCop = Number(formData.currentACSeer) * copInSeer;
   const furnaceEfficiency = Number(formData.currentFurnaceEfficiency) / 100;
@@ -31,34 +47,78 @@ const YearBtuGraph: React.FC<YearBtuGraphProps> = ({
   // in kBTU
   const rawBtuMonths = months.map((month: string) => {
     return (
-      ((Number(formData.monthlyElectricUsage[month.toLowerCase() as keyof MonthlyUsage]) - formData.baseElectricUsage) * btuInkWh) +
-      ((Number(formData.monthlyGasUsage[month.toLowerCase() as keyof MonthlyUsage]) - formData.baseGasUsage) * btuInCcf)
-    ) / 1000;
+      ((Number(
+        formData.monthlyElectricUsage[
+          month.toLowerCase() as keyof MonthlyUsage
+        ],
+      ) -
+        formData.baseElectricUsage) *
+        btuInkWh +
+        (Number(
+          formData.monthlyGasUsage[month.toLowerCase() as keyof MonthlyUsage],
+        ) -
+          formData.baseGasUsage) *
+          btuInCcf) /
+      1000
+    );
   });
 
   const realBtuMonths = months.map((month: string) => {
     return (
-      ((Number(formData.monthlyElectricUsage[month.toLowerCase() as keyof MonthlyUsage]) - formData.baseElectricUsage) * btuInkWh * acCop) +
-      ((Number(formData.monthlyGasUsage[month.toLowerCase() as keyof MonthlyUsage]) - formData.baseGasUsage) * btuInCcf * furnaceEfficiency)
-    ) / 1000;
+      ((Number(
+        formData.monthlyElectricUsage[
+          month.toLowerCase() as keyof MonthlyUsage
+        ],
+      ) -
+        formData.baseElectricUsage) *
+        btuInkWh *
+        acCop +
+        (Number(
+          formData.monthlyGasUsage[month.toLowerCase() as keyof MonthlyUsage],
+        ) -
+          formData.baseGasUsage) *
+          btuInCcf *
+          furnaceEfficiency) /
+      1000
+    );
   });
 
   const hvacCostMonths = months.map((month: string) => {
     return (
-      ((Number(formData.monthlyElectricUsage[month.toLowerCase() as keyof MonthlyUsage]) - formData.baseElectricUsage) * electricPrice) +
-      ((Number(formData.monthlyGasUsage[month.toLowerCase() as keyof MonthlyUsage]) - formData.baseGasUsage) * gasPrice)
+      (Number(
+        formData.monthlyElectricUsage[
+          month.toLowerCase() as keyof MonthlyUsage
+        ],
+      ) -
+        formData.baseElectricUsage) *
+        electricPrice +
+      (Number(
+        formData.monthlyGasUsage[month.toLowerCase() as keyof MonthlyUsage],
+      ) -
+        formData.baseGasUsage) *
+        gasPrice
     );
   });
 
   const totalCostMonths = months.map((month: string) => {
     return (
-      ((Number(formData.monthlyElectricUsage[month.toLowerCase() as keyof MonthlyUsage])) * electricPrice) +
-      ((Number(formData.monthlyGasUsage[month.toLowerCase() as keyof MonthlyUsage])) * gasPrice)
+      Number(
+        formData.monthlyElectricUsage[
+          month.toLowerCase() as keyof MonthlyUsage
+        ],
+      ) *
+        electricPrice +
+      Number(
+        formData.monthlyGasUsage[month.toLowerCase() as keyof MonthlyUsage],
+      ) *
+        gasPrice
     );
   });
 
   const currentYearHVACCost = hvacCostMonths.reduce((acc, next) => acc + next);
-  const currentYearTotalCost = totalCostMonths.reduce((acc, next) => acc + next);
+  const currentYearTotalCost = totalCostMonths.reduce(
+    (acc, next) => acc + next,
+  );
 
   useEffect(() => {
     setCurrentHVACCost(currentYearHVACCost);
@@ -66,124 +126,144 @@ const YearBtuGraph: React.FC<YearBtuGraphProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const getLinearGradient = (chartRef: React.RefObject<ChartJSOrUndefined<"line", number[], unknown>>) => {
+  const getLinearGradient = (
+    chartRef: React.RefObject<ChartJSOrUndefined<"line", number[], unknown>>,
+  ) => {
     if (chartRef && chartRef.current) {
       const chart = chartRef.current;
       const ctx = chart.ctx;
       const area = chart.chartArea;
-      const heatingColor = 'red';
-      const coolingColor = 'blue';
-    
-      const gradient = ctx.createLinearGradient(30, area.top/2, area.right, area.top/2);
-    
+      const heatingColor = "red";
+      const coolingColor = "blue";
+
+      const gradient = ctx.createLinearGradient(
+        30,
+        area.top / 2,
+        area.right,
+        area.top / 2,
+      );
+
       gradient.addColorStop(0, heatingColor);
       gradient.addColorStop(0.6, coolingColor);
       gradient.addColorStop(1, heatingColor);
-      
+
       return gradient;
     }
-  }
+  };
 
   // For some reason, importing an alias to a const string[] breaks multi axis... no idea why.
-  const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const labels = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
   const data = {
     labels,
     datasets: [
       {
-        label: 'Raw kBTU',
+        label: "Raw kBTU",
         data: rawBtuMonths,
-        borderColor: '#4e79a7',
-        yAxisID: 'y',
+        borderColor: "#4e79a7",
+        yAxisID: "y",
         lineTension: 0.3,
         hidden: true,
       },
       {
-        label: 'Real kBTU',
+        label: "Real kBTU",
         data: realBtuMonths,
         borderColor: getLinearGradient(chartRefBtu),
-        yAxisID: 'y',
+        yAxisID: "y",
         lineTension: 0.3,
       },
       {
-        label: 'HVAC Cost',
+        label: "HVAC Cost",
         data: hvacCostMonths,
-        borderColor: 'green',
-        yAxisID: 'y1',
+        borderColor: "green",
+        yAxisID: "y1",
         lineTension: 0.3,
       },
       {
-        label: 'Total Cost',
+        label: "Total Cost",
         data: totalCostMonths,
-        borderColor: 'green',
-        yAxisID: 'y1',
+        borderColor: "green",
+        yAxisID: "y1",
         lineTension: 0.3,
       },
     ],
   };
 
   const btuOptions = {
-      stacked: false,
-      responsive: true,
-      interaction: {
-        mode: 'index' as const,
-        intersect: false,
-      },
-      scales: {
-        x: {
-          beginAtZero: true,
-          ticks: {
-            color: theme.palette.text.primary,
-          }
-        },
-        y: {
-          beginAtZero: true,
-          title: {
-            text: 'kBTU per month',
-            display: true,
-            color: theme.palette.text.primary,
-          },
-          ticks: {
-            color: theme.palette.text.primary,
-          },
-        },
-        y1: {
-          type: 'linear' as const,
-          beginAtZero: true,
-          title: {
-            text: '$ per month',
-            display: true,
-            color: theme.palette.text.primary,
-          },
-          display: true,
-          position: 'right' as const,
-          ticks: {
-            color: theme.palette.text.primary,
-          },
+    stacked: false,
+    responsive: true,
+    interaction: {
+      mode: "index" as const,
+      intersect: false,
+    },
+    scales: {
+      x: {
+        beginAtZero: true,
+        ticks: {
+          color: "rgba(255, 255, 255, 0.87)",
         },
       },
-      plugins: {
+      y: {
+        beginAtZero: true,
         title: {
+          text: "kBTU per month",
           display: true,
-          text: `${formData.dataYear} HVAC energy transfer/month`,
-          color: theme.palette.text.primary,
-          font: {
-            size: 18
-          }
+          color: "rgba(255, 255, 255, 0.87)",
+        },
+        ticks: {
+          color: "rgba(255, 255, 255, 0.87)",
         },
       },
-    };
+      y1: {
+        type: "linear" as const,
+        beginAtZero: true,
+        title: {
+          text: "$ per month",
+          display: true,
+          color: "rgba(255, 255, 255, 0.87)",
+        },
+        display: true,
+        position: "right" as const,
+        ticks: {
+          color: "rgba(255, 255, 255, 0.87)",
+        },
+      },
+    },
+    plugins: {
+      title: {
+        display: true,
+        text: `${formData.dataYear} HVAC energy transfer/month`,
+        color: "rgba(255, 255, 255, 0.87)",
+        font: {
+          size: 18,
+        },
+      },
+    },
+  };
 
   return (
     <Line
       ref={chartRefBtu}
-      key='yearRawBtuGraph'
-      title='Energy use per month'
+      key="yearRawBtuGraph"
+      title="Energy use per month"
       data={data}
       width={500}
       height={500}
       options={btuOptions}
     />
   );
-}
+};
 
 export default YearBtuGraph;
