@@ -1,4 +1,4 @@
-import { Grow, TextField, Tooltip, type TextFieldProps } from '@mui/material';
+import { TextField, Tooltip, type TextFieldProps } from '@mui/material';
 import React, { useState, type ReactElement } from 'react';
 
 const prod_env = true;
@@ -16,9 +16,16 @@ interface LeftGrowProps {
   
   export const LeftGrow: React.FC<LeftGrowProps> = ({ children, timeout = 1500, trigger = true }) => {
   return (
-    <Grow in={trigger} style={{ transformOrigin: '-30% 50%' }} timeout={timeout}>
+    <div
+      style={{
+        opacity: trigger ? 1 : 0,
+        transform: trigger ? 'scale(1)' : 'scale(0.8)',
+        transformOrigin: '-30% 50%',
+        transition: `opacity ${timeout}ms ease, transform ${timeout}ms ease`,
+      }}
+    >
       {children}
-    </Grow>
+    </div>
     );
 };
 

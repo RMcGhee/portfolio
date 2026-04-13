@@ -1,13 +1,11 @@
 import { Outlet, createRootRoute } from '@tanstack/react-router'
-import CssBaseline from '@mui/material/CssBaseline';
+import '@radix-ui/themes/styles.css'
 import '../index.css'
-import { Box, ThemeProvider } from '@mui/material';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import BottomNav from '../BottomNav';
-import theme from '../base-theme';
+import { Theme, Flex, Box } from '@radix-ui/themes'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import BottomNav from '../BottomNav'
 
-
-const queryClient = new QueryClient();
+const queryClient = new QueryClient()
 
 export const Route = createRootRoute({
   component: RootComponent,
@@ -15,26 +13,17 @@ export const Route = createRootRoute({
 
 function RootComponent() {
   return (
-    <>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <QueryClientProvider client={queryClient}>
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              minHeight: '100vh',
-            }}
-          >
-            <Box sx={{ display: 'flex', flexGrow: 1, padding: '1em' }}>
-              <Outlet />
-            </Box>
-            <Box marginBottom='0px'> {/* Prevents marginBottom on BottomNav from being rendered off page */}
-              <BottomNav/>
-            </Box>
+    <Theme appearance="dark" accentColor="purple" grayColor="slate" panelBackground="solid">
+      <QueryClientProvider client={queryClient}>
+        <Flex direction="column" style={{ minHeight: '100vh' }}>
+          <Box flexGrow="1" p="4">
+            <Outlet />
           </Box>
-        </QueryClientProvider>
-      </ThemeProvider>
-    </>
-  );
+          <Box>
+            <BottomNav />
+          </Box>
+        </Flex>
+      </QueryClientProvider>
+    </Theme>
+  )
 }

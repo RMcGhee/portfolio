@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Box } from '@mui/system'
+import { Box, Flex } from '@radix-ui/themes'
 
 import { LeftGrow } from '../common/Basic'
 import { type FormData, defaultFormData } from '../entities/FormData'
@@ -44,23 +44,15 @@ function JouleHome() {
   return (
     <div>
       <LeftGrow>
-        <Box sx={{ flexGrow: 0 }} style={{ marginTop: 15 }}>
+        <Box style={{ marginTop: 15 }}>
           <h1>joule-home</h1>
         </Box>
       </LeftGrow>
-      <Box
-        sx={{
-          flexGrow: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          maxWidth: '500px',
-        }}
-      >
+      <Flex direction="column" flexGrow="1" justify="between" style={{ maxWidth: '500px' }}>
         <JouleHomeContext.Provider value={{ formData, setFormData }}>
           <Outlet />
         </JouleHomeContext.Provider>
-      </Box>
+      </Flex>
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import { Box } from '@mui/system'
+import { Box, Flex } from '@radix-ui/themes'
 import { createLazyFileRoute, Link } from '@tanstack/react-router'
 import { LeftGrow } from '../common/Basic'
 import { useFadeOrder } from '../hooks/useFadeOrder'
@@ -16,24 +16,14 @@ function Index() {
   return (
     <div>
       <LeftGrow>
-        <Box sx={{ flexGrow: 0 }} style={{ marginTop: 15 }}>
+        <Box style={{ marginTop: 15 }}>
           <h1>portfolio</h1>
         </Box>
       </LeftGrow>
 
-      <Box
-        sx={{
-          flexGrow: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          maxWidth: '500px',
-        }}
-      >
+      <Flex direction="column" flexGrow="1" style={{ maxWidth: '500px' }}>
         <LeftGrow trigger={fadeOrder > 0}>
-          <Box
-            sx={{ flexGrow: 0, display: 'flex', alignItems: 'center' }}
-            style={{ gap: 15, marginTop: 15 }}
-          >
+          <Flex align="center" gap="4" style={{ marginTop: 15 }}>
             <h3 style={{ whiteSpace: 'nowrap' }}>joule-home</h3>
             <Link to="/joule-home">
               <img
@@ -42,13 +32,10 @@ function Index() {
                 style={{ maxHeight: '25vh', objectFit: 'contain' }}
               ></img>
             </Link>
-          </Box>
+          </Flex>
         </LeftGrow>
         <LeftGrow trigger={fadeOrder > 1}>
-          <Box
-            sx={{ flexGrow: 0, display: 'flex', alignItems: 'center' }}
-            style={{ gap: 15, marginTop: 15 }}
-          >
+          <Flex align="center" gap="4" style={{ marginTop: 15 }}>
             <h3 style={{ whiteSpace: 'nowrap' }}>photography</h3>
             <Link to="/photography">
               <img
@@ -57,13 +44,10 @@ function Index() {
                 style={{ maxHeight: '25vh', objectFit: 'contain' }}
               ></img>
             </Link>
-          </Box>
+          </Flex>
         </LeftGrow>
         <LeftGrow trigger={fadeOrder > 2}>
-          <Box
-            sx={{ flexGrow: 0, display: 'flex', alignItems: 'center' }}
-            style={{ gap: 15, marginTop: 15 }}
-          >
+          <Flex align="center" gap="4" style={{ marginTop: 15 }}>
             <h3 style={{ whiteSpace: 'nowrap' }}>biology</h3>
             <Link to="/biology">
               <img
@@ -72,9 +56,9 @@ function Index() {
                 style={{ maxHeight: '25vh', objectFit: 'contain' }}
               ></img>
             </Link>
-          </Box>
+          </Flex>
         </LeftGrow>
-      </Box>
+      </Flex>
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import { Box } from '@mui/system';
+import { Box, Flex } from '@radix-ui/themes';
 
 import { AnnotatedImage, LeftGrow } from '../common/Basic';
 import photos from '../img/photos';
@@ -13,11 +13,11 @@ function Photography() {
   const [ fadeOrder ] = useFadeOrder(6);
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <LeftGrow><Box sx={{ flexGrow: 0}} style={{ marginTop: 15 }}>
+    <Box flexGrow="1">
+      <LeftGrow><Box style={{ marginTop: 15 }}>
         <h1>photography</h1>
       </Box></LeftGrow>
-      <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', maxWidth: '500px' }}>
+      <Flex direction="column" flexGrow="1" style={{ maxWidth: '500px' }}>
         <AnnotatedImage img={photos.d} maxHeight='80vh' trigger={fadeOrder > 0}>
             <p>Outer Disk at Big Tree
             Big Tree, a local landmark. This is the view during the winter, when the outer disk of the milky way is prominent. 
@@ -41,7 +41,7 @@ function Photography() {
         <AnnotatedImage img={photos.i} maxHeight='80vh' trigger={fadeOrder > 5}>
           <p>Devil's Tower, WY</p>
         </AnnotatedImage>
-      </Box>
+      </Flex>
     </Box>
   );
 }
