@@ -88,7 +88,7 @@ function JouleHomeIndex() {
         We don't wan't those.
         <br />
         Why? I like heat pumps and wanted to play around with React. Stack is
-        React, Cloudflare Pages/Workers, and Supabase (postgres) for db.
+        React, radix-ui, Cloudflare Pages/Workers and D1 for db.
         <Box
           style={{
             position: "relative",
