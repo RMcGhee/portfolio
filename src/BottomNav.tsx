@@ -7,15 +7,15 @@ const BottomNav: React.FC = () => {
   const tooltipContent = (
     <React.Fragment>
       <Typography color="inherit">Want to connect?</Typography>
-      <Link href="https://www.linkedin.com/in/rich-mcghee-18a41757" target="_blank" rel="noopener noreferrer">
+      <a href="https://www.linkedin.com/in/rich-mcghee-18a41757" target="_blank" rel="noopener noreferrer">
         LinkedIn
-      </Link><br/>
+      </a><br/>
       <Link to='/' target="_self" rel="noopener noreferrer">
         Home
       </Link>
     </React.Fragment>
   );
-  
+
   return (
     <LeftGrow>
       <Stack

@@ -1,6 +1,5 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Box } from '@mui/system'
-import { useImmer } from 'use-immer'
 
 import { LeftGrow } from '../common/Basic'
 import { type FormData, defaultFormData } from '../entities/FormData'
@@ -18,16 +17,14 @@ export interface JouleHomeContext {
 }
 
 function JouleHome() {
-  const [ formData, setFormData ] = useImmer({ ...defaultFormData } as FormData)
+  const [ formData, setFormData ] = useState<FormData>({ ...defaultFormData })
 
   useEffect(() => {
     // Load cached data from localStorage
     const savedData = localStorage.getItem('formData')
     if (savedData) {
       let loadedData = { ...defaultFormData, ...JSON.parse(savedData) }
-      setFormData((draftFormData) => {
-        Object.assign(draftFormData, loadedData)
-      })
+      setFormData(loadedData)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

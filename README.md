@@ -1,46 +1,53 @@
-# Getting Started with Create React App
+# portfolio
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A personal portfolio site built with React, Vite, and TypeScript, deployed to Cloudflare Pages.
+
+## Tech Stack
+
+- **Runtime / Package Manager:** [Bun](https://bun.sh/)
+- **Build Tool:** [Vite 8](https://vite.dev/) (powered by Rolldown + Oxc)
+- **Framework:** [React 18](https://react.dev/)
+- **Language:** [TypeScript](https://www.typescriptlang.org/)
+- **Routing:** [TanStack Router](https://tanstack.com/router)
+- **Data Fetching:** [TanStack React Query](https://tanstack.com/query)
+- **UI:** [MUI (Material UI) 5](https://mui.com/)
+- **Charts:** [Chart.js](https://www.chartjs.org/) via [react-chartjs-2](https://react-chartjs-2.js.org/)
+- **Deployment:** [Cloudflare Pages](https://pages.cloudflare.com/) via [Wrangler](https://developers.cloudflare.com/workers/wrangler/)
+
+## Prerequisites
+
+- [Bun](https://bun.sh/) (v1.3+)
+- [Node.js](https://nodejs.org/) (v20.19+ or v22.12+)
+
+## Getting Started
+
+Install dependencies:
+
+```sh
+bun install
+```
 
 ## Available Scripts
 
-In the project directory, you can run:
+### `bun run dev`
 
-### `npm start`
+Starts the Vite development server with hot module replacement.\
+Open [http://localhost:5173](http://localhost:5173) to view it in the browser.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### `bun run build`
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Runs the TypeScript compiler (`tsc -b`) and then builds the app for production using Vite.\
+Output is written to the `dist/` directory.
 
-### `npm test`
+### `bun run preview-local`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Serves the production build locally using Vite's built-in preview server.
 
-### `npm run build`
+### `bun run preview`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Builds the app and serves it locally using Wrangler (Cloudflare Pages dev server).\
+Useful for testing the deployment environment locally.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### `bun run deploy`
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Builds the app and deploys it to Cloudflare Pages via Wrangler.
