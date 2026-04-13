@@ -1,6 +1,6 @@
-import { TextField, TextFieldProps, MenuItem } from '@mui/material';
+import { MenuItem, TextField, type TextFieldProps } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { ZipDist } from '../entities/ZipDist';
+import type { ZipDist } from '../entities/ZipDist';
 import { isEmpty } from './Util';
 
 type SelectClimateProps = TextFieldProps & {
@@ -35,19 +35,20 @@ export const SelectClimate: React.FC<SelectClimateProps> = ({
   const [menuItems, setMenuItems] = useState<ClimateMenuItem[]>(generateMenuItems(zipData));
 
   useEffect(() => {
-    let menuItems = generateMenuItems(zipData);
-    setMenuItems(menuItems);
-    if (selectedClimate !== '' && menuItems.length > 1) {
-      setSelectedClimate(selectedClimate);
-    } else {
-      setSelectedClimate(menuItems[0].value as string);
-    }
-    // intentionally not dependencies; setSelectedClimate
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setMenuItems(generateMenuItems(zipData));
   }, [zipData]);
+
+  useEffect(() => {
+    if (menuItems.length > 1) {
+      if (selectedClimate !== '') {
+        setSelectedClimate(selectedClimate);
+      } else {
+        setSelectedClimate(menuItems[0].value as string);
+      }
+    }
+  }, [menuItems]);
   
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('set this: ' + event.target.value);
     setSelectedClimate(event.target.value as string);
   };
 

@@ -1,4 +1,4 @@
-import { Box, Modal, SxProps } from "@mui/material";
+import { Box, Modal, type SxProps } from "@mui/material";
 import theme from "../base-theme";
 
 export type HelpPopoverProps = {

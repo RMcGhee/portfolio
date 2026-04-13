@@ -1,5 +1,5 @@
 import { isNumeric } from "../common/Util";
-import { FormData } from "./FormData";
+import { type FormData } from "./FormData";
 
 export type EnergyFormData = {
   dataYear: 2021 | 2022 | 2023;
@@ -58,4 +58,34 @@ export const validateEnergyFormData = (formData: FormData): boolean => {
     ) &&
     isNumeric(formData.electricPrice) &&
     isNumeric(formData.gasPrice);
+};
+
+export const fixtureElectricUsage = {
+  jan: '743',
+  feb: '725',
+  mar: '589',
+  apr: '550',
+  may: '714',
+  jun: '1243',
+  jul: '1635',
+  aug: '1384',
+  sep: '972',
+  oct: '529',
+  nov: '620',
+  dec: '723',
+};
+
+export const fixtureGasUsage = {
+  jan: '171',
+  feb: '156',
+  mar: '143',
+  apr: '65',
+  may: '25',
+  jun: '13',
+  jul: '12',
+  aug: '12',
+  sep: '11',
+  oct: '20',
+  nov: '69',
+  dec: '134',
 };

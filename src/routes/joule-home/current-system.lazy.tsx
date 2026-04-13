@@ -1,19 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Box, Button, IconButton, InputAdornment } from '@mui/material';
-import { LeftGrow, ValidatedField } from '../common/Basic';
-import { ZipField } from '../common/ZipField';
-import { SelectClimate } from '../common/SelectClimate';
 import { QuestionMark } from '@mui/icons-material';
-import { HelpPopover } from '../common/HelpPopover';
-import { Link, useOutletContext } from 'react-router-dom';
-import { ContextType } from '../pages/joule-home';
+import { createLazyFileRoute, Link } from '@tanstack/react-router';
+import { LeftGrow, ValidatedField } from '../../common/Basic';
+import { HelpPopover } from '../../common/HelpPopover';
+import { SelectClimate } from '../../common/SelectClimate';
+import { ZipField } from '../../common/ZipField';
+import { useJouleHomeContext } from '../../entities/joule-home-context';
 
-const CurrentSystemForm: React.FC = () => {
-  const { formData, setFormData } = useOutletContext<ContextType>();
+export const Route = createLazyFileRoute('/joule-home/current-system')({
+  component: CurrentSystemForm,
+})
+
+function CurrentSystemForm() {
+  const { formData, setFormData } = useJouleHomeContext();
 
   const [showHelpPopover, setShowHelpPopover] = useState(false);
   const haveZipDistData = Object.keys(formData.zipDistData).length !== 0;
-
 
   useEffect(() => {
     setFormData((draftFormData) => {
@@ -22,7 +25,7 @@ const CurrentSystemForm: React.FC = () => {
     });
     // intentionally not dependencies; formData and setFormData
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formData]);
+  }, []);
 
   const helpText = (
     <div>
@@ -82,6 +85,7 @@ const CurrentSystemForm: React.FC = () => {
           <ZipField
             label="Zip Code"
             value={formData.zipCode}
+            zipCode={formData.zipCode}
             len={5}
             inputType='int'
             inputProps={{ inputMode: 'numeric' }}
@@ -146,7 +150,7 @@ const CurrentSystemForm: React.FC = () => {
           </Button>
           <Button
             component={Link}
-            to='/joule-home/energy-usage'
+            to='/joule-home/energy-usage-form'
             disabled={!haveZipDistData}
             style={{
               transition: 'width 0.5s ease-in-out, opacity 0.5s ease-in-out',
@@ -159,5 +163,3 @@ const CurrentSystemForm: React.FC = () => {
     </LeftGrow>
   );
 };
-
-export default CurrentSystemForm;

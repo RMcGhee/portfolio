@@ -1,15 +1,13 @@
-import { useEffect, useState } from 'react';
 import { Box } from '@mui/system';
 
-import '../App.css';
-
-import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css';
 import { AnnotatedImage, LeftGrow } from '../common/Basic';
 import photos from '../img/photos';
 import { useFadeOrder } from '../hooks/useFadeOrder';
+import { createLazyFileRoute } from '@tanstack/react-router';
+
+export const Route = createLazyFileRoute('/photography')({
+  component: Photography,
+})
 
 function Photography() {
   const [ fadeOrder ] = useFadeOrder(6);
@@ -47,5 +45,3 @@ function Photography() {
     </Box>
   );
 }
-
-export default Photography;

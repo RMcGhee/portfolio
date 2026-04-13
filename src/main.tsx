@@ -1,41 +1,42 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import { RouterProvider, createHashRouter } from 'react-router-dom';
-import Photography from './pages/photography';
-import Biology from './pages/biology';
-import JouleHome from './pages/joule-home';
-import Introduction from './calculator/Introduction';
-import CurrentSystemForm from './calculator/CurrentSystemForm';
-import EnergyUsageForm from './calculator/EnergyUsageForm';
-import EnergyUsageAnalysis from './calculator/EnergyUsageAnalysis';
+import { lazy, StrictMode, Suspense } from 'react'
+import ReactDOM from 'react-dom/client'
+import { RouterProvider, createRouter } from '@tanstack/react-router'
 
-const router = createHashRouter([
-  {
-    path: '/',
-    element: <App/>,
-    children: [
-      {
-        path: 'joule-home',
-        element: <JouleHome/>,
-        children: [
-          { path: '', element: <Introduction /> },
-          { path: 'current-system', element: <CurrentSystemForm /> },
-          { path: 'energy-usage', element: <EnergyUsageForm /> },
-          { path: 'analysis', element: <EnergyUsageAnalysis /> },
-        ],
-      },
-      { path: 'photography', element: <Photography/> },
-      { path: 'biology', element: <Biology/> },
-    ]
-  },
-]);
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
-root.render(
-  <React.StrictMode>
-    <RouterProvider router={router}/>
-  </React.StrictMode>
-);
+import { routeTree } from './routeTree.gen'
+
+
+// Set up a Router instance
+const router = createRouter({
+  routeTree,
+  defaultPreload: 'intent',
+})
+
+// Register things for typesafety
+declare module '@tanstack/react-router' {
+  interface Register {
+    router: typeof router
+  }
+}
+
+// TanStackRouterDevtools doesn't automatically hide itself.
+// eslint-disable-next-line react-refresh/only-export-components
+const TanStackRouterDevtools =
+  import.meta.env.PROD
+    ? () => null
+    : lazy(() =>
+      import('@tanstack/router-devtools').then((res) => ({
+        default: res.TanStackRouterDevtools,
+      })),
+    )
+
+// Render the app
+const rootElement = document.getElementById('root')!
+if (!rootElement.innerHTML) {
+  const root = ReactDOM.createRoot(rootElement)
+  root.render(
+    <StrictMode>
+      <RouterProvider router={router} />
+      <Suspense> <TanStackRouterDevtools router={router} /> </Suspense>
+    </StrictMode>,
+  )
+}

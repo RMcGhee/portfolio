@@ -1,13 +1,13 @@
-import React, { useEffect, useRef } from 'react';
-import { FormData, ddDataForYear } from '../../entities/FormData';
-import { MonthlyUsage, } from '../../entities/EnergyFormData';
-import { DegreeDayMonths } from '../../entities/DegreeDayData';
-import { Chart as ChartJS, LinearScale, CategoryScale, PointElement, LineElement, Legend, Tooltip, Title, ScatterController, } from 'chart.js';
-import { Chart } from 'react-chartjs-2';
-import { SimpleLinearRegression } from 'ml-regression-simple-linear';
-import { MonthDataEntry } from '../EnergyUsageAnalysis';
-import { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
 import { useTheme } from '@mui/material';
+import { CategoryScale, Chart as ChartJS, Legend, LineElement, LinearScale, PointElement, ScatterController, Title, Tooltip, } from 'chart.js';
+import { SimpleLinearRegression } from 'ml-regression-simple-linear';
+import React, { useEffect, useRef } from 'react';
+import { Chart } from 'react-chartjs-2';
+import type { ChartJSOrUndefined } from 'react-chartjs-2/dist/types';
+import type { DegreeDayMonths } from '../../entities/DegreeDayData';
+import type { MonthlyUsage, } from '../../entities/EnergyFormData';
+import { type FormData, ddDataForYear } from '../../entities/FormData';
+import type { MonthDataEntry } from '../../routes/joule-home/analysis.lazy';
 
 type SeasonElectricGraphProps = {
   formData: FormData;

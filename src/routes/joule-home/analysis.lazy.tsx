@@ -1,23 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Button, Grid, IconButton, Paper, } from '@mui/material';
-import { LeftGrow } from '../common/Basic';
 import { QuestionMark } from '@mui/icons-material';
-import { HelpPopover } from '../common/HelpPopover';
-import { EnergyFormData, initEnergyForm, } from '../entities/EnergyFormData';
-import SeasonElectricGraph from './graphs/SeasonElectricGraph';
-import SeasonGasGraph from './graphs/SeasonGasGraph';
-import YearBtuGraph from './graphs/YearBtuGraph';
-import YearBtuNeedsGraph from './graphs/YearBtuNeedsGraph';
-import { MonthData } from '../entities/CalculatedData';
-import NewSystemCostGraph from './graphs/NewSystemCostGraph';
-import NewSystemUsageGraph from './graphs/NewSystemUsageGraph';
-import { Link, useOutletContext } from 'react-router-dom';
-import { ContextType } from '../pages/joule-home';
+import { Box, Button, Grid, IconButton, Paper, } from '@mui/material';
+import { createLazyFileRoute, Link } from '@tanstack/react-router';
+import React, { useEffect, useState } from 'react';
+import NewSystemCostGraph from '../../calculator/graphs/NewSystemCostGraph';
+import NewSystemUsageGraph from '../../calculator/graphs/NewSystemUsageGraph';
+import SeasonElectricGraph from '../../calculator/graphs/SeasonElectricGraph';
+import SeasonGasGraph from '../../calculator/graphs/SeasonGasGraph';
+import YearBtuGraph from '../../calculator/graphs/YearBtuGraph';
+import YearBtuNeedsGraph from '../../calculator/graphs/YearBtuNeedsGraph';
+import { LeftGrow } from '../../common/Basic';
+import { HelpPopover } from '../../common/HelpPopover';
+import { type MonthData } from '../../entities/CalculatedData';
+import { type EnergyFormData, initEnergyForm } from '../../entities/EnergyFormData';
+import { useJouleHomeContext } from '../../entities/joule-home-context';
+
+export const Route = createLazyFileRoute('/joule-home/analysis')({
+  component: EnergyUsageAnalysis,
+})
 
 export type MonthDataEntry = [string, [number, number]];
 
-const EnergyUsageAnalysis: React.FC = () => {
-  const { formData, setFormData } = useOutletContext<ContextType>();
+function EnergyUsageAnalysis() {
+  const { formData, setFormData } = useJouleHomeContext();
   const [energyFormData,] = useState<EnergyFormData>(initEnergyForm(formData));
 
   const [showHelpPopover, setShowHelpPopover] = useState(false);
@@ -43,7 +47,6 @@ const EnergyUsageAnalysis: React.FC = () => {
       formDataDraft.currentHvacCost = currentHVACCost;
       formDataDraft.currentTotalCost = currentTotalCost;
       formDataDraft.desiredHvacCost = desiredHvacYearlyCost;
-      formDataDraft.desiredTotalCost = desiredTotalYearlyCost;
       formDataDraft.desiredTotalCost = desiredTotalYearlyCost;
       formDataDraft.oldHvacCost = oldHvacYearlyCost;
       return formDataDraft;
@@ -88,6 +91,7 @@ const EnergyUsageAnalysis: React.FC = () => {
   return (
     <LeftGrow>
       <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: 2 }}>
+      <h3>Zip Selected: {formData.selectedClimate}</h3>
         <div id='seasonElectricGraph' style={{ width: '1' }}>
           <SeasonElectricGraph formData={formData} setBaseElectricUsage={setBaseElectricUsage}/>
         </div>
@@ -114,6 +118,7 @@ const EnergyUsageAnalysis: React.FC = () => {
           <QuestionMark />
         </IconButton>
         <HelpPopover helpText={helpText} isOpen={showHelpPopover} onClose={() => setShowHelpPopover(false)}></HelpPopover>
+        <h5>kWh price: ${formData.electricPrice} gas price: ${formData.gasPrice}</h5>
         <Grid container spacing={2}>
           <HeaderItem>Old HVAC Cost</HeaderItem> <DataItem asDollars={true}>{formData.oldHvacCost}</DataItem>
           <HeaderItem>New HVAC Cost</HeaderItem> <DataItem asDollars={true}>{formData.desiredHvacCost}</DataItem>
@@ -130,7 +135,7 @@ const EnergyUsageAnalysis: React.FC = () => {
         }}>
           <Button
             component={Link}
-            to='/joule-home/energy-usage'
+            to='/joule-home/energy-usage-form'
             style={{
               transition: 'width 0.5s ease-in-out, opacity 0.5s ease-in-out',
               left: 0,
@@ -140,7 +145,6 @@ const EnergyUsageAnalysis: React.FC = () => {
           <Button
             component={Link}
             to='/joule-home'
-            // disabled={!haveZipDistData}
             style={{
               transition: 'width 0.5s ease-in-out, opacity 0.5s ease-in-out',
               left: 0,
@@ -152,8 +156,6 @@ const EnergyUsageAnalysis: React.FC = () => {
     </LeftGrow>
   );
 }
-
-export default EnergyUsageAnalysis;
 
 type HeaderItemProps = {
   children: React.ReactNode;
