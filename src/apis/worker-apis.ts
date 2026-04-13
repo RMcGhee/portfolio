@@ -1,8 +1,12 @@
 import type { DegreeDayData } from "../entities/DegreeDayData";
 import type { ZipDist } from "../entities/ZipDist";
 
-export const getZipDistUrl = 'https://worker.richmcghee.com/get-zip-dist'
-export const getDdDataUrl = 'https://worker.richmcghee.com/get-dd-data'
+const workerBaseUrl = import.meta.env.DEV
+  ? "/api"
+  : "https://worker.richmcghee.com";
+
+export const getZipDistUrl = `${workerBaseUrl}/get-zip-dist`;
+export const getDdDataUrl = `${workerBaseUrl}/get-dd-data`;
 
 export const getZipDist = async (zipCode: string, bypassCorsToken: string|null = null): Promise<ZipDist|null> => {
   const response = await fetch(`${getZipDistUrl}${bypassCorsToken ? '?bypassCorsToken=' + bypassCorsToken : ''}`, {
