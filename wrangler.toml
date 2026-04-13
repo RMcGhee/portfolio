@@ -1,6 +1,6 @@
 name = "portfolio"
 pages_build_output_dir = "dist"
-build_image_major_version = 3
 
 [vars]
-  PNPM_VERSION = "9.8.0"
+  NODE_VERSION = "22.16.0"
+  BUN_VERSION = "1.3.12"
