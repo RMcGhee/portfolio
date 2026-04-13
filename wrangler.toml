@@ -1,5 +1,6 @@
 name = "portfolio"
 pages_build_output_dir = "dist"
+build_image_major_version = 3
 
 [vars]
   PNPM_VERSION = "9.8.0"
