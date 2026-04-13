@@ -20,7 +20,7 @@
     "@mui/system": "^6.5.0",
     "@tanstack/react-query": "^5.99.0",
     "@tanstack/react-router": "^1.168.19",
-    "@tanstack/router-devtools": "^1.166.13",
+    "@tanstack/react-router-devtools": "^1.166.13",
     "@tanstack/router-plugin": "^1.167.20",
     "@types/chart.js": "^2.9.41",
     "@types/node": ">=22.12.0",

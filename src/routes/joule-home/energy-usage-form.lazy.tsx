@@ -77,28 +77,24 @@ function EnergyUsageForm() {
         draftData.year_2023.cooling = initDegreeDayMonths(data.year_2023.cooling)
         draftData.year_2023.heating = initDegreeDayMonths(data.year_2023.heating)
 
-        setFormData((formDataDraft) => {
-          if (draftData !== null) {
-            formDataDraft.degreeDayData = draftData
-          }
-          return formDataDraft
-        })
+        setFormData((prev) => ({
+          ...prev,
+          degreeDayData: draftData,
+        }))
       }
     }
   }, [ data ])
 
   useEffect(() => {
-    setFormData((formDataDraft) => {
-      Object.assign(formDataDraft, {
-        monthlyElectricUsage: { ...energyFormData.monthlyElectricUsage },
-        monthlyGasUsage: { ...energyFormData.monthlyGasUsage },
-        dataYear: energyFormData.dataYear,
-        electricPrice: energyFormData.electricPrice,
-        gasPrice: energyFormData.gasPrice,
-        gasUnits: energyFormData.gasUnits,
-      } as FormData)
-      return formDataDraft
-    })
+    setFormData((prev) => ({
+      ...prev,
+      monthlyElectricUsage: { ...energyFormData.monthlyElectricUsage },
+      monthlyGasUsage: { ...energyFormData.monthlyGasUsage },
+      dataYear: energyFormData.dataYear,
+      electricPrice: energyFormData.electricPrice,
+      gasPrice: energyFormData.gasPrice,
+      gasUnits: energyFormData.gasUnits,
+    }))
   }, [ energyFormData ])
 
   useEffect(() => {
