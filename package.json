@@ -6,7 +6,7 @@
   "scripts": {
     "predeploy": "bun run build",
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "bunx --bun tsc -b && vite build",
     "preview-local": "vite preview",
     "deploy": "bun run build && wrangler pages deploy ./build",
     "preview": "bun run build && wrangler pages dev ./build"
