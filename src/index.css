@@ -28,3 +28,8 @@ a:hover {
   --purple-9: #aa00ff;
   --purple-a9: #aa00ff;
 }
+
+/* Keep the visible slider thumb within the track bounds */
+.rt-SliderThumb::after {
+  inset: 0;
+}

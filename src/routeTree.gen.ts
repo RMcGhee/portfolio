@@ -14,9 +14,11 @@ import { Route as rootRouteImport } from './routes/__root'
 
 const PhotographyLazyRouteImport = createFileRoute('/photography')()
 const JouleHomeLazyRouteImport = createFileRoute('/joule-home')()
+const FlowHomeLazyRouteImport = createFileRoute('/flow-home')()
 const BiologyLazyRouteImport = createFileRoute('/biology')()
 const IndexLazyRouteImport = createFileRoute('/')()
 const JouleHomeIndexLazyRouteImport = createFileRoute('/joule-home/')()
+const FlowHomeIndexLazyRouteImport = createFileRoute('/flow-home/')()
 const JouleHomeEnergyUsageFormLazyRouteImport = createFileRoute(
   '/joule-home/energy-usage-form',
 )()
@@ -25,6 +27,9 @@ const JouleHomeCurrentSystemLazyRouteImport = createFileRoute(
 )()
 const JouleHomeAnalysisLazyRouteImport = createFileRoute(
   '/joule-home/analysis',
+)()
+const FlowHomeCostScheduleLazyRouteImport = createFileRoute(
+  '/flow-home/cost-schedule',
 )()
 
 const PhotographyLazyRoute = PhotographyLazyRouteImport.update({
@@ -37,6 +42,11 @@ const JouleHomeLazyRoute = JouleHomeLazyRouteImport.update({
   path: '/joule-home',
   getParentRoute: () => rootRouteImport,
 } as any).lazy(() => import('./routes/joule-home.lazy').then((d) => d.Route))
+const FlowHomeLazyRoute = FlowHomeLazyRouteImport.update({
+  id: '/flow-home',
+  path: '/flow-home',
+  getParentRoute: () => rootRouteImport,
+} as any).lazy(() => import('./routes/flow-home.lazy').then((d) => d.Route))
 const BiologyLazyRoute = BiologyLazyRouteImport.update({
   id: '/biology',
   path: '/biology',
@@ -53,6 +63,13 @@ const JouleHomeIndexLazyRoute = JouleHomeIndexLazyRouteImport.update({
   getParentRoute: () => JouleHomeLazyRoute,
 } as any).lazy(() =>
   import('./routes/joule-home/index.lazy').then((d) => d.Route),
+)
+const FlowHomeIndexLazyRoute = FlowHomeIndexLazyRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => FlowHomeLazyRoute,
+} as any).lazy(() =>
+  import('./routes/flow-home/index.lazy').then((d) => d.Route),
 )
 const JouleHomeEnergyUsageFormLazyRoute =
   JouleHomeEnergyUsageFormLazyRouteImport.update({
@@ -77,35 +94,51 @@ const JouleHomeAnalysisLazyRoute = JouleHomeAnalysisLazyRouteImport.update({
 } as any).lazy(() =>
   import('./routes/joule-home/analysis.lazy').then((d) => d.Route),
 )
+const FlowHomeCostScheduleLazyRoute =
+  FlowHomeCostScheduleLazyRouteImport.update({
+    id: '/cost-schedule',
+    path: '/cost-schedule',
+    getParentRoute: () => FlowHomeLazyRoute,
+  } as any).lazy(() =>
+    import('./routes/flow-home/cost-schedule.lazy').then((d) => d.Route),
+  )
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexLazyRoute
   '/biology': typeof BiologyLazyRoute
+  '/flow-home': typeof FlowHomeLazyRouteWithChildren
   '/joule-home': typeof JouleHomeLazyRouteWithChildren
   '/photography': typeof PhotographyLazyRoute
+  '/flow-home/cost-schedule': typeof FlowHomeCostScheduleLazyRoute
   '/joule-home/analysis': typeof JouleHomeAnalysisLazyRoute
   '/joule-home/current-system': typeof JouleHomeCurrentSystemLazyRoute
   '/joule-home/energy-usage-form': typeof JouleHomeEnergyUsageFormLazyRoute
+  '/flow-home/': typeof FlowHomeIndexLazyRoute
   '/joule-home/': typeof JouleHomeIndexLazyRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexLazyRoute
   '/biology': typeof BiologyLazyRoute
   '/photography': typeof PhotographyLazyRoute
+  '/flow-home/cost-schedule': typeof FlowHomeCostScheduleLazyRoute
   '/joule-home/analysis': typeof JouleHomeAnalysisLazyRoute
   '/joule-home/current-system': typeof JouleHomeCurrentSystemLazyRoute
   '/joule-home/energy-usage-form': typeof JouleHomeEnergyUsageFormLazyRoute
+  '/flow-home': typeof FlowHomeIndexLazyRoute
   '/joule-home': typeof JouleHomeIndexLazyRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexLazyRoute
   '/biology': typeof BiologyLazyRoute
+  '/flow-home': typeof FlowHomeLazyRouteWithChildren
   '/joule-home': typeof JouleHomeLazyRouteWithChildren
   '/photography': typeof PhotographyLazyRoute
+  '/flow-home/cost-schedule': typeof FlowHomeCostScheduleLazyRoute
   '/joule-home/analysis': typeof JouleHomeAnalysisLazyRoute
   '/joule-home/current-system': typeof JouleHomeCurrentSystemLazyRoute
   '/joule-home/energy-usage-form': typeof JouleHomeEnergyUsageFormLazyRoute
+  '/flow-home/': typeof FlowHomeIndexLazyRoute
   '/joule-home/': typeof JouleHomeIndexLazyRoute
 }
 export interface FileRouteTypes {
@@ -113,36 +146,45 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/biology'
+    | '/flow-home'
     | '/joule-home'
     | '/photography'
+    | '/flow-home/cost-schedule'
     | '/joule-home/analysis'
     | '/joule-home/current-system'
     | '/joule-home/energy-usage-form'
+    | '/flow-home/'
     | '/joule-home/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/biology'
     | '/photography'
+    | '/flow-home/cost-schedule'
     | '/joule-home/analysis'
     | '/joule-home/current-system'
     | '/joule-home/energy-usage-form'
+    | '/flow-home'
     | '/joule-home'
   id:
     | '__root__'
     | '/'
     | '/biology'
+    | '/flow-home'
     | '/joule-home'
     | '/photography'
+    | '/flow-home/cost-schedule'
     | '/joule-home/analysis'
     | '/joule-home/current-system'
     | '/joule-home/energy-usage-form'
+    | '/flow-home/'
     | '/joule-home/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexLazyRoute: typeof IndexLazyRoute
   BiologyLazyRoute: typeof BiologyLazyRoute
+  FlowHomeLazyRoute: typeof FlowHomeLazyRouteWithChildren
   JouleHomeLazyRoute: typeof JouleHomeLazyRouteWithChildren
   PhotographyLazyRoute: typeof PhotographyLazyRoute
 }
@@ -161,6 +203,13 @@ declare module '@tanstack/react-router' {
       path: '/joule-home'
       fullPath: '/joule-home'
       preLoaderRoute: typeof JouleHomeLazyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/flow-home': {
+      id: '/flow-home'
+      path: '/flow-home'
+      fullPath: '/flow-home'
+      preLoaderRoute: typeof FlowHomeLazyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/biology': {
@@ -184,6 +233,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JouleHomeIndexLazyRouteImport
       parentRoute: typeof JouleHomeLazyRoute
     }
+    '/flow-home/': {
+      id: '/flow-home/'
+      path: '/'
+      fullPath: '/flow-home/'
+      preLoaderRoute: typeof FlowHomeIndexLazyRouteImport
+      parentRoute: typeof FlowHomeLazyRoute
+    }
     '/joule-home/energy-usage-form': {
       id: '/joule-home/energy-usage-form'
       path: '/energy-usage-form'
@@ -205,8 +261,29 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JouleHomeAnalysisLazyRouteImport
       parentRoute: typeof JouleHomeLazyRoute
     }
+    '/flow-home/cost-schedule': {
+      id: '/flow-home/cost-schedule'
+      path: '/cost-schedule'
+      fullPath: '/flow-home/cost-schedule'
+      preLoaderRoute: typeof FlowHomeCostScheduleLazyRouteImport
+      parentRoute: typeof FlowHomeLazyRoute
+    }
   }
 }
+
+interface FlowHomeLazyRouteChildren {
+  FlowHomeCostScheduleLazyRoute: typeof FlowHomeCostScheduleLazyRoute
+  FlowHomeIndexLazyRoute: typeof FlowHomeIndexLazyRoute
+}
+
+const FlowHomeLazyRouteChildren: FlowHomeLazyRouteChildren = {
+  FlowHomeCostScheduleLazyRoute: FlowHomeCostScheduleLazyRoute,
+  FlowHomeIndexLazyRoute: FlowHomeIndexLazyRoute,
+}
+
+const FlowHomeLazyRouteWithChildren = FlowHomeLazyRoute._addFileChildren(
+  FlowHomeLazyRouteChildren,
+)
 
 interface JouleHomeLazyRouteChildren {
   JouleHomeAnalysisLazyRoute: typeof JouleHomeAnalysisLazyRoute
@@ -229,6 +306,7 @@ const JouleHomeLazyRouteWithChildren = JouleHomeLazyRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexLazyRoute: IndexLazyRoute,
   BiologyLazyRoute: BiologyLazyRoute,
+  FlowHomeLazyRoute: FlowHomeLazyRouteWithChildren,
   JouleHomeLazyRoute: JouleHomeLazyRouteWithChildren,
   PhotographyLazyRoute: PhotographyLazyRoute,
 }
