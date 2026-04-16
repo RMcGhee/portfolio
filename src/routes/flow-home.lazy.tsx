@@ -7,6 +7,7 @@ import {
   defaultFlowHomeInputs,
   flowHomeReducer,
   FlowHomeContext,
+  sanitizeInputs,
 } from "../entities/flow-home/flow-home-context";
 import { defaultCostSchedulePlan } from "../entities/flow-home/cost-schedule";
 import { createLazyFileRoute, Outlet } from "@tanstack/react-router";
@@ -22,11 +23,7 @@ function loadSavedInputs(): FlowHomeInputs {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       const parsed = JSON.parse(saved);
-      return {
-        ...defaultFlowHomeInputs,
-        plan: defaultCostSchedulePlan(),
-        ...parsed,
-      };
+      return sanitizeInputs(parsed);
     }
   } catch {
     // Corrupted data — start fresh

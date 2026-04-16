@@ -153,32 +153,13 @@ export type CostScheduleWeek = Record<DayOfWeek, CostScheduleDay>;
 // --- Seasonal Schedule ---
 
 /**
- * Defines a point in the calendar year.
- * Month is 0-indexed to match Date.getMonth() (0 = January, 11 = December).
- * Day is 1-indexed to match Date.getDate() (1–31). Defaults to 1 if omitted,
- * allowing mid-month season transitions.
- */
-export type SeasonBoundary = {
-  /** 0-indexed month matching Date.getMonth() */
-  month: Month;
-  /** 1-indexed day of month matching Date.getDate(). Defaults to 1. */
-  day?: number;
-};
-
-/**
- * A named season with its effective date range and weekly cost schedule.
- *
- * The season runs from `start` (inclusive) through `end` (inclusive).
- * Example: { name: "Summer", start: { month: 5, day: 1 }, end: { month: 8, day: 30 }, week: ... }
- *          (June 1 through September 30)
+ * A named season with its selected months and weekly cost schedule.
  */
 export type CostScheduleSeason = {
   /** Human-readable name, e.g. "Summer", "Winter", "Shoulder" */
   name: string;
-  /** Inclusive start boundary */
-  start: SeasonBoundary;
-  /** Inclusive end boundary */
-  end: SeasonBoundary;
+  /** Selected months for this season */
+  months: Month[];
   /** The weekly cost pattern that applies during this season */
   week: CostScheduleWeek;
 };
@@ -264,35 +245,10 @@ export function getMonth(date: Date): Month {
   return date.getMonth() as Month;
 }
 
-/**
- * Check whether a Date falls within a SeasonBoundary range (inclusive on both ends).
- * Handles seasons that wrap around the year boundary (e.g. Nov–Feb).
- */
+/** Check whether a Date falls within a season's selected months. */
 export function isDateInSeason(date: Date, season: CostScheduleSeason): boolean {
   const m = date.getMonth() as Month;
-  const d = date.getDate();
-  const startMonth = season.start.month;
-  const startDay = season.start.day ?? 1;
-  const endMonth = season.end.month;
-  const endDay = season.end.day ?? lastDayOfMonth(endMonth, date.getFullYear());
-
-  const dateOrdinal = m * 100 + d;
-  const startOrdinal = startMonth * 100 + startDay;
-  const endOrdinal = endMonth * 100 + endDay;
-
-  if (startOrdinal <= endOrdinal) {
-    // Normal range: e.g. Mar–Oct
-    return dateOrdinal >= startOrdinal && dateOrdinal <= endOrdinal;
-  } else {
-    // Wraps around year boundary: e.g. Nov–Feb
-    return dateOrdinal >= startOrdinal || dateOrdinal <= endOrdinal;
-  }
-}
-
-/** Get the last day of a 0-indexed month in a given year. */
-function lastDayOfMonth(month: Month, year: number): number {
-  // month is 0-indexed; Date constructor with day=0 gives last day of previous month
-  return new Date(year, month + 1, 0).getDate();
+  return season.months.includes(m);
 }
 
 /**
@@ -334,19 +290,13 @@ export function defaultCostScheduleWeek(): CostScheduleWeek {
   ) as CostScheduleWeek;
 }
 
-export const defaultSeasonBoundary: SeasonBoundary = {
-  month: JANUARY,
-  day: 1,
-};
-
 export function defaultCostSchedulePlan(): CostSchedulePlan {
   return {
     name: "",
     seasons: [
       {
         name: "Year Round",
-        start: { month: JANUARY, day: 1 },
-        end: { month: DECEMBER, day: 31 },
+        months: [...MONTHS],
         week: defaultCostScheduleWeek(),
       },
     ],

@@ -1,4 +1,4 @@
-import { Box, Button, Card, Flex, Heading, Separator, Text, TextField } from "@radix-ui/themes";
+import { Box, Button, Card, Flex, Heading, Separator, Tabs, Text, TextField } from "@radix-ui/themes";
 import { createLazyFileRoute, Link } from "@tanstack/react-router";
 import { LeftGrow } from "../../common/Basic";
 import { useFlowHomeContext } from "../../entities/flow-home/flow-home-context";
@@ -8,19 +8,18 @@ import {
   type DayOfWeek,
   MONTH_LABELS,
 } from "../../entities/flow-home/cost-schedule";
-import { SeasonEditor } from "./SeasonEditor";
-import { DayScheduleEditor } from "./DayScheduleEditor";
+import { SeasonEditor } from "../../views/flow-home/SeasonEditor";
+import { DayScheduleEditor } from "../../views/flow-home/DayScheduleEditor";
 
 export const Route = createLazyFileRoute("/flow-home/cost-schedule")({
   component: CostScheduleStep,
 });
 
 function seasonDateLabel(season: CostScheduleSeason): string {
-  const startMonth = MONTH_LABELS[season.start.month];
-  const endMonth = MONTH_LABELS[season.end.month];
-  const startDay = season.start.day ?? 1;
-  const endDay = season.end.day ?? "";
-  return `${startMonth} ${startDay} – ${endMonth}${endDay ? ` ${endDay}` : ""}`;
+  if (season.months.length === 0) return "No months selected";
+  const sorted = [...season.months].sort((a, b) => a - b);
+  const labels = sorted.map((m) => MONTH_LABELS[m]);
+  return labels.join(", ");
 }
 
 function CostScheduleStep() {
@@ -105,7 +104,7 @@ function CostScheduleStep() {
 
         <Separator size="4" style={{ width: "100%" }} />
 
-        {/* Step 2 & 3: Daily schedules for each season, shown inline */}
+        {/* Step 2 & 3: Daily schedules per season, shown via tabs */}
         <Heading size="4">Time Blocks & Day Schedules</Heading>
 
         {plan.seasons.length === 0 ? (
@@ -113,42 +112,41 @@ function CostScheduleStep() {
             Add at least one season above to configure time blocks.
           </Text>
         ) : (
-          <Flex direction="column" gap="4">
+          <Tabs.Root defaultValue="0">
+            <Tabs.List size="2">
+              {plan.seasons.map((season, seasonIndex) => (
+                <Tabs.Trigger key={seasonIndex} value={String(seasonIndex)}>
+                  {season.name || `Season ${seasonIndex + 1}`}
+                </Tabs.Trigger>
+              ))}
+            </Tabs.List>
+
             {plan.seasons.map((season, seasonIndex) => (
-              <Card
-                key={seasonIndex}
-                style={{
-                  padding: "16px",
-                  border: "1px solid var(--gray-a5)",
-                }}
-              >
-                <Flex direction="column" gap="3">
-                  <Flex direction="column" gap="1">
-                    <Heading size="3">
-                      {season.name || `Season ${seasonIndex + 1}`}
-                    </Heading>
+              <Tabs.Content key={seasonIndex} value={String(seasonIndex)}>
+                <Card mt="3" style={{ padding: "16px" }}>
+                  <Flex direction="column" gap="3">
                     <Text size="1" color="gray">
                       {seasonDateLabel(season)}
                     </Text>
-                  </Flex>
 
-                  <DayScheduleEditor
-                    week={season.week}
-                    onUpdateDay={(day, schedule) =>
-                      handleUpdateDay(seasonIndex, day, schedule)
-                    }
-                    onApplyToMultiple={(sourceDay, targetDays) =>
-                      handleApplyToMultiple(
-                        seasonIndex,
-                        sourceDay,
-                        targetDays,
-                      )
-                    }
-                  />
-                </Flex>
-              </Card>
+                    <DayScheduleEditor
+                      week={season.week}
+                      onUpdateDay={(day, schedule) =>
+                        handleUpdateDay(seasonIndex, day, schedule)
+                      }
+                      onApplyToMultiple={(sourceDay, targetDays) =>
+                        handleApplyToMultiple(
+                          seasonIndex,
+                          sourceDay,
+                          targetDays,
+                        )
+                      }
+                    />
+                  </Flex>
+                </Card>
+              </Tabs.Content>
             ))}
-          </Flex>
+          </Tabs.Root>
         )}
 
         {/* Navigation */}
