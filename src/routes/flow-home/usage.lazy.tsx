@@ -49,6 +49,10 @@ function UsagePage() {
             <UsageAnalysis
               savedPlans={inputs.savedPlans}
               usageData={inputs.usageData}
+              planAId={inputs.analysisPlanAId}
+              planBId={inputs.analysisPlanBId}
+              onSetPlanA={(id) => dispatch({ type: "setAnalysisPlanA", id })}
+              onSetPlanB={(id) => dispatch({ type: "setAnalysisPlanB", id })}
             />
           </>
         )}

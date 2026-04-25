@@ -34,14 +34,14 @@ function loadSavedInputs(): FlowHomeInputs {
 function FlowHome() {
   const [inputs, dispatch] = useReducer(flowHomeReducer, null, loadSavedInputs);
 
-  // Persist inputs to localStorage 3 seconds after any change.
+  // Persist inputs to localStorage 200ms after any change.
   useEffect(() => {
     const hasContent = inputs.plan.name || inputs.usageData.length > 0;
     if (!hasContent) return;
 
     const timer = setTimeout(() => {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(inputs));
-    }, 3000);
+    }, 200);
 
     return () => clearTimeout(timer);
   }, [inputs]);
@@ -54,11 +54,7 @@ function FlowHome() {
             <h1>flow-home</h1>
           </Box>
         </LeftGrow>
-        <Flex
-          direction="column"
-          flexGrow="1"
-          justify="between"
-        >
+        <Flex direction="column" flexGrow="1" justify="between">
           <Outlet />
         </Flex>
       </div>

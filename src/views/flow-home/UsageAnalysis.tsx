@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import {
   Callout,
   Card,
@@ -62,12 +62,18 @@ function SeasonTable({ season }: { season: SeasonSummary }) {
           ))}
         </Table.Body>
       </Table.Root>
-      <Flex justify="end">
+      <Flex justify="between">
         <Text size="1" color="gray">
-          Season total:{" "}
+          <Text size="1" weight="bold">
+            {fmtKwh(season.totalUsage)}
+          </Text>{" "}
+          total
+        </Text>
+        <Text size="1" color="gray">
           <Text size="1" weight="bold">
             {fmtCurrency(season.totalCost)}
-          </Text>
+          </Text>{" "}
+          total
         </Text>
       </Flex>
     </Flex>
@@ -117,11 +123,24 @@ function PlanResultCard({ result }: { result: PlanCostResult }) {
 type UsageAnalysisProps = {
   savedPlans: SavedPlan[];
   usageData: DateTimeUsage[];
+  planAId: string;
+  planBId: string;
+  onSetPlanA: (id: string) => void;
+  onSetPlanB: (id: string) => void;
 };
 
-export function UsageAnalysis({ savedPlans, usageData }: UsageAnalysisProps) {
-  const [planAId, setPlanAId] = useState<string>(savedPlans[0]?.id ?? "");
-  const [planBId, setPlanBId] = useState<string>("__none__");
+export function UsageAnalysis({
+  savedPlans,
+  usageData,
+  planAId: planAIdProp,
+  planBId,
+  onSetPlanA,
+  onSetPlanB,
+}: UsageAnalysisProps) {
+  // Fall back to the first saved plan when the persisted id is empty or stale
+  const planAId = savedPlans.find((sp) => sp.id === planAIdProp)
+    ? planAIdProp
+    : (savedPlans[0]?.id ?? "");
 
   const planA = useMemo(
     () => savedPlans.find((sp) => sp.id === planAId) ?? null,
@@ -174,7 +193,7 @@ export function UsageAnalysis({ savedPlans, usageData }: UsageAnalysisProps) {
           <Text size="2" color="gray">
             Plan A
           </Text>
-          <Select.Root size="2" value={planAId} onValueChange={setPlanAId}>
+          <Select.Root size="2" value={planAId} onValueChange={onSetPlanA}>
             <Select.Trigger placeholder="Select a plan" />
             <Select.Content>
               {savedPlans.map((sp) => (
@@ -193,7 +212,7 @@ export function UsageAnalysis({ savedPlans, usageData }: UsageAnalysisProps) {
               (optional — for comparison)
             </Text>
           </Text>
-          <Select.Root size="2" value={planBId} onValueChange={setPlanBId}>
+          <Select.Root size="2" value={planBId} onValueChange={onSetPlanB}>
             <Select.Trigger placeholder="Select to compare" />
             <Select.Content>
               <Select.Item value="__none__">None</Select.Item>

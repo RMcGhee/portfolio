@@ -15,6 +15,7 @@ function FlowHomeIndex() {
           flexDirection: "column",
           justifyContent: "flex-start",
           gap: "16px",
+          maxWidth: "50rem",
         }}
       >
         <Heading size="5">Utility Cost Schedule Calculator</Heading>

@@ -33,6 +33,8 @@ export type FlowHomeInputs = {
 
   savedPlans: SavedPlan[];
   activePlanId: string | null; // null = working on an unsaved new plan
+  analysisPlanAId: string; // "" means auto-select first saved plan
+  analysisPlanBId: string; // "__none__" means no comparison plan selected
 };
 
 export const defaultFlowHomeInputs: FlowHomeInputs = {
@@ -42,6 +44,8 @@ export const defaultFlowHomeInputs: FlowHomeInputs = {
 
   savedPlans: [],
   activePlanId: null,
+  analysisPlanAId: "",
+  analysisPlanBId: "__none__",
 };
 
 // ============================================================================
@@ -88,6 +92,12 @@ export function sanitizeInputs(raw: Record<string, unknown>): FlowHomeInputs {
       plan: defPlan,
       savedPlans,
       activePlanId,
+      analysisPlanAId:
+        typeof raw.analysisPlanAId === "string" ? raw.analysisPlanAId : "",
+      analysisPlanBId:
+        typeof raw.analysisPlanBId === "string"
+          ? raw.analysisPlanBId
+          : "__none__",
     };
 
   return {
@@ -113,6 +123,12 @@ export function sanitizeInputs(raw: Record<string, unknown>): FlowHomeInputs {
 
     savedPlans,
     activePlanId,
+    analysisPlanAId:
+      typeof raw.analysisPlanAId === "string" ? raw.analysisPlanAId : "",
+    analysisPlanBId:
+      typeof raw.analysisPlanBId === "string"
+        ? raw.analysisPlanBId
+        : "__none__",
   };
 }
 
@@ -257,7 +273,9 @@ export type FlowHomeAction =
   | { type: "savePlan" }
   | { type: "switchPlan"; id: string }
   | { type: "newPlan" }
-  | { type: "duplicatePlan" };
+  | { type: "duplicatePlan" }
+  | { type: "setAnalysisPlanA"; id: string }
+  | { type: "setAnalysisPlanB"; id: string };
 
 // ============================================================================
 // Reducer
@@ -384,6 +402,11 @@ export function flowHomeReducer(
         usageData: [],
         usageGaps: [],
       };
+
+    case "setAnalysisPlanA":
+      return { ...state, analysisPlanAId: action.id };
+    case "setAnalysisPlanB":
+      return { ...state, analysisPlanBId: action.id };
   }
 }
 
