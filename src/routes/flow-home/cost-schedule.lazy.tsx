@@ -1,4 +1,13 @@
-import { Box, Button, Flex, Heading, Separator, Text, TextField } from "@radix-ui/themes";
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  Select,
+  Separator,
+  Text,
+  TextField,
+} from "@radix-ui/themes";
 import { createLazyFileRoute, Link } from "@tanstack/react-router";
 import { LeftGrow } from "../../common/Basic";
 import { useFlowHomeContext } from "../../entities/flow-home/flow-home-context";
@@ -16,7 +25,7 @@ export const Route = createLazyFileRoute("/flow-home/cost-schedule")({
 
 function CostScheduleStep() {
   const { inputs, dispatch } = useFlowHomeContext();
-  const { plan } = inputs;
+  const { plan, savedPlans, activePlanId } = inputs;
 
   const handleUpdateSeason = (index: number, season: CostScheduleSeason) => {
     dispatch({ type: "updateSeason", index, season });
@@ -51,6 +60,16 @@ function CostScheduleStep() {
     });
   };
 
+  const handlePlanSelect = (value: string) => {
+    if (value === "__new__") {
+      dispatch({ type: "newPlan" });
+    } else if (value === "__duplicate__") {
+      dispatch({ type: "duplicatePlan" });
+    } else {
+      dispatch({ type: "switchPlan", id: value });
+    }
+  };
+
   return (
     <LeftGrow>
       <Box
@@ -61,16 +80,6 @@ function CostScheduleStep() {
           gap: "16px",
         }}
       >
-        {/* Plan Name */}
-        <Box
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "flex-start",
-            gap: "16px",
-            maxWidth: "20rem",
-          }}
-        >
         <Heading size="5">Rate Schedule</Heading>
         <Text as="p" size="2" color="gray">
           Define your utility's time-of-use rate plan. Start with the plan name,
@@ -78,21 +87,61 @@ function CostScheduleStep() {
           schedules.
         </Text>
 
-        <Flex direction="column" gap="1">
-          <Text as="label" size="2" color="gray">
-            Plan Name
-          </Text>
-          <TextField.Root
-            size="2"
-            variant="surface"
-            placeholder="e.g. TOU-D-Prime, Summer Peak Plan"
-            value={plan.name}
-            onChange={(e) =>
-              dispatch({ type: "setPlanName", name: e.target.value })
-            }
-          />
+        {/* Plan selector + Save */}
+        <Flex direction="row" align="end" gap="2">
+          <Flex
+            direction="column"
+            gap="1"
+            flexGrow="1"
+            style={{ maxWidth: "20rem" }}
+          >
+            <Text as="label" size="2" color="gray">
+              Plan Name
+            </Text>
+            <TextField.Root
+              size="2"
+              variant="surface"
+              placeholder="e.g. TOU-D-Prime, Summer Peak Plan"
+              value={plan.name}
+              onChange={(e) =>
+                dispatch({ type: "setPlanName", name: e.target.value })
+              }
+            />
           </Flex>
-        </Box>
+
+          <Select.Root
+            size="2"
+            value={activePlanId ?? "__new__"}
+            onValueChange={handlePlanSelect}
+          >
+            <Select.Trigger placeholder="Select plan" />
+            <Select.Content>
+              {savedPlans.length > 0 && (
+                <>
+                  {savedPlans.map((sp) => (
+                    <Select.Item key={sp.id} value={sp.id}>
+                      {sp.plan.name || "Unnamed Plan"}
+                    </Select.Item>
+                  ))}
+                  <Select.Separator />
+                </>
+              )}
+              <Select.Item value="__new__">+ New Plan</Select.Item>
+              <Select.Item value="__duplicate__">
+                + Duplicate Current
+              </Select.Item>
+            </Select.Content>
+          </Select.Root>
+
+          <Button
+            size="2"
+            variant="solid"
+            disabled={!plan.name}
+            onClick={() => dispatch({ type: "savePlan" })}
+          >
+            Save
+          </Button>
+        </Flex>
 
         <Separator size="4" style={{ width: "100%" }} />
 

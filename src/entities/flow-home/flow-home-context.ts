@@ -19,14 +19,23 @@ import {
 // Input State — what the user configures, what gets persisted
 // ============================================================================
 
+export type SavedPlan = {
+  id: string;
+  plan: CostSchedulePlan;
+};
+
 export type FlowHomeInputs = {
   plan: CostSchedulePlan;
   usageData: DateTimeUsage[];
+  savedPlans: SavedPlan[];
+  activePlanId: string | null; // null = working on an unsaved new plan
 };
 
 export const defaultFlowHomeInputs: FlowHomeInputs = {
   plan: defaultCostSchedulePlan(),
   usageData: [],
+  savedPlans: [],
+  activePlanId: null,
 };
 
 // ============================================================================
@@ -41,12 +50,45 @@ export function sanitizeInputs(raw: Record<string, unknown>): FlowHomeInputs {
   const defPlan = defaultCostSchedulePlan();
   const defSeason = defPlan.seasons[0];
 
-  const plan = raw.plan && typeof raw.plan === "object" ? (raw.plan as Record<string, unknown>) : null;
-  if (!plan) return { ...defaultFlowHomeInputs, plan: defPlan };
+  const plan =
+    raw.plan && typeof raw.plan === "object"
+      ? (raw.plan as Record<string, unknown>)
+      : null;
+
+  const rawSavedPlans = Array.isArray(raw.savedPlans) ? raw.savedPlans : [];
+  const savedPlans: SavedPlan[] = rawSavedPlans
+    .filter((sp: unknown) => sp && typeof sp === "object")
+    .map((sp: unknown) => {
+      const s = sp as Record<string, unknown>;
+      const rawPlan =
+        s.plan && typeof s.plan === "object"
+          ? (s.plan as Record<string, unknown>)
+          : null;
+      return {
+        id: typeof s.id === "string" ? s.id : crypto.randomUUID(),
+        plan: rawPlan ? sanitizePlan(rawPlan, defPlan, defSeason) : defPlan,
+      };
+    });
+
+  const activePlanId =
+    typeof raw.activePlanId === "string" &&
+    savedPlans.some((sp) => sp.id === raw.activePlanId)
+      ? raw.activePlanId
+      : null;
+
+  if (!plan)
+    return {
+      ...defaultFlowHomeInputs,
+      plan: defPlan,
+      savedPlans,
+      activePlanId,
+    };
 
   return {
     plan: sanitizePlan(plan, defPlan, defSeason),
     usageData: Array.isArray(raw.usageData) ? raw.usageData : [],
+    savedPlans,
+    activePlanId,
   };
 }
 
@@ -76,9 +118,10 @@ function sanitizeSeason(
     months: Array.isArray(raw.months)
       ? raw.months.filter((m): m is Month => MONTHS.includes(m as Month))
       : [...def.months],
-    week: raw.week && typeof raw.week === "object"
-      ? sanitizeWeek(raw.week as Record<string, unknown>)
-      : defaultCostScheduleWeek(),
+    week:
+      raw.week && typeof raw.week === "object"
+        ? sanitizeWeek(raw.week as Record<string, unknown>)
+        : defaultCostScheduleWeek(),
   };
 }
 
@@ -101,7 +144,10 @@ function sanitizeDay(raw: Record<string, unknown>): CostScheduleDay {
   return {
     blocks: Array.isArray(raw.blocks)
       ? raw.blocks
-          .filter((b): b is Record<string, unknown> => b != null && typeof b === "object")
+          .filter(
+            (b): b is Record<string, unknown> =>
+              b != null && typeof b === "object",
+          )
           .map(sanitizeBlock)
       : [{ ...defaultCostBlock }],
   };
@@ -111,7 +157,10 @@ function sanitizeBlock(raw: Record<string, unknown>): CostBlock {
   return {
     start: typeof raw.start === "string" ? raw.start : defaultCostBlock.start,
     end: typeof raw.end === "string" ? raw.end : defaultCostBlock.end,
-    pricePerKwh: typeof raw.pricePerKwh === "number" ? raw.pricePerKwh : defaultCostBlock.pricePerKwh,
+    pricePerKwh:
+      typeof raw.pricePerKwh === "number"
+        ? raw.pricePerKwh
+        : defaultCostBlock.pricePerKwh,
     label: typeof raw.label === "string" ? raw.label : defaultCostBlock.label,
   };
 }
@@ -141,7 +190,11 @@ export type FlowHomeAction =
   | { type: "setUsageData"; usageData: DateTimeUsage[] }
   | { type: "appendUsageData"; usageData: DateTimeUsage[] }
   | { type: "clearUsageData" }
-  | { type: "reset" };
+  | { type: "reset" }
+  | { type: "savePlan" }
+  | { type: "switchPlan"; id: string }
+  | { type: "newPlan" }
+  | { type: "duplicatePlan" };
 
 // ============================================================================
 // Reducer
@@ -174,9 +227,7 @@ export function flowHomeReducer(
     }
 
     case "removeSeason": {
-      const seasons = state.plan.seasons.filter(
-        (_, i) => i !== action.index,
-      );
+      const seasons = state.plan.seasons.filter((_, i) => i !== action.index);
       return { ...state, plan: { ...state.plan, seasons } };
     }
 
@@ -217,6 +268,56 @@ export function flowHomeReducer(
 
     case "reset":
       return { ...defaultFlowHomeInputs, plan: defaultCostSchedulePlan() };
+
+    case "savePlan": {
+      const existing = state.activePlanId
+        ? state.savedPlans.findIndex((sp) => sp.id === state.activePlanId)
+        : -1;
+      if (existing >= 0) {
+        // Update the existing saved plan
+        const savedPlans = [...state.savedPlans];
+        savedPlans[existing] = { ...savedPlans[existing], plan: state.plan };
+        return { ...state, savedPlans };
+      } else {
+        // New plan — generate an ID and add it
+        const id = crypto.randomUUID();
+        return {
+          ...state,
+          activePlanId: id,
+          savedPlans: [...state.savedPlans, { id, plan: state.plan }],
+        };
+      }
+    }
+
+    case "switchPlan": {
+      const target = state.savedPlans.find((sp) => sp.id === action.id);
+      if (!target) return state;
+      return {
+        ...state,
+        plan: target.plan,
+        activePlanId: target.id,
+        usageData: [],
+      };
+    }
+
+    case "newPlan":
+      return {
+        ...state,
+        plan: defaultCostSchedulePlan(),
+        activePlanId: null,
+        usageData: [],
+      };
+
+    case "duplicatePlan":
+      return {
+        ...state,
+        plan: {
+          ...state.plan,
+          name: state.plan.name ? `${state.plan.name} (Copy)` : "Copy",
+        },
+        activePlanId: null,
+        usageData: [],
+      };
   }
 }
 
