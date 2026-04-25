@@ -4,6 +4,7 @@ import {
   Card,
   Flex,
   Heading,
+  Separator,
   Text,
   TextField,
 } from "@radix-ui/themes";
@@ -14,12 +15,14 @@ import {
   defaultCostScheduleWeek,
 } from "../../entities/flow-home/cost-schedule";
 import { MonthSelector } from "./MonthSelector";
+import type { ReactNode } from "react";
 
 type SeasonEditorProps = {
   seasons: CostScheduleSeason[];
   onUpdateSeason: (index: number, season: CostScheduleSeason) => void;
   onAddSeason: (season: CostScheduleSeason) => void;
   onRemoveSeason: (index: number) => void;
+  renderSchedule?: (seasonIndex: number) => ReactNode;
 };
 
 export function SeasonEditor({
@@ -27,6 +30,7 @@ export function SeasonEditor({
   onUpdateSeason,
   onAddSeason,
   onRemoveSeason,
+  renderSchedule,
 }: SeasonEditorProps) {
   const handleNameChange = (index: number, name: string) => {
     onUpdateSeason(index, { ...seasons[index], name });
@@ -51,13 +55,20 @@ export function SeasonEditor({
     <Flex direction="column" gap="4">
       <Heading size="4">Seasons</Heading>
       <Text size="2" color="gray">
-        Define the time periods your utility rate schedule covers. Seasons
-        should cover the full year with no gaps.
+        Define the time periods your utility rate schedule covers, then
+        configure time blocks and day-of-week schedules for each season.
       </Text>
 
-      <Flex direction="column" gap="3">
+      <Flex direction="row" gap="3" wrap="wrap" align="start">
         {seasons.map((season, index) => (
-          <Card key={index} style={{ padding: "16px" }}>
+          <Card
+            key={index}
+            style={{
+              padding: "16px",
+              flex: "1 1 400px",
+              minWidth: "380px",
+            }}
+          >
             <Flex direction="column" gap="3">
               {/* Season name */}
               <Flex direction="column" gap="1">
@@ -101,7 +112,13 @@ export function SeasonEditor({
                 />
               </Flex>
 
-
+              {/* Day schedule editor injected by parent */}
+              {renderSchedule && (
+                <>
+                  <Separator size="4" />
+                  {renderSchedule(index)}
+                </>
+              )}
             </Flex>
           </Card>
         ))}

@@ -58,7 +58,6 @@ function FlowHome() {
           direction="column"
           flexGrow="1"
           justify="between"
-          style={{ maxWidth: "500px" }}
         >
           <Outlet />
         </Flex>

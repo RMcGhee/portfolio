@@ -1,4 +1,4 @@
-import { Box, Button, Card, Flex, Heading, Separator, Tabs, Text, TextField } from "@radix-ui/themes";
+import { Box, Button, Flex, Heading, Separator, Text, TextField } from "@radix-ui/themes";
 import { createLazyFileRoute, Link } from "@tanstack/react-router";
 import { LeftGrow } from "../../common/Basic";
 import { useFlowHomeContext } from "../../entities/flow-home/flow-home-context";
@@ -6,7 +6,6 @@ import {
   type CostScheduleSeason,
   type CostScheduleDay,
   type DayOfWeek,
-  MONTH_LABELS,
 } from "../../entities/flow-home/cost-schedule";
 import { SeasonEditor } from "../../views/flow-home/SeasonEditor";
 import { DayScheduleEditor } from "../../views/flow-home/DayScheduleEditor";
@@ -14,13 +13,6 @@ import { DayScheduleEditor } from "../../views/flow-home/DayScheduleEditor";
 export const Route = createLazyFileRoute("/flow-home/cost-schedule")({
   component: CostScheduleStep,
 });
-
-function seasonDateLabel(season: CostScheduleSeason): string {
-  if (season.months.length === 0) return "No months selected";
-  const sorted = [...season.months].sort((a, b) => a - b);
-  const labels = sorted.map((m) => MONTH_LABELS[m]);
-  return labels.join(", ");
-}
 
 function CostScheduleStep() {
   const { inputs, dispatch } = useFlowHomeContext();
@@ -70,6 +62,15 @@ function CostScheduleStep() {
         }}
       >
         {/* Plan Name */}
+        <Box
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+            gap: "16px",
+            maxWidth: "20rem",
+          }}
+        >
         <Heading size="5">Rate Schedule</Heading>
         <Text as="p" size="2" color="gray">
           Define your utility's time-of-use rate plan. Start with the plan name,
@@ -90,64 +91,29 @@ function CostScheduleStep() {
               dispatch({ type: "setPlanName", name: e.target.value })
             }
           />
-        </Flex>
+          </Flex>
+        </Box>
 
         <Separator size="4" style={{ width: "100%" }} />
 
-        {/* Step 1: Seasons */}
+        {/* Seasons with inline day schedule editors */}
         <SeasonEditor
           seasons={plan.seasons}
           onUpdateSeason={handleUpdateSeason}
           onAddSeason={handleAddSeason}
           onRemoveSeason={handleRemoveSeason}
+          renderSchedule={(seasonIndex) => (
+            <DayScheduleEditor
+              week={plan.seasons[seasonIndex].week}
+              onUpdateDay={(day, schedule) =>
+                handleUpdateDay(seasonIndex, day, schedule)
+              }
+              onApplyToMultiple={(sourceDay, targetDays) =>
+                handleApplyToMultiple(seasonIndex, sourceDay, targetDays)
+              }
+            />
+          )}
         />
-
-        <Separator size="4" style={{ width: "100%" }} />
-
-        {/* Step 2 & 3: Daily schedules per season, shown via tabs */}
-        <Heading size="4">Time Blocks & Day Schedules</Heading>
-
-        {plan.seasons.length === 0 ? (
-          <Text as="p" size="2" color="red">
-            Add at least one season above to configure time blocks.
-          </Text>
-        ) : (
-          <Tabs.Root defaultValue="0">
-            <Tabs.List size="2">
-              {plan.seasons.map((season, seasonIndex) => (
-                <Tabs.Trigger key={seasonIndex} value={String(seasonIndex)}>
-                  {season.name || `Season ${seasonIndex + 1}`}
-                </Tabs.Trigger>
-              ))}
-            </Tabs.List>
-
-            {plan.seasons.map((season, seasonIndex) => (
-              <Tabs.Content key={seasonIndex} value={String(seasonIndex)}>
-                <Card mt="3" style={{ padding: "16px" }}>
-                  <Flex direction="column" gap="3">
-                    <Text size="1" color="gray">
-                      {seasonDateLabel(season)}
-                    </Text>
-
-                    <DayScheduleEditor
-                      week={season.week}
-                      onUpdateDay={(day, schedule) =>
-                        handleUpdateDay(seasonIndex, day, schedule)
-                      }
-                      onApplyToMultiple={(sourceDay, targetDays) =>
-                        handleApplyToMultiple(
-                          seasonIndex,
-                          sourceDay,
-                          targetDays,
-                        )
-                      }
-                    />
-                  </Flex>
-                </Card>
-              </Tabs.Content>
-            ))}
-          </Tabs.Root>
-        )}
 
         {/* Navigation */}
         <Separator size="4" style={{ width: "100%", marginTop: "8px" }} />
