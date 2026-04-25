@@ -20,11 +20,23 @@ export const SATURDAY: DayOfWeek = 6;
 
 /** All days of the week in JS Date order (Sunday first). */
 export const DAYS_OF_WEEK: DayOfWeek[] = [
-  SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY,
+  SUNDAY,
+  MONDAY,
+  TUESDAY,
+  WEDNESDAY,
+  THURSDAY,
+  FRIDAY,
+  SATURDAY,
 ];
 
 /** Weekdays (Mon–Fri) for convenience when applying bulk schedules. */
-export const WEEKDAYS: DayOfWeek[] = [MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY];
+export const WEEKDAYS: DayOfWeek[] = [
+  MONDAY,
+  TUESDAY,
+  WEDNESDAY,
+  THURSDAY,
+  FRIDAY,
+];
 
 /** Weekend days (Sat–Sun). */
 export const WEEKEND: DayOfWeek[] = [SUNDAY, SATURDAY];
@@ -73,8 +85,18 @@ export const NOVEMBER: Month = 10;
 export const DECEMBER: Month = 11;
 
 export const MONTHS: Month[] = [
-  JANUARY, FEBRUARY, MARCH, APRIL, MAY, JUNE,
-  JULY, AUGUST, SEPTEMBER, OCTOBER, NOVEMBER, DECEMBER,
+  JANUARY,
+  FEBRUARY,
+  MARCH,
+  APRIL,
+  MAY,
+  JUNE,
+  JULY,
+  AUGUST,
+  SEPTEMBER,
+  OCTOBER,
+  NOVEMBER,
+  DECEMBER,
 ];
 
 /** Short display labels indexed by Month. */
@@ -181,14 +203,27 @@ export type CostSchedulePlan = {
 export type UsageUnit = "kwh" | "therms" | "ccf";
 
 /**
+ * A detected gap in usage data coverage — a period with no reported intervals,
+ * e.g. during a power outage. Gaps are filled with 0-usage entries.
+ */
+export type GapInfo = {
+  /** Start of the gap (inclusive). */
+  start: Date;
+  /** End of the gap (exclusive — the moment coverage resumes). */
+  end: Date;
+  /** Total duration of the gap in minutes. */
+  durationMinutes: number;
+};
+
+/**
  * A single metered usage reading from a utility bill export.
  * Typically 15-minute or 1-hour intervals.
  *
  * Example: { start: "2025-01-15T14:00:00", durationMinutes: 60, usage: 1.2, unit: "kwh" }
  */
 export type DateTimeUsage = {
-  /** ISO 8601 datetime string for the start of the interval */
-  start: string;
+  /** Start of the interval */
+  start: Date;
   /** Duration of the measurement interval in minutes (typically 15 or 60) */
   durationMinutes: number;
   /** Measured usage during this interval */
@@ -246,7 +281,10 @@ export function getMonth(date: Date): Month {
 }
 
 /** Check whether a Date falls within a season's selected months. */
-export function isDateInSeason(date: Date, season: CostScheduleSeason): boolean {
+export function isDateInSeason(
+  date: Date,
+  season: CostScheduleSeason,
+): boolean {
   const m = date.getMonth() as Month;
   return season.months.includes(m);
 }
@@ -283,10 +321,7 @@ export const defaultCostScheduleDay: CostScheduleDay = {
 
 export function defaultCostScheduleWeek(): CostScheduleWeek {
   return Object.fromEntries(
-    DAYS_OF_WEEK.map((day) => [
-      day,
-      { blocks: [{ ...defaultCostBlock }] },
-    ]),
+    DAYS_OF_WEEK.map((day) => [day, { blocks: [{ ...defaultCostBlock }] }]),
   ) as CostScheduleWeek;
 }
 

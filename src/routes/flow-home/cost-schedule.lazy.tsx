@@ -188,12 +188,13 @@ function CostScheduleStep() {
           </Button>
           <Button
             variant="outline"
+            asChild
             disabled={!plan.name || plan.seasons.length === 0}
             style={{
               transition: "width 0.5s ease-in-out, opacity 0.5s ease-in-out",
             }}
           >
-            Next
+            <Link to="/flow-home/usage">Next</Link>
           </Button>
         </Box>
       </Box>

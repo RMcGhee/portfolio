@@ -28,6 +28,7 @@ const JouleHomeCurrentSystemLazyRouteImport = createFileRoute(
 const JouleHomeAnalysisLazyRouteImport = createFileRoute(
   '/joule-home/analysis',
 )()
+const FlowHomeUsageLazyRouteImport = createFileRoute('/flow-home/usage')()
 const FlowHomeCostScheduleLazyRouteImport = createFileRoute(
   '/flow-home/cost-schedule',
 )()
@@ -94,6 +95,13 @@ const JouleHomeAnalysisLazyRoute = JouleHomeAnalysisLazyRouteImport.update({
 } as any).lazy(() =>
   import('./routes/joule-home/analysis.lazy').then((d) => d.Route),
 )
+const FlowHomeUsageLazyRoute = FlowHomeUsageLazyRouteImport.update({
+  id: '/usage',
+  path: '/usage',
+  getParentRoute: () => FlowHomeLazyRoute,
+} as any).lazy(() =>
+  import('./routes/flow-home/usage.lazy').then((d) => d.Route),
+)
 const FlowHomeCostScheduleLazyRoute =
   FlowHomeCostScheduleLazyRouteImport.update({
     id: '/cost-schedule',
@@ -110,6 +118,7 @@ export interface FileRoutesByFullPath {
   '/joule-home': typeof JouleHomeLazyRouteWithChildren
   '/photography': typeof PhotographyLazyRoute
   '/flow-home/cost-schedule': typeof FlowHomeCostScheduleLazyRoute
+  '/flow-home/usage': typeof FlowHomeUsageLazyRoute
   '/joule-home/analysis': typeof JouleHomeAnalysisLazyRoute
   '/joule-home/current-system': typeof JouleHomeCurrentSystemLazyRoute
   '/joule-home/energy-usage-form': typeof JouleHomeEnergyUsageFormLazyRoute
@@ -121,6 +130,7 @@ export interface FileRoutesByTo {
   '/biology': typeof BiologyLazyRoute
   '/photography': typeof PhotographyLazyRoute
   '/flow-home/cost-schedule': typeof FlowHomeCostScheduleLazyRoute
+  '/flow-home/usage': typeof FlowHomeUsageLazyRoute
   '/joule-home/analysis': typeof JouleHomeAnalysisLazyRoute
   '/joule-home/current-system': typeof JouleHomeCurrentSystemLazyRoute
   '/joule-home/energy-usage-form': typeof JouleHomeEnergyUsageFormLazyRoute
@@ -135,6 +145,7 @@ export interface FileRoutesById {
   '/joule-home': typeof JouleHomeLazyRouteWithChildren
   '/photography': typeof PhotographyLazyRoute
   '/flow-home/cost-schedule': typeof FlowHomeCostScheduleLazyRoute
+  '/flow-home/usage': typeof FlowHomeUsageLazyRoute
   '/joule-home/analysis': typeof JouleHomeAnalysisLazyRoute
   '/joule-home/current-system': typeof JouleHomeCurrentSystemLazyRoute
   '/joule-home/energy-usage-form': typeof JouleHomeEnergyUsageFormLazyRoute
@@ -150,6 +161,7 @@ export interface FileRouteTypes {
     | '/joule-home'
     | '/photography'
     | '/flow-home/cost-schedule'
+    | '/flow-home/usage'
     | '/joule-home/analysis'
     | '/joule-home/current-system'
     | '/joule-home/energy-usage-form'
@@ -161,6 +173,7 @@ export interface FileRouteTypes {
     | '/biology'
     | '/photography'
     | '/flow-home/cost-schedule'
+    | '/flow-home/usage'
     | '/joule-home/analysis'
     | '/joule-home/current-system'
     | '/joule-home/energy-usage-form'
@@ -174,6 +187,7 @@ export interface FileRouteTypes {
     | '/joule-home'
     | '/photography'
     | '/flow-home/cost-schedule'
+    | '/flow-home/usage'
     | '/joule-home/analysis'
     | '/joule-home/current-system'
     | '/joule-home/energy-usage-form'
@@ -261,6 +275,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JouleHomeAnalysisLazyRouteImport
       parentRoute: typeof JouleHomeLazyRoute
     }
+    '/flow-home/usage': {
+      id: '/flow-home/usage'
+      path: '/usage'
+      fullPath: '/flow-home/usage'
+      preLoaderRoute: typeof FlowHomeUsageLazyRouteImport
+      parentRoute: typeof FlowHomeLazyRoute
+    }
     '/flow-home/cost-schedule': {
       id: '/flow-home/cost-schedule'
       path: '/cost-schedule'
@@ -273,11 +294,13 @@ declare module '@tanstack/react-router' {
 
 interface FlowHomeLazyRouteChildren {
   FlowHomeCostScheduleLazyRoute: typeof FlowHomeCostScheduleLazyRoute
+  FlowHomeUsageLazyRoute: typeof FlowHomeUsageLazyRoute
   FlowHomeIndexLazyRoute: typeof FlowHomeIndexLazyRoute
 }
 
 const FlowHomeLazyRouteChildren: FlowHomeLazyRouteChildren = {
   FlowHomeCostScheduleLazyRoute: FlowHomeCostScheduleLazyRoute,
+  FlowHomeUsageLazyRoute: FlowHomeUsageLazyRoute,
   FlowHomeIndexLazyRoute: FlowHomeIndexLazyRoute,
 }
 

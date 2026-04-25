@@ -6,6 +6,8 @@ import {
   type CostScheduleDay,
   type CostBlock,
   type DateTimeUsage,
+  type GapInfo,
+  type UsageUnit,
   type Month,
   type DayOfWeek,
   MONTHS,
@@ -27,6 +29,8 @@ export type SavedPlan = {
 export type FlowHomeInputs = {
   plan: CostSchedulePlan;
   usageData: DateTimeUsage[];
+  usageGaps: GapInfo[];
+
   savedPlans: SavedPlan[];
   activePlanId: string | null; // null = working on an unsaved new plan
 };
@@ -34,6 +38,8 @@ export type FlowHomeInputs = {
 export const defaultFlowHomeInputs: FlowHomeInputs = {
   plan: defaultCostSchedulePlan(),
   usageData: [],
+  usageGaps: [],
+
   savedPlans: [],
   activePlanId: null,
 };
@@ -86,7 +92,25 @@ export function sanitizeInputs(raw: Record<string, unknown>): FlowHomeInputs {
 
   return {
     plan: sanitizePlan(plan, defPlan, defSeason),
-    usageData: Array.isArray(raw.usageData) ? raw.usageData : [],
+    usageData: Array.isArray(raw.usageData)
+      ? raw.usageData
+          .filter(
+            (u): u is Record<string, unknown> =>
+              u != null && typeof u === "object",
+          )
+          .map(sanitizeDateTimeUsage)
+          .filter((u): u is DateTimeUsage => u !== null)
+      : [],
+    usageGaps: Array.isArray(raw.usageGaps)
+      ? raw.usageGaps
+          .filter(
+            (g): g is Record<string, unknown> =>
+              g != null && typeof g === "object",
+          )
+          .map(sanitizeGapInfo)
+          .filter((g): g is GapInfo => g !== null)
+      : [],
+
     savedPlans,
     activePlanId,
   };
@@ -165,6 +189,45 @@ function sanitizeBlock(raw: Record<string, unknown>): CostBlock {
   };
 }
 
+function sanitizeGapInfo(raw: Record<string, unknown>): GapInfo | null {
+  const toDate = (v: unknown): Date | null => {
+    if (v instanceof Date) return v;
+    if (typeof v === "string") {
+      const d = new Date(v);
+      return isNaN(d.getTime()) ? null : d;
+    }
+    return null;
+  };
+  const start = toDate(raw.start);
+  const end = toDate(raw.end);
+  if (!start || !end) return null;
+  if (typeof raw.durationMinutes !== "number") return null;
+  return { start, end, durationMinutes: raw.durationMinutes };
+}
+
+function sanitizeDateTimeUsage(
+  raw: Record<string, unknown>,
+): DateTimeUsage | null {
+  let start: Date;
+  if (raw.start instanceof Date) {
+    start = raw.start;
+  } else if (typeof raw.start === "string") {
+    start = new Date(raw.start);
+    if (isNaN(start.getTime())) return null;
+  } else {
+    return null;
+  }
+  if (typeof raw.durationMinutes !== "number") return null;
+  if (typeof raw.usage !== "number") return null;
+  if (typeof raw.unit !== "string") return null;
+  return {
+    start,
+    durationMinutes: raw.durationMinutes,
+    usage: raw.usage,
+    unit: raw.unit as UsageUnit,
+  };
+}
+
 // ============================================================================
 // Actions
 // ============================================================================
@@ -187,7 +250,7 @@ export type FlowHomeAction =
       sourceDay: DayOfWeek;
       targetDays: DayOfWeek[];
     }
-  | { type: "setUsageData"; usageData: DateTimeUsage[] }
+  | { type: "setUsageData"; usageData: DateTimeUsage[]; gaps: GapInfo[] }
   | { type: "appendUsageData"; usageData: DateTimeUsage[] }
   | { type: "clearUsageData" }
   | { type: "reset" }
@@ -255,7 +318,7 @@ export function flowHomeReducer(
     }
 
     case "setUsageData":
-      return { ...state, usageData: action.usageData };
+      return { ...state, usageData: action.usageData, usageGaps: action.gaps };
 
     case "appendUsageData":
       return {
@@ -264,7 +327,7 @@ export function flowHomeReducer(
       };
 
     case "clearUsageData":
-      return { ...state, usageData: [] };
+      return { ...state, usageData: [], usageGaps: [] };
 
     case "reset":
       return { ...defaultFlowHomeInputs, plan: defaultCostSchedulePlan() };
@@ -297,6 +360,7 @@ export function flowHomeReducer(
         plan: target.plan,
         activePlanId: target.id,
         usageData: [],
+        usageGaps: [],
       };
     }
 
@@ -306,6 +370,7 @@ export function flowHomeReducer(
         plan: defaultCostSchedulePlan(),
         activePlanId: null,
         usageData: [],
+        usageGaps: [],
       };
 
     case "duplicatePlan":
@@ -317,6 +382,7 @@ export function flowHomeReducer(
         },
         activePlanId: null,
         usageData: [],
+        usageGaps: [],
       };
   }
 }
