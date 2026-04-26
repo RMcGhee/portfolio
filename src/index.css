@@ -28,6 +28,10 @@ a:hover {
   box-shadow: none;
 }
 
+.flow-home-nav .rt-SegmentedControlItemSeparator {
+  opacity: 1;
+}
+
 .unstyled-link {
   text-decoration: none;
   color: inherit;
