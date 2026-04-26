@@ -432,3 +432,26 @@ export const useFlowHomeContext = () => {
   }
   return context;
 };
+
+// ============================================================================
+// Dirty-state detection
+// ============================================================================
+
+/**
+ * Returns true when the current plan draft differs from its saved counterpart.
+ *
+ * - When `activePlanId` is null (no saved plan yet), the draft is dirty if the
+ *   user has deviated from the default empty plan at all.
+ * - Otherwise, the draft is dirty if it doesn't deep-equal the saved copy in
+ *   `savedPlans`.
+ */
+export function isPlanDirty(inputs: FlowHomeInputs): boolean {
+  if (inputs.activePlanId === null) {
+    return (
+      JSON.stringify(inputs.plan) !== JSON.stringify(defaultCostSchedulePlan())
+    );
+  }
+  const saved = inputs.savedPlans.find((sp) => sp.id === inputs.activePlanId);
+  if (!saved) return true;
+  return JSON.stringify(saved.plan) !== JSON.stringify(inputs.plan);
+}

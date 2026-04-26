@@ -1,16 +1,17 @@
 import { SegmentedControl } from "@radix-ui/themes";
 import { useNavigate, useRouterState } from "@tanstack/react-router";
+import { useUnsavedPlanGuard } from "./UnsavedPlanGuard";
 
-type StepValue = "about" | "schedules" | "usage";
+type StepValue = "about" | "plans" | "usage";
 
 const STEPS: { value: StepValue; label: string; path: string }[] = [
   { value: "about", label: "About", path: "/flow-home" },
-  { value: "schedules", label: "Schedules", path: "/flow-home/cost-schedule" },
+  { value: "plans", label: "Plans", path: "/flow-home/cost-schedule" },
   { value: "usage", label: "Usage", path: "/flow-home/usage" },
 ];
 
 function pathToStep(pathname: string): StepValue {
-  if (pathname.startsWith("/flow-home/cost-schedule")) return "schedules";
+  if (pathname.startsWith("/flow-home/cost-schedule")) return "plans";
   if (pathname.startsWith("/flow-home/usage")) return "usage";
   return "about";
 }
@@ -19,10 +20,11 @@ export function FlowHomeNav() {
   const navigate = useNavigate();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const current = pathToStep(pathname);
+  const { guardNavigate } = useUnsavedPlanGuard();
 
   const handleChange = (value: string) => {
     const step = STEPS.find((s) => s.value === value);
-    if (step) navigate({ to: step.path });
+    if (step) guardNavigate(() => navigate({ to: step.path }));
   };
 
   return (

@@ -12,6 +12,7 @@ import {
 import { defaultCostSchedulePlan } from "../entities/flow-home/cost-schedule";
 import { createLazyFileRoute, Outlet } from "@tanstack/react-router";
 import { FlowHomeNav } from "../views/flow-home/FlowHomeNav";
+import { UnsavedPlanGuardProvider } from "../views/flow-home/UnsavedPlanGuard";
 
 const STORAGE_KEY = "flowHomeInputs";
 
@@ -49,29 +50,31 @@ function FlowHome() {
 
   return (
     <FlowHomeContext.Provider value={{ inputs, dispatch }}>
-      <div>
-        <Box
-          style={{
-            position: "sticky",
-            top: 0,
-            zIndex: 10,
-            backgroundColor: "var(--color-background)",
-            paddingTop: "12px",
-            paddingBottom: "12px",
-            marginBottom: "8px",
-          }}
-        >
-          <LeftGrow>
-            <Flex align="center" gap="4" style={{ marginLeft: "0.8em" }}>
-              <h2 style={{ margin: 0 }}>flow-home</h2>
-              <FlowHomeNav />
-            </Flex>
-          </LeftGrow>
-        </Box>
-        <Flex direction="column" flexGrow="1" justify="between">
-          <Outlet />
-        </Flex>
-      </div>
+      <UnsavedPlanGuardProvider>
+        <div>
+          <Box
+            style={{
+              position: "sticky",
+              top: 0,
+              zIndex: 10,
+              backgroundColor: "var(--color-background)",
+              paddingTop: "12px",
+              paddingBottom: "12px",
+              marginBottom: "8px",
+            }}
+          >
+            <LeftGrow>
+              <Flex align="center" gap="4" style={{ marginLeft: "0.8em" }}>
+                <h2 style={{ margin: 0 }}>flow-home</h2>
+                <FlowHomeNav />
+              </Flex>
+            </LeftGrow>
+          </Box>
+          <Flex direction="column" flexGrow="1" justify="between">
+            <Outlet />
+          </Flex>
+        </div>
+      </UnsavedPlanGuardProvider>
     </FlowHomeContext.Provider>
   );
 }
