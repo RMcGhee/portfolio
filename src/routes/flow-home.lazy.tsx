@@ -11,6 +11,7 @@ import {
 } from "../entities/flow-home/flow-home-context";
 import { defaultCostSchedulePlan } from "../entities/flow-home/cost-schedule";
 import { createLazyFileRoute, Outlet } from "@tanstack/react-router";
+import { FlowHomeNav } from "../views/flow-home/FlowHomeNav";
 
 const STORAGE_KEY = "flowHomeInputs";
 
@@ -49,11 +50,24 @@ function FlowHome() {
   return (
     <FlowHomeContext.Provider value={{ inputs, dispatch }}>
       <div>
-        <LeftGrow>
-          <Box style={{ marginTop: 15 }}>
-            <h1>flow-home</h1>
-          </Box>
-        </LeftGrow>
+        <Box
+          style={{
+            position: "sticky",
+            top: 0,
+            zIndex: 10,
+            backgroundColor: "var(--color-background)",
+            paddingTop: "12px",
+            paddingBottom: "12px",
+            marginBottom: "8px",
+          }}
+        >
+          <LeftGrow>
+            <Flex align="center" gap="4" style={{ marginLeft: "0.8em" }}>
+              <h2 style={{ margin: 0 }}>flow-home</h2>
+              <FlowHomeNav />
+            </Flex>
+          </LeftGrow>
+        </Box>
         <Flex direction="column" flexGrow="1" justify="between">
           <Outlet />
         </Flex>

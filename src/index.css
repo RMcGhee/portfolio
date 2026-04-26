@@ -1,15 +1,15 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
+    "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family:
+    source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
 a {
@@ -17,6 +17,15 @@ a {
 }
 a:hover {
   color: #e91e62ae;
+}
+
+/* Sliding pink underline that follows the active flow-home nav segment */
+.flow-home-nav .rt-SegmentedControlIndicator::before {
+  inset: auto 0 0 0;
+  height: 2px;
+  background-color: #e91e63;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .unstyled-link {
