@@ -38,7 +38,11 @@ function FlowHome() {
 
   // Persist inputs to localStorage 200ms after any change.
   useEffect(() => {
-    const hasContent = inputs.plan.name || inputs.usageData.length > 0;
+    const hasContent =
+      inputs.plan.name ||
+      inputs.usageData.length > 0 ||
+      inputs.zipCode !== "" ||
+      inputs.batterySpec.capacityKwh > 0;
     if (!hasContent) return;
 
     const timer = setTimeout(() => {

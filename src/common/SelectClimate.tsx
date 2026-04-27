@@ -1,5 +1,5 @@
 import { Select, Text } from "@radix-ui/themes";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo } from "react";
 import type { ZipDist } from "../entities/ZipDist";
 import { isEmpty } from "./Util";
 
@@ -21,15 +21,12 @@ type ClimateMenuItem = {
 };
 
 const generateMenuItems = (zipData: ZipDist): ClimateMenuItem[] => {
-  if (!isEmpty(zipData)) {
-    return Array.from({ length: 5 }, (_, i) => {
-      const cityKey = `near_city_${i + 1}` as keyof ZipDist;
-      const zipKey = `near_zip_${i + 1}` as keyof ZipDist;
-      return { itemKey: zipData[cityKey], value: zipData[zipKey] };
-    });
-  } else {
-    return [{ itemKey: "placeholder", value: "" }];
-  }
+  if (isEmpty(zipData)) return [];
+  return Array.from({ length: 5 }, (_, i) => {
+    const cityKey = `near_city_${i + 1}` as keyof ZipDist;
+    const zipKey = `near_zip_${i + 1}` as keyof ZipDist;
+    return { itemKey: zipData[cityKey], value: zipData[zipKey] };
+  }).filter((item) => String(item.value) !== "");
 };
 
 export const SelectClimate: React.FC<SelectClimateProps> = ({
@@ -41,19 +38,15 @@ export const SelectClimate: React.FC<SelectClimateProps> = ({
   style,
   InputProps,
 }) => {
-  const [menuItems, setMenuItems] = useState<ClimateMenuItem[]>(
-    generateMenuItems(zipData),
-  );
+  // Derive menuItems from zipData on every render instead of mirroring it
+  // into local state. The mirror pattern left a stale placeholder item with
+  // value="" in state between the prop change and the useEffect firing,
+  // which Radix's <Select.Item> rejects.
+  const menuItems = useMemo(() => generateMenuItems(zipData), [zipData]);
 
   useEffect(() => {
-    setMenuItems(generateMenuItems(zipData));
-  }, [zipData]);
-
-  useEffect(() => {
-    if (menuItems.length > 1) {
-      if (selectedClimate === "") {
-        setSelectedClimate(menuItems[0].value as string);
-      }
+    if (menuItems.length > 0 && selectedClimate === "") {
+      setSelectedClimate(menuItems[0].value as string);
     }
   }, [menuItems]);
 

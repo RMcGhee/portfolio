@@ -26,6 +26,23 @@ export type SavedPlan = {
   plan: CostSchedulePlan;
 };
 
+/**
+ * User-configurable specs for a hypothetical battery system.
+ * Percentages are stored as 0–100, not 0–1, for direct binding to
+ * TextField / Slider controls.
+ */
+export type BatterySpec = {
+  capacityKwh: number;
+  roundTripEfficiencyPct: number;
+  depthOfDischargePct: number;
+};
+
+export const defaultBatterySpec: BatterySpec = {
+  capacityKwh: 0,
+  roundTripEfficiencyPct: 90,
+  depthOfDischargePct: 80,
+};
+
 export type FlowHomeInputs = {
   plan: CostSchedulePlan;
   usageData: DateTimeUsage[];
@@ -35,6 +52,13 @@ export type FlowHomeInputs = {
   activePlanId: string | null; // null = working on an unsaved new plan
   analysisPlanAId: string; // "" means auto-select first saved plan
   analysisPlanBId: string; // "__none__" means no comparison plan selected
+
+  // Location / climate modeling
+  zipCode: string; // user-entered 5-digit zip (persisted)
+  selectedStationZip: string; // zip of chosen nearby weather station (persisted)
+
+  // Battery system (persisted)
+  batterySpec: BatterySpec;
 };
 
 export const defaultFlowHomeInputs: FlowHomeInputs = {
@@ -46,6 +70,11 @@ export const defaultFlowHomeInputs: FlowHomeInputs = {
   activePlanId: null,
   analysisPlanAId: "",
   analysisPlanBId: "__none__",
+
+  zipCode: "",
+  selectedStationZip: "",
+
+  batterySpec: { ...defaultBatterySpec },
 };
 
 // ============================================================================
@@ -98,6 +127,12 @@ export function sanitizeInputs(raw: Record<string, unknown>): FlowHomeInputs {
         typeof raw.analysisPlanBId === "string"
           ? raw.analysisPlanBId
           : "__none__",
+      zipCode: typeof raw.zipCode === "string" ? raw.zipCode : "",
+      selectedStationZip:
+        typeof raw.selectedStationZip === "string"
+          ? raw.selectedStationZip
+          : "",
+      batterySpec: sanitizeBatterySpec(raw.batterySpec),
     };
 
   return {
@@ -129,6 +164,36 @@ export function sanitizeInputs(raw: Record<string, unknown>): FlowHomeInputs {
       typeof raw.analysisPlanBId === "string"
         ? raw.analysisPlanBId
         : "__none__",
+
+    zipCode: typeof raw.zipCode === "string" ? raw.zipCode : "",
+    selectedStationZip:
+      typeof raw.selectedStationZip === "string" ? raw.selectedStationZip : "",
+    batterySpec: sanitizeBatterySpec(raw.batterySpec),
+  };
+}
+
+function sanitizeBatterySpec(raw: unknown): BatterySpec {
+  const clampPct = (n: unknown, fallback: number): number => {
+    if (typeof n !== "number" || !Number.isFinite(n)) return fallback;
+    return Math.max(0, Math.min(100, n));
+  };
+  const clampCap = (n: unknown, fallback: number): number => {
+    if (typeof n !== "number" || !Number.isFinite(n)) return fallback;
+    return Math.max(0, n);
+  };
+
+  if (!raw || typeof raw !== "object") return { ...defaultBatterySpec };
+  const r = raw as Record<string, unknown>;
+  return {
+    capacityKwh: clampCap(r.capacityKwh, defaultBatterySpec.capacityKwh),
+    roundTripEfficiencyPct: clampPct(
+      r.roundTripEfficiencyPct,
+      defaultBatterySpec.roundTripEfficiencyPct,
+    ),
+    depthOfDischargePct: clampPct(
+      r.depthOfDischargePct,
+      defaultBatterySpec.depthOfDischargePct,
+    ),
   };
 }
 
@@ -275,7 +340,12 @@ export type FlowHomeAction =
   | { type: "newPlan" }
   | { type: "duplicatePlan" }
   | { type: "setAnalysisPlanA"; id: string }
-  | { type: "setAnalysisPlanB"; id: string };
+  | { type: "setAnalysisPlanB"; id: string }
+  | { type: "setZipCode"; zipCode: string }
+  | { type: "setSelectedStationZip"; zip: string }
+  | { type: "setBatteryCapacity"; capacityKwh: number }
+  | { type: "setBatteryRoundTripEfficiency"; pct: number }
+  | { type: "setBatteryDepthOfDischarge"; pct: number };
 
 // ============================================================================
 // Reducer
@@ -407,6 +477,33 @@ export function flowHomeReducer(
       return { ...state, analysisPlanAId: action.id };
     case "setAnalysisPlanB":
       return { ...state, analysisPlanBId: action.id };
+
+    case "setZipCode":
+      return { ...state, zipCode: action.zipCode };
+
+    case "setSelectedStationZip":
+      return { ...state, selectedStationZip: action.zip };
+
+    case "setBatteryCapacity":
+      return {
+        ...state,
+        batterySpec: { ...state.batterySpec, capacityKwh: action.capacityKwh },
+      };
+
+    case "setBatteryRoundTripEfficiency":
+      return {
+        ...state,
+        batterySpec: {
+          ...state.batterySpec,
+          roundTripEfficiencyPct: action.pct,
+        },
+      };
+
+    case "setBatteryDepthOfDischarge":
+      return {
+        ...state,
+        batterySpec: { ...state.batterySpec, depthOfDischargePct: action.pct },
+      };
   }
 }
 

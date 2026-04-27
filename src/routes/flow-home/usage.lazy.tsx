@@ -1,9 +1,10 @@
 import { Box, Button, Heading, Separator, Text } from "@radix-ui/themes";
-import { createLazyFileRoute, Link } from "@tanstack/react-router";
+import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
 import { LeftGrow } from "../../common/Basic";
 import { useFlowHomeContext } from "../../entities/flow-home/flow-home-context";
 import { UsageUploader } from "../../views/flow-home/UsageUploader";
 import { UsageAnalysis } from "../../views/flow-home/UsageAnalysis";
+import { useUnsavedPlanGuard } from "../../views/flow-home/UnsavedPlanGuard";
 import type {
   DateTimeUsage,
   GapInfo,
@@ -15,6 +16,8 @@ export const Route = createLazyFileRoute("/flow-home/usage")({
 
 function UsagePage() {
   const { inputs, dispatch } = useFlowHomeContext();
+  const navigate = useNavigate();
+  const { guardNavigate } = useUnsavedPlanGuard();
 
   const handleUpload = (data: DateTimeUsage[], gaps: GapInfo[]) => {
     dispatch({ type: "setUsageData", usageData: data, gaps });
@@ -68,10 +71,21 @@ function UsagePage() {
             justifyContent: "space-evenly",
           }}
         >
-          <Button variant="outline" asChild>
-            <Link to="/flow-home/cost-schedule">Previous</Link>
+          <Button
+            variant="outline"
+            onClick={() =>
+              guardNavigate(() => navigate({ to: "/flow-home/cost-schedule" }))
+            }
+          >
+            Previous
           </Button>
-          <Button variant="outline" disabled={inputs.usageData.length === 0}>
+          <Button
+            variant="outline"
+            disabled={inputs.usageData.length === 0}
+            onClick={() =>
+              guardNavigate(() => navigate({ to: "/flow-home/profile" }))
+            }
+          >
             Next
           </Button>
         </Box>
